@@ -24,19 +24,44 @@ Build a compact FlySys variometer board with:
 | 6-axis IMU | Bosch `BMI323` | Primary accelerometer/gyro. |
 | Magnetometer | Not fitted | Keep unpopulated I2C pads or optional footprint for future magnetometer. |
 | Charger / power path | TI `BQ24075RGTR` | 1S LiPo charger with power-path management. |
-| 3.3 V regulator | `AP2112K-3.3TRG1` or equivalent 600 mA LDO | ESP32-C3 radio transmission will be kept minimal in production. Add local bulk capacitance near the module. |
-| USB | USB-C 2.0 receptacle + USB ESD | Used for charging, USB Serial/JTAG, logs, and flashing. |
-| Audio | Passive piezo + low-side N-MOSFET | Keep optional wired piezo pads if enclosure volume is insufficient. |
-| User input | Momentary active-low button | Final switch depends on enclosure height. |
-| Battery | Protected 1S LiPo connector | Exact connector and polarity to be finalized with enclosure/battery choice. |
+| 3.3 V regulator | TI `TLV75533PDBVR` | Replaces `AP2112K-3.3TRG1` because AP2112 was 0 stock in the DigiKey.si audit. ESP32-C3 radio transmission will be kept minimal in production. Add local bulk capacitance near the module. |
+| USB | GCT `USB4105-GF-A` + ST `USBLC6-2SC6` | USB-C 2.0 receptacle and USB ESD for charging, USB Serial/JTAG, logs, and flashing. |
+| Audio | Same Sky `CPT-9019A-SMT-TR` + `AO3400A` N-MOSFET | 3 V externally driven piezo plus low-side driver. Keep optional wired piezo pads if enclosure volume is insufficient. |
+| User input | C&K `KMR211NG LFS` | Momentary active-low tactile switch. Final actuator geometry still depends on enclosure height. |
+| Battery | JST `S2B-PH-SM4-TB` | 2-pin JST-PH right-angle SMD header. Confirm protected pack and cable polarity. |
 | Debug | ESP32-C3 USB Serial/JTAG, `EN`, `BOOT`, optional UART0 pads | ESP32-C3 does not use SWD. |
+
+## DigiKey.si Availability Audit
+
+Checked: 2026-05-31. Stock changes quickly; recheck before ordering.
+
+| Function | MPN | DigiKey cut-tape part | Observed availability | Status |
+| --- | --- | --- | --- | --- |
+| MCU/BLE/Wi-Fi | `ESP32-C3-MINI-1-N4X` | `1965-ESP32-C3-MINI-1-N4XCT-ND` | 955 in stock | Selected |
+| Pressure sensor | `BMP581` | `828-BMP581CT-ND` | 46,324 in stock | Selected |
+| 6-axis IMU | `BMI323` | `828-BMI323CT-ND` | 663 in stock | Selected |
+| Charger / power path | `BQ24075RGTR` | `296-38874-1-ND` | 3,702 in stock | Selected |
+| 3.3 V LDO, rejected | `AP2112K-3.3TRG1` | `AP2112K-3.3TRG1DICT-ND` | 0 in stock | Do not use for current DigiKey-sourced build |
+| 3.3 V LDO, replacement | `TLV75533PDBVR` | `296-50411-1-ND` | 110,688 in stock | Selected replacement |
+| USB-C receptacle | `USB4105-GF-A` | `2073-USB4105-GF-ACT-ND` | 126,702 in stock | Selected |
+| USB ESD | `USBLC6-2SC6` | `497-5235-1-ND` | 86,224 in stock | Selected |
+| Battery connector | `S2B-PH-SM4-TB` | `455-S2B-PH-SM4-TBCT-ND` | 71,350 in stock | Selected |
+| Buzzer | `CPT-9019A-SMT-TR` | `2223-CPT-9019A-SMT-TRCT-ND` | 23,410 in stock | Selected |
+| Buzzer MOSFET | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Selected |
+| User button | `KMR211NG LFS` | `CKN10243CT-ND` | 44,917 in stock | Selected |
+| Status LED | `LTST-C190KRKT` | `160-1436-1-ND` | 631,926 in stock | Selected |
+| Resistors | Yageo `RC0603FR` 1% 0603 family | Value-specific | `RC0603FR-0710KL` observed at 9,468,329 in stock | Use same family for 100R, 1k, 3k, 5.1k, 10k, 100k, 1M as needed |
+| 100 nF decoupling capacitor | Samsung `CL10B104KB8NNNC` | `1276-1000-1-ND` | 9,953,497 in stock | Selected family |
+| Other ceramics | Samsung CL-series MLCCs | Value-specific | Not individually locked yet | Select exact 1 uF, 10 uF, and 220 nF parts during Atopile binding |
+
+Main audit result: all active semiconductors, sensors, connector choices, buzzer, button, LED, and common passives are available from DigiKey.si. The only rejected current-plan part is `AP2112K-3.3TRG1`, replaced by `TLV75533PDBVR`.
 
 ## Baseline Electrical Architecture
 
 - `USB_VBUS`: USB-C 5 V input to charger and USB VBUS sense.
 - `SYS`: BQ24075 system output.
 - `BAT`: protected 1S LiPo positive terminal.
-- `+3V3`: AP2112 output powering ESP32-C3, BMP581, BMI323, and optional magnetometer pads.
+- `+3V3`: TLV75533 output powering ESP32-C3, BMP581, BMI323, and optional magnetometer pads.
 - `I2C_SCL`, `I2C_SDA`: shared sensor bus for BMP581, BMI323, and DNP magnetometer option.
 - `USB_DP`, `USB_DM`: USB full-speed pair to ESP32-C3.
 - `BUZZER_PWM`: ESP32-C3 PWM-capable GPIO to MOSFET gate.
@@ -83,18 +108,17 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 
 ## Open Decisions
 
-- Exact USB-C connector and USB ESD part.
-- Exact battery connector and protected LiPo pack.
-- Exact buzzer and whether a wired piezo disc is needed.
-- Button height and enclosure mechanics.
+- Protected LiPo pack and cable polarity.
+- Whether a wired piezo disc is needed in addition to the selected SMD buzzer.
+- Button actuator/enclosure mechanics.
 - Final ESP32-C3 GPIO map after strapping-pin review.
 - Whether charger status pins need LEDs or only test pads.
-- Final Atopile package/footprint sources for each selected component.
+- Final Atopile package/footprint sources and exact passive values.
 
 ## Atopile Build Order
 
 1. Create Atopile project scaffold.
-2. Add verified packages for ESP32-C3-MINI-1-N4X, BMP581, BMI323, BQ24075, AP2112, USB-C, USB ESD, LiPo connector, buzzer, MOSFET, button, LED, and passives.
+2. Add verified packages for ESP32-C3-MINI-1-N4X, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, buzzer, MOSFET, button, LED, and passives.
 3. Capture power path and 3.3 V rail.
 4. Capture ESP32-C3 USB, `EN`, `BOOT`, and debug access.
 5. Capture BMP581 and BMI323 on shared I2C.
@@ -112,4 +136,15 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 - Bosch BMI323: https://www.bosch-sensortec.com/en/products/motion-sensors/imus/bmi323/
 - DigiKey.si BMI323: https://www.digikey.si/en/products/detail/bosch-sensortec/BMI323/16719593
 - TI BQ24075: https://www.ti.com/product/BQ24075
-- DigiKey.si AP2112K-3.3TRG1: https://www.digikey.si/en/products/detail/diodes-incorporated/AP2112K-3-3TRG1/4470746
+- DigiKey.si BQ24075RGTR: https://www.digikey.si/en/products/detail/texas-instruments/BQ24075RGTR/2047273
+- DigiKey.si AP2112K-3.3TRG1, rejected due to 0 stock: https://www.digikey.si/en/products/detail/diodes-incorporated/AP2112K-3-3TRG1/4470746
+- DigiKey.si TLV75533PDBVR: https://www.digikey.si/en/products/detail/texas-instruments/TLV75533PDBVR/9356541
+- DigiKey.si USB4105-GF-A: https://www.digikey.si/en/products/detail/gct/USB4105-GF-A/11198441
+- DigiKey.si USBLC6-2SC6: https://www.digikey.si/en/products/detail/stmicroelectronics/USBLC6-2SC6/1121688
+- DigiKey.si S2B-PH-SM4-TB: https://www.digikey.si/en/products/filter/headers-male-pins/314?s=N4Ig7CBcoIYE5QIwA5EGYA0IYBcmZAAcBLJAJjLUQE4wBfOoA
+- DigiKey.si CPT-9019A-SMT-TR: https://www.digikey.si/en/products/detail/same-sky-formerly-cui-devices/CPT-9019A-SMT-TR/19105220
+- DigiKey.si AO3400A: https://www.digikey.si/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772
+- DigiKey.si KMR211NG LFS: https://www.digikey.si/en/products/detail/c-k/Y78B21120FP/2176482
+- DigiKey.si LTST-C190KRKT: https://www.digikey.si/en/products/detail/lite-on-inc/LTST-C190KRKT/386817
+- DigiKey.si RC0603FR resistor family: https://www.digikey.si/en/products/filter/chip-resistor-surface-mount/52
+- DigiKey.si CL10B104KB8NNNC: https://www.digikey.si/en/products/detail/samsung-electro-mechanics/CL10B104KB8NNNC/3886658
