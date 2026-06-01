@@ -1,0 +1,34 @@
+import has_datasheet
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component GCT_USB4105_GF_A_package:
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C3020560", date="2026-06-01T08:27:47.938756+00:00", checksum="5404c86b0423c27113b2d52577180ff33cd60419b6d46f89427d26b169982e7e">
+
+    trait is_atomic_part<manufacturer="GCT", partnumber="USB4105-GF-A", footprint="TYPE-C-SMD_SBC-160S1A-20-S412.kicad_mod", symbol="USB4105-GF-A.kicad_sym", model="TYPE-C-SMD_SBC-160S1A-20-S412.STEP">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C3020560", manufacturer="GCT", partno="USB4105-GF-A">
+    trait has_designator_prefix<prefix="USB">
+    trait has_datasheet<datasheet="https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2304140030_Global-Connector-Technology-USB4105-GF-A_C3020560.pdf">
+
+    # pins
+    signal CC1 ~ pin A5
+    signal CC2 ~ pin B5
+    signal DN1 ~ pin A7
+    signal DN2 ~ pin B7
+    signal DP1 ~ pin A6
+    signal DP2 ~ pin B6
+    signal EH ~ pin 1
+    signal GND ~ pin B1
+    GND ~ pin B12
+    GND ~ pin A1
+    GND ~ pin A12
+    signal SBU1 ~ pin A8
+    signal SBU2 ~ pin B8
+    signal VBUS ~ pin B4
+    VBUS ~ pin B9
+    VBUS ~ pin A4
+    VBUS ~ pin A9

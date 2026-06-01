@@ -1,0 +1,21 @@
+import has_datasheet
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component Texas_Instruments_TLV75533PDBVR_package:
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C404027", date="2026-06-01T08:27:40.051919+00:00", checksum="1dfe0f1698cfad4386649542228991623589b64a21a2e7f504ac1e4f8d8d7140">
+
+    trait is_atomic_part<manufacturer="Texas Instruments", partnumber="TLV75533PDBVR", footprint="SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR.kicad_mod", symbol="TLV75533PDBVR.kicad_sym", model="SOT-23-5_L2.9-W1.6-H1.1-LS2.8-P0.95.step">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C404027", manufacturer="Texas Instruments", partno="TLV75533PDBVR">
+    trait has_designator_prefix<prefix="U">
+    trait has_datasheet<datasheet="https://www.lcsc.com/datasheet/lcsc_datasheet_1912111437_Texas-Instruments-TLV75533PDBVR_C404027.pdf">
+
+    # pins
+    signal EN ~ pin 3
+    signal GND ~ pin 2
+    signal IN ~ pin 1
+    signal OUT ~ pin 5

@@ -1,0 +1,27 @@
+import has_datasheet
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component Bosch_Sensortec_BMI323_package:
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C5368700", date="2026-06-01T08:27:43.993130+00:00", checksum="91cf103df030c10248f14a2806ef6a54a8b892e32c84ba5ad7eccd96a725b572">
+
+    trait is_atomic_part<manufacturer="Bosch Sensortec", partnumber="BMI323", footprint="LGA-14_L3.0-W2.5-P0.50-TL_QMI8658A.kicad_mod", symbol="BMI323.kicad_sym", model="LGA-14_L3.0-W2.5-P0.50-TL_QMI8658A.STEP">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C5368700", manufacturer="Bosch Sensortec", partno="BMI323">
+    trait has_designator_prefix<prefix="U">
+    trait has_datasheet<datasheet="https://www.lcsc.com/datasheet/lcsc_datasheet_2410121717_Bosch-Sensortec-BMI323_C5368700.pdf">
+
+    # pins
+    signal CSB ~ pin 12
+    signal GND ~ pin 7
+    signal GNDIO ~ pin 6
+    signal INT1 ~ pin 4
+    signal INT2 ~ pin 9
+    signal SCX ~ pin 13
+    signal SDO ~ pin 1
+    signal SDX ~ pin 14
+    signal VDD ~ pin 8
+    signal VDDIO ~ pin 5

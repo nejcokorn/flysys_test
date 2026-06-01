@@ -1,0 +1,384 @@
+"""FlySys variometer hardware schematic."""
+
+import Capacitor
+import ElectricPower
+import Electrical
+import Resistor
+
+from "parts/Bosch_Sensortec_BMI323/Bosch_Sensortec_BMI323.ato" import Bosch_Sensortec_BMI323_package
+from "parts/Espressif_Systems_ESP32_S3_MINI_1_N8/Espressif_Systems_ESP32_S3_MINI_1_N8.ato" import Espressif_Systems_ESP32_S3_MINI_1_N8_package
+from "parts/GCT_USB4105_GF_A/GCT_USB4105_GF_A.ato" import GCT_USB4105_GF_A_package
+from "parts/Lite_On_LTST_C190GKT/Lite_On_LTST_C190GKT.ato" import Lite_On_LTST_C190GKT_package
+from "parts/Lite_On_LTST_C190TBKT/Lite_On_LTST_C190TBKT.ato" import Lite_On_LTST_C190TBKT_package
+from "parts/STMicroelectronics_USBLC6_2SC6/STMicroelectronics_USBLC6_2SC6.ato" import STMicroelectronics_USBLC6_2SC6_package
+from "parts/Texas_Instruments_BQ24075RGTR/Texas_Instruments_BQ24075RGTR.ato" import Texas_Instruments_BQ24075RGTR_package
+from "parts/Texas_Instruments_TLV75533PDBVR/Texas_Instruments_TLV75533PDBVR.ato" import Texas_Instruments_TLV75533PDBVR_package
+
+
+component Bosch_Sensortec_BMP581_package:
+    signal VDDIO ~ pin 1
+    signal SCK ~ pin 2
+    signal VSS ~ pin 3
+    signal SDI ~ pin 4
+    signal SDO ~ pin 5
+    signal CSB ~ pin 6
+    signal INT ~ pin 7
+    VSS ~ pin 8
+    VSS ~ pin 9
+    signal VDD ~ pin 10
+
+
+component JST_S2B_PH_SM4_TB_package:
+    signal BAT_POS ~ pin 1
+    signal BAT_NEG ~ pin 2
+
+
+component Same_Sky_CSS_J4D20_SMT_TR_package:
+    signal POS ~ pin 1
+    signal NEG ~ pin 2
+
+
+component AO3400A_package:
+    signal GATE ~ pin 1
+    signal SOURCE ~ pin 2
+    signal DRAIN ~ pin 3
+
+
+component CK_KMR211NG_LFS_package:
+    signal A ~ pin 1
+    A ~ pin 2
+    signal B ~ pin 3
+    B ~ pin 4
+
+
+component DebugPads_package:
+    signal GND ~ pin 1
+    signal P3V3 ~ pin 2
+    signal EN ~ pin 3
+    signal BOOT ~ pin 4
+    signal TXD0 ~ pin 5
+    signal RXD0 ~ pin 6
+
+
+component OptionalMagnetometerPads_package:
+    signal P3V3 ~ pin 1
+    signal GND ~ pin 2
+    signal SCL ~ pin 3
+    signal SDA ~ pin 4
+    signal INT ~ pin 5
+
+
+module FlySysVario:
+    gnd = new Electrical
+    usb_vbus = new ElectricPower
+    sys = new ElectricPower
+    v3v3 = new ElectricPower
+    bat = new ElectricPower
+
+    gnd.override_net_name = "GND"
+    usb_vbus.hv.override_net_name = "USB_VBUS"
+    sys.hv.override_net_name = "SYS"
+    v3v3.hv.override_net_name = "+3V3"
+    bat.hv.override_net_name = "BAT"
+
+    usb_vbus.lv ~ gnd
+    sys.lv ~ gnd
+    v3v3.lv ~ gnd
+    bat.lv ~ gnd
+
+    assert usb_vbus.voltage within 4.75V to 5.25V
+    assert sys.voltage within 3.0V to 5.5V
+    assert v3v3.voltage within 3.3V +/- 5%
+    assert bat.voltage within 3.0V to 4.2V
+
+    usb = new GCT_USB4105_GF_A_package
+    usb_esd = new STMicroelectronics_USBLC6_2SC6_package
+    charger = new Texas_Instruments_BQ24075RGTR_package
+    ldo_3v3 = new Texas_Instruments_TLV75533PDBVR_package
+    battery = new JST_S2B_PH_SM4_TB_package
+    mcu = new Espressif_Systems_ESP32_S3_MINI_1_N8_package
+    pressure = new Bosch_Sensortec_BMP581_package
+    imu = new Bosch_Sensortec_BMI323_package
+    buzzer = new Same_Sky_CSS_J4D20_SMT_TR_package
+    q_buzzer = new AO3400A_package
+    q_ble_led = new AO3400A_package
+    user_button = new CK_KMR211NG_LFS_package
+    power_led = new Lite_On_LTST_C190GKT_package
+    ble_led = new Lite_On_LTST_C190TBKT_package
+    debug = new DebugPads_package
+    mag_future = new OptionalMagnetometerPads_package
+
+    usb_dp_conn = new Electrical
+    usb_dm_conn = new Electrical
+    usb_dp_mcu = new Electrical
+    usb_dm_mcu = new Electrical
+    i2c_scl = new Electrical
+    i2c_sda = new Electrical
+    en = new Electrical
+    boot_user_btn_n = new Electrical
+    bat_sense = new Electrical
+    usb_vbus_sense = new Electrical
+    buzzer_gate = new Electrical
+    ble_led_gate = new Electrical
+
+    usb_dp_conn.override_net_name = "USB_DP_CONN"
+    usb_dm_conn.override_net_name = "USB_DM_CONN"
+    usb_dp_mcu.override_net_name = "USB_OTG_DP"
+    usb_dm_mcu.override_net_name = "USB_OTG_DM"
+    i2c_scl.override_net_name = "I2C_SCL"
+    i2c_sda.override_net_name = "I2C_SDA"
+    en.override_net_name = "EN"
+    boot_user_btn_n.override_net_name = "BOOT_USER_BTN_N"
+    bat_sense.override_net_name = "BAT_SENSE"
+    usb_vbus_sense.override_net_name = "USB_VBUS_SENSE"
+    buzzer_gate.override_net_name = "BUZZER_GATE"
+    ble_led_gate.override_net_name = "BLE_LED_GATE"
+
+    # USB-C receptacle, ESD protection, and USB2 routing.
+    usb.VBUS ~ usb_vbus.hv
+    usb.GND ~ gnd
+    usb.EH ~ gnd
+    usb.CC1 ~> r_cc1 ~> gnd
+    usb.CC2 ~> r_cc2 ~> gnd
+    r_cc1 = new Resistor
+    r_cc2 = new Resistor
+    r_cc1.resistance = 5.1kohm +/- 1%
+    r_cc2.resistance = 5.1kohm +/- 1%
+    r_cc1.package = "0603"
+    r_cc2.package = "0603"
+
+    usb.DP1 ~ usb_dp_conn
+    usb.DP2 ~ usb_dp_conn
+    usb.DN1 ~ usb_dm_conn
+    usb.DN2 ~ usb_dm_conn
+    usb_esd.IO1_A ~ usb_dp_conn
+    usb_esd.IO1_B ~ usb_dp_mcu
+    usb_esd.IO2_A ~ usb_dm_conn
+    usb_esd.IO2_B ~ usb_dm_mcu
+    usb_esd.VBUS ~ usb_vbus.hv
+    usb_esd.GND ~ gnd
+
+    mcu.IO20 ~ usb_dp_mcu
+    mcu.IO19 ~ usb_dm_mcu
+
+    # Charger and power-path management.
+    charger.IN ~ usb_vbus.hv
+    charger.OUT ~ sys.hv
+    charger.BAT ~ bat.hv
+    charger.VSS ~ gnd
+    charger.EP ~ gnd
+    charger.nCE ~ gnd
+    charger.EN1 ~ gnd
+    charger.EN2 ~ sys.hv
+    charger.SYSOFF ~ gnd
+    charger.TS ~> r_chg_ts ~> gnd
+    charger.ISET ~> r_chg_iset ~> gnd
+    charger.ILIM ~> r_chg_ilim ~> gnd
+    charger.TMR ~> r_chg_tmr ~> gnd
+    charger.nCHG ~> r_chg_pullup ~> v3v3.hv
+    charger.nPGOOD ~> r_pgood_pullup ~> v3v3.hv
+    charger.nCHG ~ mcu.IO37
+    charger.nPGOOD ~ mcu.IO38
+
+    r_chg_ts = new Resistor
+    r_chg_iset = new Resistor
+    r_chg_ilim = new Resistor
+    r_chg_tmr = new Resistor
+    r_chg_pullup = new Resistor
+    r_pgood_pullup = new Resistor
+    r_chg_ts.resistance = 10kohm +/- 1%
+    r_chg_iset.resistance = 2kohm +/- 1%
+    r_chg_ilim.resistance = 1.1kohm +/- 1%
+    r_chg_tmr.resistance = 47kohm +/- 1%
+    r_chg_pullup.resistance = 10kohm +/- 1%
+    r_pgood_pullup.resistance = 10kohm +/- 1%
+    r_chg_ts.package = "0603"
+    r_chg_iset.package = "0603"
+    r_chg_ilim.package = "0603"
+    r_chg_tmr.package = "0603"
+    r_chg_pullup.package = "0603"
+    r_pgood_pullup.package = "0603"
+
+    battery.BAT_POS ~ bat.hv
+    battery.BAT_NEG ~ gnd
+
+    ldo_3v3.IN ~ sys.hv
+    ldo_3v3.OUT ~ v3v3.hv
+    ldo_3v3.EN ~ sys.hv
+    ldo_3v3.GND ~ gnd
+
+    usb_vbus.hv ~> c_vbus_in ~> gnd
+    sys.hv ~> c_sys_bulk ~> gnd
+    bat.hv ~> c_bat_bulk ~> gnd
+    sys.hv ~> c_ldo_in ~> gnd
+    v3v3.hv ~> c_ldo_out ~> gnd
+    v3v3.hv ~> c_mcu_bulk ~> gnd
+    v3v3.hv ~> c_mcu_decoup ~> gnd
+
+    c_vbus_in = new Capacitor
+    c_sys_bulk = new Capacitor
+    c_bat_bulk = new Capacitor
+    c_ldo_in = new Capacitor
+    c_ldo_out = new Capacitor
+    c_mcu_bulk = new Capacitor
+    c_mcu_decoup = new Capacitor
+    c_vbus_in.capacitance = 1uF +/- 20%
+    c_sys_bulk.capacitance = 10uF +/- 20%
+    c_bat_bulk.capacitance = 10uF +/- 20%
+    c_ldo_in.capacitance = 1uF +/- 20%
+    c_ldo_out.capacitance = 1uF +/- 20%
+    c_mcu_bulk.capacitance = 10uF +/- 20%
+    c_mcu_decoup.capacitance = 100nF +/- 10%
+    c_vbus_in.package = "0603"
+    c_sys_bulk.package = "0603"
+    c_bat_bulk.package = "0603"
+    c_ldo_in.package = "0603"
+    c_ldo_out.package = "0603"
+    c_mcu_bulk.package = "0603"
+    c_mcu_decoup.package = "0603"
+
+    # ESP32-S3 bring-up, USB VBUS sense, battery sense, and debug access.
+    mcu.P3V3 ~ v3v3.hv
+    mcu.SIG_GND ~ gnd
+    mcu.EN ~ en
+    en ~> r_en_pullup ~> v3v3.hv
+    en ~> c_en ~> gnd
+    mcu.IO0 ~ boot_user_btn_n
+    boot_user_btn_n ~> r_boot_pullup ~> v3v3.hv
+    user_button.A ~ boot_user_btn_n
+    user_button.B ~ gnd
+
+    r_en_pullup = new Resistor
+    r_boot_pullup = new Resistor
+    c_en = new Capacitor
+    r_en_pullup.resistance = 10kohm +/- 1%
+    r_boot_pullup.resistance = 10kohm +/- 1%
+    c_en.capacitance = 100nF +/- 10%
+    r_en_pullup.package = "0603"
+    r_boot_pullup.package = "0603"
+    c_en.package = "0603"
+
+    bat.hv ~> r_bat_sense_top ~> bat_sense ~> r_bat_sense_bottom ~> gnd
+    bat_sense ~> c_bat_sense ~> gnd
+    mcu.IO1 ~ bat_sense
+    usb_vbus.hv ~> r_vbus_sense_top ~> usb_vbus_sense ~> r_vbus_sense_bottom ~> gnd
+    mcu.IO2 ~ usb_vbus_sense
+
+    r_bat_sense_top = new Resistor
+    r_bat_sense_bottom = new Resistor
+    r_vbus_sense_top = new Resistor
+    r_vbus_sense_bottom = new Resistor
+    c_bat_sense = new Capacitor
+    r_bat_sense_top.resistance = 1Mohm +/- 1%
+    r_bat_sense_bottom.resistance = 1Mohm +/- 1%
+    r_vbus_sense_top.resistance = 1Mohm +/- 1%
+    r_vbus_sense_bottom.resistance = 330kohm +/- 1%
+    c_bat_sense.capacitance = 100nF +/- 10%
+    r_bat_sense_top.package = "0603"
+    r_bat_sense_bottom.package = "0603"
+    r_vbus_sense_top.package = "0603"
+    r_vbus_sense_bottom.package = "0603"
+    c_bat_sense.package = "0603"
+
+    debug.GND ~ gnd
+    debug.P3V3 ~ v3v3.hv
+    debug.EN ~ en
+    debug.BOOT ~ boot_user_btn_n
+    debug.TXD0 ~ mcu.TXD0
+    debug.RXD0 ~ mcu.RXD0
+
+    # Shared I2C sensor bus.
+    mcu.IO8 ~ i2c_scl
+    mcu.IO9 ~ i2c_sda
+    i2c_scl ~> r_i2c_scl_pullup ~> v3v3.hv
+    i2c_sda ~> r_i2c_sda_pullup ~> v3v3.hv
+    r_i2c_scl_pullup = new Resistor
+    r_i2c_sda_pullup = new Resistor
+    r_i2c_scl_pullup.resistance = 4.7kohm +/- 1%
+    r_i2c_sda_pullup.resistance = 4.7kohm +/- 1%
+    r_i2c_scl_pullup.package = "0603"
+    r_i2c_sda_pullup.package = "0603"
+
+    pressure.VDD ~ v3v3.hv
+    pressure.VDDIO ~ v3v3.hv
+    pressure.VSS ~ gnd
+    pressure.SCK ~ i2c_scl
+    pressure.SDI ~ i2c_sda
+    pressure.SDO ~ gnd
+    pressure.CSB ~ v3v3.hv
+    pressure.INT ~ mcu.IO4
+    v3v3.hv ~> c_pressure_vdd ~> gnd
+    v3v3.hv ~> c_pressure_vddio ~> gnd
+    c_pressure_vdd = new Capacitor
+    c_pressure_vddio = new Capacitor
+    c_pressure_vdd.capacitance = 100nF +/- 10%
+    c_pressure_vddio.capacitance = 100nF +/- 10%
+    c_pressure_vdd.package = "0603"
+    c_pressure_vddio.package = "0603"
+
+    imu.VDD ~ v3v3.hv
+    imu.VDDIO ~ v3v3.hv
+    imu.GND ~ gnd
+    imu.GNDIO ~ gnd
+    imu.SCX ~ i2c_scl
+    imu.SDX ~ i2c_sda
+    imu.SDO ~ gnd
+    imu.CSB ~ v3v3.hv
+    imu.INT1 ~ mcu.IO5
+    imu.INT2 ~ mcu.IO6
+    v3v3.hv ~> c_imu_vdd ~> gnd
+    v3v3.hv ~> c_imu_vddio ~> gnd
+    c_imu_vdd = new Capacitor
+    c_imu_vddio = new Capacitor
+    c_imu_vdd.capacitance = 100nF +/- 10%
+    c_imu_vddio.capacitance = 100nF +/- 10%
+    c_imu_vdd.package = "0603"
+    c_imu_vddio.package = "0603"
+
+    mag_future.P3V3 ~ v3v3.hv
+    mag_future.GND ~ gnd
+    mag_future.SCL ~ i2c_scl
+    mag_future.SDA ~ i2c_sda
+    mag_future.INT ~ mcu.IO7
+
+    # Loud passive buzzer driven from SYS with a PWM low-side switch.
+    buzzer.POS ~ sys.hv
+    buzzer.NEG ~ q_buzzer.DRAIN
+    q_buzzer.SOURCE ~ gnd
+    mcu.IO17 ~> r_buzzer_gate ~> buzzer_gate
+    buzzer_gate ~ q_buzzer.GATE
+    buzzer_gate ~> r_buzzer_gate_pd ~> gnd
+    sys.hv ~> c_buzzer_bulk ~> gnd
+
+    r_buzzer_gate = new Resistor
+    r_buzzer_gate_pd = new Resistor
+    c_buzzer_bulk = new Capacitor
+    r_buzzer_gate.resistance = 100ohm +/- 5%
+    r_buzzer_gate_pd.resistance = 100kohm +/- 5%
+    c_buzzer_bulk.capacitance = 10uF +/- 20%
+    r_buzzer_gate.package = "0603"
+    r_buzzer_gate_pd.package = "0603"
+    c_buzzer_bulk.package = "0603"
+
+    # Green power LED from +3V3 and blue BLE LED from SYS via low-side switch.
+    v3v3.hv ~> r_power_led ~> power_led.pos
+    power_led.neg ~ gnd
+    sys.hv ~> r_ble_led ~> ble_led.A
+    ble_led.K ~ q_ble_led.DRAIN
+    q_ble_led.SOURCE ~ gnd
+    mcu.IO18 ~> r_ble_gate ~> ble_led_gate
+    ble_led_gate ~ q_ble_led.GATE
+    ble_led_gate ~> r_ble_gate_pd ~> gnd
+
+    r_power_led = new Resistor
+    r_ble_led = new Resistor
+    r_ble_gate = new Resistor
+    r_ble_gate_pd = new Resistor
+    r_power_led.resistance = 1kohm +/- 5%
+    r_ble_led.resistance = 1kohm +/- 5%
+    r_ble_gate.resistance = 100ohm +/- 5%
+    r_ble_gate_pd.resistance = 100kohm +/- 5%
+    r_power_led.package = "0603"
+    r_ble_led.package = "0603"
+    r_ble_gate.package = "0603"
+    r_ble_gate_pd.package = "0603"

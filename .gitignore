@@ -1,0 +1,14 @@
+build/
+.ato/
+parts/**/*.pdf
+
+*.000
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.kicad_pcb.lck
+fp-info-cache
+
+__pycache__/
+.ruff_cache/

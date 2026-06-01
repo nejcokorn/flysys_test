@@ -1,0 +1,78 @@
+import has_datasheet
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component Espressif_Systems_ESP32_S3_MINI_1_N8_package:
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C2913206", date="2026-06-01T08:27:32.069998+00:00", checksum="feab383891a1d234792377edafdf4e0f5f0895ea006b77098ecfd23295e96d57">
+
+    trait is_atomic_part<manufacturer="Espressif Systems", partnumber="ESP32-S3-MINI-1-N8", footprint="BULETM-SMD_ESP32-S3-MINI-1-N8.kicad_mod", symbol="ESP32-S3-MINI-1-N8.kicad_sym", model="BULETM-SMD_ESP32-S3-MINI-1-N8.step">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C2913206", manufacturer="Espressif Systems", partno="ESP32-S3-MINI-1-N8">
+    trait has_designator_prefix<prefix="U">
+    trait has_datasheet<datasheet="https://www.lcsc.com/datasheet/lcsc_datasheet_2411121055_Espressif-Systems-ESP32-S3-MINI-1-N8_C2913206.pdf">
+
+    # pins
+    signal EN ~ pin 45
+    signal SIG_GND ~ pin 1
+    SIG_GND ~ pin 2
+    SIG_GND ~ pin 42
+    SIG_GND ~ pin 43
+    SIG_GND ~ pin 46
+    SIG_GND ~ pin 47
+    SIG_GND ~ pin 48
+    SIG_GND ~ pin 49
+    SIG_GND ~ pin 50
+    SIG_GND ~ pin 51
+    SIG_GND ~ pin 52
+    SIG_GND ~ pin 53
+    SIG_GND ~ pin 54
+    SIG_GND ~ pin 55
+    SIG_GND ~ pin 56
+    SIG_GND ~ pin 57
+    SIG_GND ~ pin 58
+    SIG_GND ~ pin 59
+    SIG_GND ~ pin 60
+    SIG_GND ~ pin GND
+    signal IO0 ~ pin 4
+    signal IO1 ~ pin 5
+    signal IO2 ~ pin 6
+    signal IO3 ~ pin 7
+    signal IO4 ~ pin 8
+    signal IO5 ~ pin 9
+    signal IO6 ~ pin 10
+    signal IO7 ~ pin 11
+    signal IO8 ~ pin 12
+    signal IO9 ~ pin 13
+    signal IO10 ~ pin 14
+    signal IO11 ~ pin 15
+    signal IO12 ~ pin 16
+    signal IO13 ~ pin 17
+    signal IO14 ~ pin 18
+    signal IO15 ~ pin 19
+    signal IO16 ~ pin 20
+    signal IO17 ~ pin 21
+    signal IO18 ~ pin 22
+    signal IO19 ~ pin 23
+    signal IO20 ~ pin 24
+    signal IO21 ~ pin 25
+    signal IO26 ~ pin 26
+    signal IO33 ~ pin 28
+    signal IO34 ~ pin 29
+    signal IO35 ~ pin 31
+    signal IO36 ~ pin 32
+    signal IO37 ~ pin 33
+    signal IO38 ~ pin 34
+    signal IO39 ~ pin 35
+    signal IO40 ~ pin 36
+    signal IO41 ~ pin 37
+    signal IO42 ~ pin 38
+    signal IO45 ~ pin 41
+    signal IO46 ~ pin 44
+    signal IO47 ~ pin 27
+    signal IO48 ~ pin 30
+    signal P3V3 ~ pin 3
+    signal RXD0 ~ pin 40
+    signal TXD0 ~ pin 39

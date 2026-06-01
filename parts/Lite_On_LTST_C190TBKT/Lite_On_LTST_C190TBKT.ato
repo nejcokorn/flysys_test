@@ -1,0 +1,19 @@
+import has_datasheet
+import has_designator_prefix
+import has_part_picked
+import is_atomic_part
+import is_auto_generated
+
+component Lite_On_LTST_C190TBKT_package:
+    # This trait marks this file as auto-generated
+    # If you want to manually change it, remove the trait
+    trait is_auto_generated<system="ato_part", source="easyeda:C125096", date="2026-06-01T08:27:59.667317+00:00", checksum="a54e99ce7027eb23718639dd8e33917238a2ae7e1e95fbb032549f8c9727cb07">
+
+    trait is_atomic_part<manufacturer="Lite-On", partnumber="LTST-C190TBKT", footprint="LED0603-RD.kicad_mod", symbol="LTST-C190TBKT.kicad_sym", model="LED0603-RD-YELLOW.STEP">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C125096", manufacturer="Lite-On", partno="LTST-C190TBKT">
+    trait has_designator_prefix<prefix="LED">
+    trait has_datasheet<datasheet="https://www.lcsc.com/datasheet/lcsc_datasheet_1810231512_Lite-On-LTST-C190TBKT_C125096.pdf">
+
+    # pins
+    signal A ~ pin 2
+    signal K ~ pin 1

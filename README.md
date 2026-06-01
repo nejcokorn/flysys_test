@@ -29,7 +29,7 @@ Build a compact FlySys variometer board with:
 | USB | GCT `USB4105-GF-A` + ST `USBLC6-2SC6` | USB-C 2.0 receptacle and USB ESD for charging, ESP32-S3 native USB, USBMSD, logs, and flashing. |
 | Audio | Same Sky `CSS-J4D20-SMT-TR` + `AO3400A` N-MOSFET | Externally driven SMD magnetic transducer from the old device BOM. Drive from the 1S battery/SYS rail; keep firmware tone, carrier-duty, and envelope control. |
 | User input | C&K `KMR211NG LFS` | Momentary active-low tactile switch. Final actuator geometry still depends on enclosure height. |
-| Indicators | Lite-On `LTST-C190GKT` + `LTST-C190TBKT` | 0603 LEDs: green low-current `POWER_LED`, blue firmware-controlled `BLE_LED`. |
+| Indicators | Lite-On `LTST-C190GKT` + `LTST-C190TBKT` | 0603 LEDs: green low-current `POWER_LED`, blue firmware-controlled `BLE_LED`. The blue LED is driven from `SYS` with a GPIO-controlled low-side MOSFET. |
 | Battery | JST `S2B-PH-SM4-TB` | 2-pin JST-PH right-angle SMD header. Confirm protected pack and cable polarity. |
 | Debug | ESP32-S3 USB Serial/JTAG, `EN`, `BOOT`, optional UART0/plain JTAG pads | ESP32-S3 does not use SWD. With the internal USB PHY, USB Serial/JTAG and USB OTG/TinyUSB do not run at the same time; keep UART0/plain JTAG pads for debug while USBMSD is active, or add an external USB PHY if simultaneous USB debug and USBMSD is required. |
 
@@ -48,7 +48,7 @@ Initial audit checked: 2026-05-31. Audio and LED changes rechecked: 2026-06-01. 
 | USB ESD | `USBLC6-2SC6` | `497-5235-1-ND` | 86,224 in stock | Selected |
 | Battery connector | `S2B-PH-SM4-TB` | `455-S2B-PH-SM4-TBCT-ND` | 71,350 in stock | Selected |
 | Loud SMD buzzer | `CSS-J4D20-SMT-TR` | `102-1198-1-ND` | 2,332 in stock | Selected old-device buzzer: externally driven magnetic transducer, 90 dB at 3.6 V, 5 cm, 80 mA, 3.1 kHz |
-| Buzzer MOSFET | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Selected low-side driver; matches the old firmware's single PWM output model |
+| Buzzer/BLE LED MOSFETs | 2x `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Selected low-side drivers for buzzer PWM and blue BLE LED switching |
 | User button | `KMR211NG LFS` | `CKN10243CT-ND` | 44,917 in stock | Selected |
 | Power LED | `LTST-C190GKT` | `160-LTST-C190GKTCT-ND` | 1,068,260 in stock | Selected 0603 green LED, 2.1 V typical Vf |
 | BLE LED | `LTST-C190TBKT` | `160-1646-1-ND` | 92,246 in stock | Selected 0603 blue LED, 3.3 V typical Vf |
@@ -180,8 +180,23 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 9. Assign supplier/manufacturer metadata for audit.
 10. Run electrical/package checks before PCB routing.
 
+## Atopile Schematic Status
+
+Initial Atopile schematic capture is in this repo:
+
+- `ato.yaml`: Atopile 0.15.7 project config.
+- `main.ato`: FlySysVario schematic source.
+- `parts/`: generated part definitions and picked passives.
+- `layouts/default/default.kicad_pcb`: Atopile-generated KiCad PCB container.
+
+Current modeled nets include USB-C, USB ESD, BQ24075 power path, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, BMP581, BMI323, battery connector, battery/USB sense dividers, buzzer MOSFET driver, green power LED, blue BLE LED low-side switch, user/BOOT button, debug pads, and optional future magnetometer pads.
+
+`ato --non-interactive build` completes successfully. The remaining warnings are expected for schematic-only custom parts that still need verified footprints or importable CAD models before layout: `BMP581`, `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `KMR211NG LFS`, debug pads, and optional magnetometer pads. Generated/picked footprints already exist for ESP32-S3-MINI-1-N8, BQ24075RGTR, TLV75533PDBVR, BMI323, USB4105-GF-A, USBLC6-2SC6, LTST-C190GKT, LTST-C190TBKT, and current passives.
+
 ## Source Links
 
+- Atopile project structure: https://docs.atopile.io/atopile-0.14.x/essentials/5-project-structure
+- Atopile language reference: https://docs.atopile.io/atopile-0.14.x/essentials/1-the-ato-language
 - ESP32-S3-MINI-1 datasheet: https://documentation.espressif.com/esp32-s3-mini-1_mini-1u_datasheet_en.html
 - DigiKey.si ESP32-S3-MINI-1-N8: https://www.digikey.si/en/products/detail/espressif-systems/ESP32-S3-MINI-1-N8/15295890
 - ESP-IDF ESP32-S3 USB Device Stack / TinyUSB MSC: https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html
