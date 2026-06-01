@@ -29,7 +29,7 @@ Build a compact FlySys variometer board with:
 | USB | GCT `USB4105-GF-A` + ST `USBLC6-2SC6` | USB-C 2.0 receptacle and USB ESD for charging, ESP32-S3 native USB, USBMSD, logs, and flashing. |
 | Audio | Same Sky `CSS-J4D20-SMT-TR` + `AO3400A` N-MOSFET | Externally driven SMD magnetic transducer from the old device BOM. Drive from the 1S battery/SYS rail; keep firmware tone, carrier-duty, and envelope control. |
 | User input | C&K `KMR211NG LFS` | Momentary active-low tactile switch. Final actuator geometry still depends on enclosure height. |
-| Indicators | 2x Lite-On `LTST-C190KRKT` | 0603 red LEDs: one low-current `POWER_LED`, one firmware-controlled `BLE_LED`. |
+| Indicators | Lite-On `LTST-C190GKT` + `LTST-C190TBKT` | 0603 LEDs: green low-current `POWER_LED`, blue firmware-controlled `BLE_LED`. |
 | Battery | JST `S2B-PH-SM4-TB` | 2-pin JST-PH right-angle SMD header. Confirm protected pack and cable polarity. |
 | Debug | ESP32-S3 USB Serial/JTAG, `EN`, `BOOT`, optional UART0/plain JTAG pads | ESP32-S3 does not use SWD. With the internal USB PHY, USB Serial/JTAG and USB OTG/TinyUSB do not run at the same time; keep UART0/plain JTAG pads for debug while USBMSD is active, or add an external USB PHY if simultaneous USB debug and USBMSD is required. |
 
@@ -50,7 +50,8 @@ Initial audit checked: 2026-05-31. Audio and LED changes rechecked: 2026-06-01. 
 | Loud SMD buzzer | `CSS-J4D20-SMT-TR` | `102-1198-1-ND` | 2,332 in stock | Selected old-device buzzer: externally driven magnetic transducer, 90 dB at 3.6 V, 5 cm, 80 mA, 3.1 kHz |
 | Buzzer MOSFET | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Selected low-side driver; matches the old firmware's single PWM output model |
 | User button | `KMR211NG LFS` | `CKN10243CT-ND` | 44,917 in stock | Selected |
-| Power/BLE LEDs | 2x `LTST-C190KRKT` | `160-1436-1-ND` | 600,973 in stock | Selected 0603 red LED for both indicators |
+| Power LED | `LTST-C190GKT` | `160-LTST-C190GKTCT-ND` | 1,068,260 in stock | Selected 0603 green LED, 2.1 V typical Vf |
+| BLE LED | `LTST-C190TBKT` | `160-1646-1-ND` | 92,246 in stock | Selected 0603 blue LED, 3.3 V typical Vf |
 | Resistors | Yageo `RC0603FR` 1% 0603 family | Value-specific | `RC0603FR-0710KL` observed at 9,468,329 in stock | Use same family for 100R, 1k, 3k, 5.1k, 10k, 100k, 1M as needed |
 | 100 nF decoupling capacitor | Samsung `CL10B104KB8NNNC` | `1276-1000-1-ND` | 9,953,497 in stock | Selected family |
 | Other ceramics | Samsung CL-series MLCCs | Value-specific | Not individually locked yet | Select exact 1 uF, 10 uF, and 220 nF parts during Atopile binding |
@@ -69,8 +70,8 @@ Main audit result: all selected active semiconductors, sensors, connector choice
 - `BUZZER_PWM`: ESP32-S3 PWM-capable GPIO to the MOSFET gate.
 - `USER_BTN_N`: active-low button input.
 - `BAT_SENSE`: high-value battery divider to ESP32-S3 ADC-capable GPIO.
-- `POWER_LED`: low-current `+3V3` rail indicator with series resistor.
-- `BLE_LED`: low-current ESP32-S3 GPIO indicator for BLE advertising/connection state.
+- `POWER_LED`: low-current green `+3V3` rail indicator with series resistor.
+- `BLE_LED`: low-current blue indicator for BLE advertising/connection state. Because the blue LED has high forward voltage, prefer `SYS` plus a current-limit resistor and a small GPIO-controlled low-side switch instead of direct `+3V3` GPIO drive.
 - `EN`, `BOOT`: required ESP32-S3 bring-up/programming access.
 - `UART0_TX`, `UART0_RX`, optional plain JTAG pads: debug fallback while the USB PHY is used by USBMSD.
 
@@ -169,7 +170,7 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 ## Atopile Build Order
 
 1. Create Atopile project scaffold.
-2. Add verified packages for ESP32-S3-MINI-1-N8, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, CSS-J4D20 buzzer, MOSFET driver, button, power/BLE LEDs, and passives.
+2. Add verified packages for ESP32-S3-MINI-1-N8, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, CSS-J4D20 buzzer, MOSFET driver, button, green power LED, blue BLE LED, and passives.
 3. Capture power path and 3.3 V rail.
 4. Capture ESP32-S3 native USB OTG, USB VBUS sense, `EN`, `BOOT`, UART0, and debug access.
 5. Capture BMP581 and BMI323 on shared I2C.
@@ -198,6 +199,7 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 - DigiKey.si CSS-J4D20-SMT-TR: https://www.digikey.si/en/products/detail/same-sky-formerly-cui-devices/CSS-J4D20-SMT-TR/504819
 - DigiKey.si AO3400A: https://www.digikey.si/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772
 - DigiKey.si KMR211NG LFS: https://www.digikey.si/en/products/detail/c-k/Y78B21120FP/2176482
-- DigiKey.si LTST-C190KRKT: https://www.digikey.si/en/products/detail/lite-on-inc/LTST-C190KRKT/386817
+- DigiKey.si LTST-C190GKT: https://www.digikey.si/en/products/detail/lite-on-inc/LTST-C190GKT/269230
+- DigiKey.si LTST-C190TBKT: https://www.digikey.si/en/products/detail/lite-on-inc/LTST-C190TBKT/388529
 - DigiKey.si RC0603FR resistor family: https://www.digikey.si/en/products/filter/chip-resistor-surface-mount/52
 - DigiKey.si CL10B104KB8NNNC: https://www.digikey.si/en/products/detail/samsung-electro-mechanics/CL10B104KB8NNNC/3886658
