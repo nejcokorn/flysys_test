@@ -186,12 +186,12 @@ Initial Atopile schematic capture is in this repo:
 
 - `ato.yaml`: Atopile 0.15.7 project config.
 - `main.ato`: FlySysVario schematic source.
-- `parts/`: generated part definitions and picked passives.
+- `parts/`: generated and local part definitions plus picked passives.
 - `layouts/default/default.kicad_pcb`: Atopile-generated KiCad PCB container.
 
 Current modeled nets include USB-C, USB ESD, BQ24075 power path, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, BMP581, BMI323, battery connector, battery/USB sense dividers, buzzer MOSFET driver, green power LED, blue BLE LED low-side switch, user/BOOT button, debug pads, and optional future magnetometer pads.
 
-`ato --non-interactive build` completes successfully. The remaining warnings are expected for schematic-only custom parts that still need verified footprints or importable CAD models before layout: `BMP581`, `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `KMR211NG LFS`, debug pads, and optional magnetometer pads. Generated/picked footprints already exist for ESP32-S3-MINI-1-N8, BQ24075RGTR, TLV75533PDBVR, BMI323, USB4105-GF-A, USBLC6-2SC6, LTST-C190GKT, LTST-C190TBKT, and current passives.
+`ato --non-interactive build` completes successfully. The remaining warnings are expected for local or schematic-only custom parts. `BMP581` has a local KiCad footprint generated from the Bosch land pattern, but no Atopile supplier picker yet. `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `KMR211NG LFS`, debug pads, and optional magnetometer pads still need verified footprints or importable CAD models before layout. Generated/picked footprints already exist for ESP32-S3-MINI-1-N8, BQ24075RGTR, TLV75533PDBVR, BMI323, USB4105-GF-A, USBLC6-2SC6, LTST-C190GKT, LTST-C190TBKT, and current passives.
 
 ## Source Links
 
@@ -202,6 +202,7 @@ Current modeled nets include USB-C, USB ESD, BQ24075 power path, TLV75533 3.3 V 
 - ESP-IDF ESP32-S3 USB Device Stack / TinyUSB MSC: https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html
 - ESP-IDF ESP32-C3 USB Serial/JTAG fixed-function note: https://docs.espressif.com/projects/esp-idf/en/release-v5.2/esp32c3/api-guides/usb-serial-jtag-console.html
 - Bosch BMP581: https://www.bosch-sensortec.com/en/products/environmental-sensors/pressure-sensors/bmp581/
+- Bosch BMP581 datasheet / land pattern: https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp581-ds004.pdf
 - DigiKey.si BMP581: https://www.digikey.si/en/products/detail/bosch-sensortec/BMP581/16036134
 - Bosch BMI323: https://www.bosch-sensortec.com/en/products/motion-sensors/imus/bmi323/
 - DigiKey.si BMI323: https://www.digikey.si/en/products/detail/bosch-sensortec/BMI323/16719593

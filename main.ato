@@ -6,6 +6,7 @@ import Electrical
 import Resistor
 
 from "parts/Bosch_Sensortec_BMI323/Bosch_Sensortec_BMI323.ato" import Bosch_Sensortec_BMI323_package
+from "parts/Bosch_Sensortec_BMP581/Bosch_Sensortec_BMP581.ato" import Bosch_Sensortec_BMP581_package
 from "parts/Espressif_Systems_ESP32_S3_MINI_1_N8/Espressif_Systems_ESP32_S3_MINI_1_N8.ato" import Espressif_Systems_ESP32_S3_MINI_1_N8_package
 from "parts/GCT_USB4105_GF_A/GCT_USB4105_GF_A.ato" import GCT_USB4105_GF_A_package
 from "parts/Lite_On_LTST_C190GKT/Lite_On_LTST_C190GKT.ato" import Lite_On_LTST_C190GKT_package
@@ -13,19 +14,6 @@ from "parts/Lite_On_LTST_C190TBKT/Lite_On_LTST_C190TBKT.ato" import Lite_On_LTST
 from "parts/STMicroelectronics_USBLC6_2SC6/STMicroelectronics_USBLC6_2SC6.ato" import STMicroelectronics_USBLC6_2SC6_package
 from "parts/Texas_Instruments_BQ24075RGTR/Texas_Instruments_BQ24075RGTR.ato" import Texas_Instruments_BQ24075RGTR_package
 from "parts/Texas_Instruments_TLV75533PDBVR/Texas_Instruments_TLV75533PDBVR.ato" import Texas_Instruments_TLV75533PDBVR_package
-
-
-component Bosch_Sensortec_BMP581_package:
-    signal VDDIO ~ pin 1
-    signal SCK ~ pin 2
-    signal VSS ~ pin 3
-    signal SDI ~ pin 4
-    signal SDO ~ pin 5
-    signal CSB ~ pin 6
-    signal INT ~ pin 7
-    VSS ~ pin 8
-    VSS ~ pin 9
-    signal VDD ~ pin 10
 
 
 component JST_S2B_PH_SM4_TB_package:

@@ -154,4 +154,11 @@
 		(options "")
 		(descr "atopile: part lib: UNI_ROYAL_0603WAF3303T5E")
 	)
+	(lib
+		(name "Bosch_Sensortec_BMP581")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/../../parts/Bosch_Sensortec_BMP581")
+		(options "")
+		(descr "atopile: part lib: Bosch_Sensortec_BMP581")
+	)
 )
