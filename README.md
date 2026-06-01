@@ -1,6 +1,6 @@
 # FlySys Hardware Plan
 
-Updated: 2026-05-31
+Updated: 2026-06-01
 
 This folder is intentionally a planning workspace only. The next hardware build will be created from scratch in Atopile. Old EasyEDA, KiCad, generated production files, and JLC-specific draft outputs are not part of the active design.
 
@@ -12,63 +12,101 @@ Build a compact FlySys variometer board with:
 - Accurate pressure-based vertical-speed sensing.
 - 6-axis inertial sensing for filtering/orientation support.
 - LiPo charging and battery operation.
-- Piezo audio output.
-- Simple button, status LED, USB, and debug access.
+- Loud firmware-controlled audio output.
+- USB mass-storage device access for logs/configuration.
+- Simple button, power LED, BLE LED, USB, and debug access.
 
 ## Selected Components
 
 | Function | Selection | Supplier note |
 | --- | --- | --- |
-| MCU/BLE/Wi-Fi | Espressif `ESP32-C3-MINI-1-N4X` | Use this exact `N4X` variant. Do not use older `ESP32-C3-MINI-1-N4`, which was shown as not-for-new-design / 0 stock. |
+| MCU/BLE/Wi-Fi/USBMSD | Espressif `ESP32-S3-MINI-1-N8` | Use ESP32-S3 because USBMSD needs configurable USB device support. `N8` provides 8 MB flash and is stocked; it has no PSRAM. |
 | Pressure sensor | Bosch `BMP581` | Primary altitude/variometer pressure sensor. |
 | 6-axis IMU | Bosch `BMI323` | Primary accelerometer/gyro. |
 | Magnetometer | Not fitted | Keep unpopulated I2C pads or optional footprint for future magnetometer. |
 | Charger / power path | TI `BQ24075RGTR` | 1S LiPo charger with power-path management. |
-| 3.3 V regulator | TI `TLV75533PDBVR` | Replaces `AP2112K-3.3TRG1` because AP2112 was 0 stock in the DigiKey.si audit. ESP32-C3 radio transmission will be kept minimal in production. Add local bulk capacitance near the module. |
-| USB | GCT `USB4105-GF-A` + ST `USBLC6-2SC6` | USB-C 2.0 receptacle and USB ESD for charging, USB Serial/JTAG, logs, and flashing. |
-| Audio | Same Sky `CPT-9019A-SMT-TR` + `AO3400A` N-MOSFET | 3 V externally driven piezo plus low-side driver. Keep optional wired piezo pads if enclosure volume is insufficient. |
+| 3.3 V regulator | TI `TLV75533PDBVR` | Replaces `AP2112K-3.3TRG1` because AP2112 was 0 stock in the DigiKey.si audit. Recheck current and thermal margin with ESP32-S3 peaks. Add local bulk capacitance near the module. |
+| USB | GCT `USB4105-GF-A` + ST `USBLC6-2SC6` | USB-C 2.0 receptacle and USB ESD for charging, ESP32-S3 native USB, USBMSD, logs, and flashing. |
+| Audio | Same Sky `CSS-J4D20-SMT-TR` + `AO3400A` N-MOSFET | Externally driven SMD magnetic transducer from the old device BOM. Drive from the 1S battery/SYS rail; keep firmware tone, carrier-duty, and envelope control. |
 | User input | C&K `KMR211NG LFS` | Momentary active-low tactile switch. Final actuator geometry still depends on enclosure height. |
+| Indicators | 2x Lite-On `LTST-C190KRKT` | 0603 red LEDs: one low-current `POWER_LED`, one firmware-controlled `BLE_LED`. |
 | Battery | JST `S2B-PH-SM4-TB` | 2-pin JST-PH right-angle SMD header. Confirm protected pack and cable polarity. |
-| Debug | ESP32-C3 USB Serial/JTAG, `EN`, `BOOT`, optional UART0 pads | ESP32-C3 does not use SWD. |
+| Debug | ESP32-S3 USB Serial/JTAG, `EN`, `BOOT`, optional UART0/plain JTAG pads | ESP32-S3 does not use SWD. With the internal USB PHY, USB Serial/JTAG and USB OTG/TinyUSB do not run at the same time; keep UART0/plain JTAG pads for debug while USBMSD is active, or add an external USB PHY if simultaneous USB debug and USBMSD is required. |
 
 ## DigiKey.si Availability Audit
 
-Checked: 2026-05-31. Stock changes quickly; recheck before ordering.
+Initial audit checked: 2026-05-31. Audio and LED changes rechecked: 2026-06-01. Stock changes quickly; recheck before ordering.
 
 | Function | MPN | DigiKey cut-tape part | Observed availability | Status |
 | --- | --- | --- | --- | --- |
-| MCU/BLE/Wi-Fi | `ESP32-C3-MINI-1-N4X` | `1965-ESP32-C3-MINI-1-N4XCT-ND` | 955 in stock | Selected |
+| MCU/BLE/Wi-Fi/USBMSD | `ESP32-S3-MINI-1-N8` | `5407-ESP32-S3-MINI-1-N8CT-ND` | 3,843 in stock | Selected |
 | Pressure sensor | `BMP581` | `828-BMP581CT-ND` | 46,324 in stock | Selected |
 | 6-axis IMU | `BMI323` | `828-BMI323CT-ND` | 663 in stock | Selected |
 | Charger / power path | `BQ24075RGTR` | `296-38874-1-ND` | 3,702 in stock | Selected |
-| 3.3 V LDO, rejected | `AP2112K-3.3TRG1` | `AP2112K-3.3TRG1DICT-ND` | 0 in stock | Do not use for current DigiKey-sourced build |
-| 3.3 V LDO, replacement | `TLV75533PDBVR` | `296-50411-1-ND` | 110,688 in stock | Selected replacement |
+| 3.3 V LDO | `TLV75533PDBVR` | `296-50411-1-ND` | 110,688 in stock | Selected |
 | USB-C receptacle | `USB4105-GF-A` | `2073-USB4105-GF-ACT-ND` | 126,702 in stock | Selected |
 | USB ESD | `USBLC6-2SC6` | `497-5235-1-ND` | 86,224 in stock | Selected |
 | Battery connector | `S2B-PH-SM4-TB` | `455-S2B-PH-SM4-TBCT-ND` | 71,350 in stock | Selected |
-| Buzzer | `CPT-9019A-SMT-TR` | `2223-CPT-9019A-SMT-TRCT-ND` | 23,410 in stock | Selected |
-| Buzzer MOSFET | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Selected |
+| Loud SMD buzzer | `CSS-J4D20-SMT-TR` | `102-1198-1-ND` | 2,332 in stock | Selected old-device buzzer: externally driven magnetic transducer, 90 dB at 3.6 V, 5 cm, 80 mA, 3.1 kHz |
+| Buzzer MOSFET | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Selected low-side driver; matches the old firmware's single PWM output model |
 | User button | `KMR211NG LFS` | `CKN10243CT-ND` | 44,917 in stock | Selected |
-| Status LED | `LTST-C190KRKT` | `160-1436-1-ND` | 631,926 in stock | Selected |
+| Power/BLE LEDs | 2x `LTST-C190KRKT` | `160-1436-1-ND` | 600,973 in stock | Selected 0603 red LED for both indicators |
 | Resistors | Yageo `RC0603FR` 1% 0603 family | Value-specific | `RC0603FR-0710KL` observed at 9,468,329 in stock | Use same family for 100R, 1k, 3k, 5.1k, 10k, 100k, 1M as needed |
 | 100 nF decoupling capacitor | Samsung `CL10B104KB8NNNC` | `1276-1000-1-ND` | 9,953,497 in stock | Selected family |
 | Other ceramics | Samsung CL-series MLCCs | Value-specific | Not individually locked yet | Select exact 1 uF, 10 uF, and 220 nF parts during Atopile binding |
 
-Main audit result: all active semiconductors, sensors, connector choices, buzzer, button, LED, and common passives are available from DigiKey.si. The only rejected current-plan part is `AP2112K-3.3TRG1`, replaced by `TLV75533PDBVR`.
+Main audit result: all selected active semiconductors, sensors, connector choices, audio parts, button, LED, and common passives are available from DigiKey.si.
 
 ## Baseline Electrical Architecture
 
-- `USB_VBUS`: USB-C 5 V input to charger and USB VBUS sense.
+- `USB_VBUS`: USB-C 5 V input to charger and USB VBUS sense divider/comparator.
 - `SYS`: BQ24075 system output.
 - `BAT`: protected 1S LiPo positive terminal.
-- `+3V3`: TLV75533 output powering ESP32-C3, BMP581, BMI323, and optional magnetometer pads.
+- `+3V3`: TLV75533 output powering ESP32-S3, BMP581, BMI323, and optional magnetometer pads.
 - `I2C_SCL`, `I2C_SDA`: shared sensor bus for BMP581, BMI323, and DNP magnetometer option.
-- `USB_DP`, `USB_DM`: USB full-speed pair to ESP32-C3.
-- `BUZZER_PWM`: ESP32-C3 PWM-capable GPIO to MOSFET gate.
+- `USB_OTG_DP`, `USB_OTG_DM`: USB full-speed pair to ESP32-S3 native USB pins (`GPIO20` D+, `GPIO19` D-).
+- `BUZZER_VM`: battery/SYS-powered audio rail feeding the buzzer; no boost in the baseline.
+- `BUZZER_PWM`: ESP32-S3 PWM-capable GPIO to the MOSFET gate.
 - `USER_BTN_N`: active-low button input.
-- `BAT_SENSE`: high-value battery divider to ESP32-C3 ADC-capable GPIO.
-- `STATUS_LED`: low-current LED GPIO.
-- `EN`, `BOOT`: required ESP32-C3 bring-up/programming access.
+- `BAT_SENSE`: high-value battery divider to ESP32-S3 ADC-capable GPIO.
+- `POWER_LED`: low-current `+3V3` rail indicator with series resistor.
+- `BLE_LED`: low-current ESP32-S3 GPIO indicator for BLE advertising/connection state.
+- `EN`, `BOOT`: required ESP32-S3 bring-up/programming access.
+- `UART0_TX`, `UART0_RX`, optional plain JTAG pads: debug fallback while the USB PHY is used by USBMSD.
+
+## USBMSD / Storage Plan
+
+USBMSD is now a baseline requirement. Use ESP32-S3 native USB OTG device mode with the ESP-IDF TinyUSB MSC class.
+
+Route the USB-C D+/D- pair to ESP32-S3 `GPIO20`/`GPIO19`, keep the ESD part near the connector, and add a USB VBUS monitor path because this is a battery-powered, self-powered USB device.
+
+Initial storage options:
+
+- Internal flash FAT partition for small configuration import/export and short log files.
+- External SPI flash, SPI NAND, or microSD if host-visible logs need materially more capacity or write endurance.
+
+Do not let firmware and the USB host write the same mounted filesystem at the same time. Define a mode switch or mount arbitration before implementing firmware.
+
+## Audio Plan
+
+The buzzer must be loud enough for a paragliding vario used in open air with wind noise. Treat acoustic output as a primary requirement, not a secondary indicator.
+
+Use an externally driven passive SMD transducer so firmware keeps control over pitch, cadence, envelope, mute profiles, and sink/climb tone patterns. Do not use an internally driven active buzzer.
+
+Selected audio path:
+
+- Transducer: `CSS-J4D20-SMT-TR`, externally driven magnetic SMD transducer from the old device BOM, 90 dB at 3.6 V, 5 cm, 3.1 kHz, about 80 mA at rated drive.
+- Driver: `AO3400A` low-side N-MOSFET, with the buzzer powered from the 1S battery/SYS rail and the MOSFET gate driven by one ESP32-S3 PWM GPIO.
+
+This matches the old `MX270_MiniUP` firmware model: one output-compare PWM channel generated the audio carrier, `beep->volume` changed the carrier duty, and the vario queue changed the beep envelope/cadence. Port that control model to ESP32-S3 LEDC or MCPWM.
+
+Use the battery/SYS rail, not raw USB VBUS. A normal 1S Li-ion/LiPo pack is 4.2 V full and about 3.6-3.7 V nominal; that fits the buzzer's 3-5 V operating range. Confirm BQ24075 `SYS` behavior so the buzzer never sees an out-of-range USB-derived rail.
+
+Drive the buzzer near its 3.1 kHz rated frequency for maximum SPL. For lower volume, prefer carrier-duty control and audible envelope control; avoid detuning far from resonance just to reduce volume. The old firmware's tone table can be reused as a behavioral reference, but final tones should be revalidated against this buzzer in the enclosure.
+
+Add a gate resistor, gate pulldown, local bulk capacitance near the buzzer supply, and a footprint option for coil clamp/snubber parts. Keep the buzzer current loop compact and scope the first PCB for ringing and EMI while the buzzer is running.
+
+The enclosure must include a real acoustic outlet or sound channel. Verify SPL after the PCB is installed in the actual enclosure, because the port, chamber volume, venting, clothing, helmet, and mounting orientation can dominate the result.
 
 ## Sensor Plan
 
@@ -88,61 +126,76 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 
 ## Layout Constraints
 
-- Put the ESP32-C3-MINI-1-N4X antenna at a board edge and follow Espressif keepout guidance.
+- Put the ESP32-S3-MINI-1-N8 antenna at a board edge and follow Espressif keepout guidance.
 - Put BMP581 near a pressure vent and away from heat, board flex, adhesive, conformal coating, and direct buzzer airflow.
 - Put BMI323 near the board center in a mechanically stable area and document axis orientation.
 - Keep sensor supply decoupling close to each VDD/VDDIO pin.
-- Keep USB D+/D- short, impedance-conscious, and protected by ESD near the connector.
-- Keep buzzer and charger return currents away from sensor ground return.
-- Avoid assigning functional loads to ESP32-C3 boot strapping pins until boot behavior is checked.
+- Keep USB D+/D- short, impedance-conscious, protected by ESD near the connector, and routed to ESP32-S3 `GPIO20`/`GPIO19`.
+- Include USB VBUS monitoring suitable for self-powered USB device behavior.
+- Give the buzzer a clear acoustic outlet; do not bury the port in a sealed or foam-covered enclosure pocket.
+- Keep buzzer switching current and charger return currents away from sensor ground return.
+- Avoid assigning functional loads to ESP32-S3 boot strapping pins, USB pins, and flash/PSRAM-reserved pins until boot behavior and the exact module variant are checked.
 
 ## Firmware Impact
 
-- Port board support from Arduino Nano 33 BLE Sense Rev2 / nRF52840 assumptions to ESP32-C3.
-- Use ESP32-C3 BLE stack and keep transmission duty cycle low in production.
+- Port board support from Arduino Nano 33 BLE Sense Rev2 / nRF52840 assumptions to ESP32-S3.
+- Use ESP32-S3 BLE stack and keep transmission duty cycle low in production.
+- Add USBMSD using ESP-IDF TinyUSB MSC over ESP32-S3 native USB OTG.
+- Define the USBMSD storage backend and host-visible filesystem.
+- Prevent concurrent writes between firmware logging/config code and the mounted USB host filesystem.
+- Decide whether USB presents MSC only, CDC+MSC composite, or a boot/mode-selected function.
 - Add direct BMP581 driver support.
 - Add direct BMI323 driver support.
 - Remove required magnetometer reads from the baseline firmware path.
-- Rework GPIO mapping for ESP32-C3, including `BUZZER_PWM`, `USER_BTN_N`, `BAT_SENSE`, `STATUS_LED`, I2C, USB, `EN`, and `BOOT`.
+- Rework GPIO mapping for ESP32-S3, including `BUZZER_PWM`, `USER_BTN_N`, `BAT_SENSE`, `BLE_LED`, I2C, USB, `EN`, `BOOT`, UART0, and optional plain JTAG.
+- Add configurable audio profiles for vario use: climb cadence, sink alarm, mute, startup check, and volume/power-saving modes.
+- Port the old single-PWM buzzer model, then retune frequency and volume tables around the `CSS-J4D20-SMT-TR` response on the new PCB.
 - Revalidate sensor axis mapping and calibration on the actual PCB.
 
 ## Open Decisions
 
 - Protected LiPo pack and cable polarity.
-- Whether a wired piezo disc is needed in addition to the selected SMD buzzer.
+- USBMSD storage backend: internal flash FAT partition vs external flash/NAND/microSD.
+- USB device mode policy: MSC only, CDC+MSC composite, or boot/mode-selected function.
+- Final volume-control policy: envelope levels, quiet mode, and startup volume.
+- Enclosure acoustic outlet, port orientation, and measured SPL after installation.
 - Button actuator/enclosure mechanics.
-- Final ESP32-C3 GPIO map after strapping-pin review.
+- Final ESP32-S3 GPIO map after strapping-pin, USB-pin, and reserved-pin review.
+- Whether `ESP32-S3-MINI-1-N8` without PSRAM is sufficient for the final USBMSD firmware.
+- TLV75533 current and thermal margin with ESP32-S3 RF peaks and USB-attached operation.
 - Whether charger status pins need LEDs or only test pads.
 - Final Atopile package/footprint sources and exact passive values.
 
 ## Atopile Build Order
 
 1. Create Atopile project scaffold.
-2. Add verified packages for ESP32-C3-MINI-1-N4X, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, buzzer, MOSFET, button, LED, and passives.
+2. Add verified packages for ESP32-S3-MINI-1-N8, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, CSS-J4D20 buzzer, MOSFET driver, button, power/BLE LEDs, and passives.
 3. Capture power path and 3.3 V rail.
-4. Capture ESP32-C3 USB, `EN`, `BOOT`, and debug access.
+4. Capture ESP32-S3 native USB OTG, USB VBUS sense, `EN`, `BOOT`, UART0, and debug access.
 5. Capture BMP581 and BMI323 on shared I2C.
 6. Add unpopulated magnetometer I2C pads or optional footprint.
-7. Capture user I/O.
-8. Assign supplier/manufacturer metadata for audit.
-9. Run electrical/package checks before PCB routing.
+7. Add the selected USBMSD storage backend if external storage is selected.
+8. Capture loud audio and user I/O.
+9. Assign supplier/manufacturer metadata for audit.
+10. Run electrical/package checks before PCB routing.
 
 ## Source Links
 
-- ESP32-C3-MINI-1 datasheet: https://documentation.espressif.com/esp32-c3-mini-1_datasheet_en.html
-- DigiKey.si ESP32-C3-MINI-1-N4X: https://www.digikey.si/en/products/detail/espressif-systems/ESP32-C3-MINI-1-N4X/27525554
+- ESP32-S3-MINI-1 datasheet: https://documentation.espressif.com/esp32-s3-mini-1_mini-1u_datasheet_en.html
+- DigiKey.si ESP32-S3-MINI-1-N8: https://www.digikey.si/en/products/detail/espressif-systems/ESP32-S3-MINI-1-N8/15295890
+- ESP-IDF ESP32-S3 USB Device Stack / TinyUSB MSC: https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html
+- ESP-IDF ESP32-C3 USB Serial/JTAG fixed-function note: https://docs.espressif.com/projects/esp-idf/en/release-v5.2/esp32c3/api-guides/usb-serial-jtag-console.html
 - Bosch BMP581: https://www.bosch-sensortec.com/en/products/environmental-sensors/pressure-sensors/bmp581/
 - DigiKey.si BMP581: https://www.digikey.si/en/products/detail/bosch-sensortec/BMP581/16036134
 - Bosch BMI323: https://www.bosch-sensortec.com/en/products/motion-sensors/imus/bmi323/
 - DigiKey.si BMI323: https://www.digikey.si/en/products/detail/bosch-sensortec/BMI323/16719593
 - TI BQ24075: https://www.ti.com/product/BQ24075
 - DigiKey.si BQ24075RGTR: https://www.digikey.si/en/products/detail/texas-instruments/BQ24075RGTR/2047273
-- DigiKey.si AP2112K-3.3TRG1, rejected due to 0 stock: https://www.digikey.si/en/products/detail/diodes-incorporated/AP2112K-3-3TRG1/4470746
 - DigiKey.si TLV75533PDBVR: https://www.digikey.si/en/products/detail/texas-instruments/TLV75533PDBVR/9356541
 - DigiKey.si USB4105-GF-A: https://www.digikey.si/en/products/detail/gct/USB4105-GF-A/11198441
 - DigiKey.si USBLC6-2SC6: https://www.digikey.si/en/products/detail/stmicroelectronics/USBLC6-2SC6/1121688
 - DigiKey.si S2B-PH-SM4-TB: https://www.digikey.si/en/products/filter/headers-male-pins/314?s=N4Ig7CBcoIYE5QIwA5EGYA0IYBcmZAAcBLJAJjLUQE4wBfOoA
-- DigiKey.si CPT-9019A-SMT-TR: https://www.digikey.si/en/products/detail/same-sky-formerly-cui-devices/CPT-9019A-SMT-TR/19105220
+- DigiKey.si CSS-J4D20-SMT-TR: https://www.digikey.si/en/products/detail/same-sky-formerly-cui-devices/CSS-J4D20-SMT-TR/504819
 - DigiKey.si AO3400A: https://www.digikey.si/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772
 - DigiKey.si KMR211NG LFS: https://www.digikey.si/en/products/detail/c-k/Y78B21120FP/2176482
 - DigiKey.si LTST-C190KRKT: https://www.digikey.si/en/products/detail/lite-on-inc/LTST-C190KRKT/386817
