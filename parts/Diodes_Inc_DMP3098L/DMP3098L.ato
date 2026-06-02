@@ -1,0 +1,14 @@
+import has_designator
+import has_designator_prefix
+import is_atomic_part
+
+component Diodes_Inc_DMP3098L_Q4_package:
+    """DMP3098L P-channel MOSFET in SOT-23."""
+
+    trait is_atomic_part<manufacturer="Diodes Incorporated", partnumber="DMP3098L-7", footprint="DMP3098L.kicad_mod", symbol="DMP3098L.kicad_sym">
+    trait has_designator<designator="Q4">
+    trait has_designator_prefix<prefix="Q">
+
+    signal GATE ~ pin 1
+    signal SOURCE ~ pin 2
+    signal DRAIN ~ pin 3

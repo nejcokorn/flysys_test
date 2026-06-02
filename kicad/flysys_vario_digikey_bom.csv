@@ -1,8 +1,10 @@
 References,Quantity,Value,Manufacturer,MPN,DigiKey Part Number,Supplier,DigiKey URL,Description
-"Q1, Q2",2,AO3400A,Alpha & Omega Semiconductor Inc.,AO3400A,785-1000-1-ND,DigiKey,https://www.digikey.com/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772,"N-channel MOSFET, SOT-23"
+"Q1, Q2, Q3, Q5",4,AO3400A,Alpha & Omega Semiconductor Inc.,AO3400A,785-1000-1-ND,DigiKey,https://www.digikey.com/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772,"N-channel MOSFET, SOT-23"
 U2,1,BMI323,Bosch Sensortec,BMI323,828-BMI323CT-ND,DigiKey,https://www.digikey.com/en/products/detail/bosch-sensortec/BMI323/16719593,6-axis IMU
 U5,1,BMP581,Bosch Sensortec,BMP581,828-BMP581CT-ND,DigiKey,https://www.digikey.com/en/products/detail/bosch-sensortec/BMP581/16036134,Barometric pressure sensor
-SW1,1,KMR211NG LFS,C&K,KMR211NG LFS,CKN10243CT-ND,DigiKey,https://www.digikey.com/en/products/detail/c-k/KMR211NG-LFS/2176482,Low-profile tactile switch
+"SW1, SW2, SW3",3,KMR211NG LFS,C&K,KMR211NG LFS,CKN10243CT-ND,DigiKey,https://www.digikey.com/en/products/detail/c-k/KMR211NG-LFS/2176482,Low-profile tactile switch
+"D2, D3, D4",3,1N4148W,Diodes Incorporated,1N4148W-7-F,1N4148W-FDICT-ND,DigiKey,https://www.digikey.com/en/products/detail/diodes-incorporated/1N4148W-7-F/815280,"Small-signal switching diode, SOD-123"
+Q4,1,DMP3098L,Diodes Incorporated,DMP3098L-7,DMP3098L-7DICT-ND,DigiKey,https://www.digikey.com/en/products/detail/diodes-incorporated/DMP3098L-7/1964698,"P-channel MOSFET, SOT-23"
 U4,1,ESP32-S3-MINI-1-N8,Espressif Systems,ESP32-S3-MINI-1-N8,5407-ESP32-S3-MINI-1-N8CT-ND,DigiKey,https://www.digikey.com/en/products/detail/espressif-systems/ESP32-S3-MINI-1-N8/15295890,ESP32-S3 module with PCB antenna and 8 MB flash
 USB1,1,USB4105-GF-A,GCT,USB4105-GF-A,2073-USB4105-GF-ACT-ND,DigiKey,https://www.digikey.com/en/products/detail/gct/USB4105-GF-A/11198441,"USB-C receptacle, USB 2.0, right angle"
 J1,1,S2B-PH-SM4-TB,JST Sales America Inc.,S2B-PH-SM4-TB,455-S2B-PH-SM4-TBCT-ND,DigiKey,https://www.digikey.com/en/products/detail/jst-sales-america-inc/S2B-PH-SM4-TB/926655,2-pin JST PH side-entry SMT header
@@ -15,14 +17,14 @@ BZ1,1,CSS-J4D20-SMT-TR,Same Sky (Formerly CUI Devices),CSS-J4D20-SMT-TR,102-1198
 U1,1,BQ24075RGTR,Texas Instruments,BQ24075RGTR,296-38874-1-ND,DigiKey,https://www.digikey.com/en/products/detail/texas-instruments/BQ24075RGTR/2047273,Li-ion charger and power-path controller
 U3,1,TLV75533PDBVR,Texas Instruments,TLV75533PDBVR,296-50411-1-ND,DigiKey,https://www.digikey.com/en/products/detail/texas-instruments/TLV75533PDBVR/9356541,3.3 V 500 mA LDO regulator
 "C2, C4, C5, C6, C10, C11, C12",7,100nF,YAGEO,CC0603KRX7R9BB104,311-1344-1-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/CC0603KRX7R9BB104/2103082,"100 nF, 50 V, X7R, 0603 capacitor"
-"R3, R7",2,100k,YAGEO,RC0603FR-07100KL,311-100KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-07100KL/726889,"100 kohm, 1%, 0.1 W, 0603 resistor"
-"R4, R8",2,100R,YAGEO,RC0603FR-07100RL,311-100HRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-07100RL/726888,"100 ohm, 1%, 0.1 W, 0603 resistor"
+"R3, R7, R24",3,100k,YAGEO,RC0603FR-07100KL,311-100KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-07100KL/726889,"100 kohm, 1%, 0.1 W, 0603 resistor"
+"R4, R8, R25",3,100R,YAGEO,RC0603FR-07100RL,311-100HRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-07100RL/726888,"100 ohm, 1%, 0.1 W, 0603 resistor"
 "R6, R13, R15, R16, R19",5,10k,YAGEO,RC0603FR-0710KL,311-10.0KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-0710KL/726880,"10 kohm, 1%, 0.1 W, 0603 resistor"
 R11,1,1.1k,YAGEO,RC0603FR-071K1L,311-1.10KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-071K1L/726848,"1.1 kohm, 1%, 0.1 W, 0603 resistor"
 "R5, R20",2,1k,YAGEO,RC0603FR-071KL,311-1.00KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-071KL/726843,"1 kohm, 1%, 0.1 W, 0603 resistor"
-"R1, R2, R22",3,1M,YAGEO,RC0603FR-071ML,311-1.00MHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-071ML/729791,"1 Mohm, 1%, 0.1 W, 0603 resistor"
+"R1, R2, R22, R23, R26, R28",6,1M,YAGEO,RC0603FR-071ML,311-1.00MHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-071ML/729791,"1 Mohm, 1%, 0.1 W, 0603 resistor"
 R12,1,2k,YAGEO,RC0603FR-072KL,311-2.00KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-072KL/727009,"2 kohm, 1%, 0.1 W, 0603 resistor"
 R21,1,330k,YAGEO,RC0603FR-07330KL,311-330KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-07330KL/727163,"330 kohm, 1%, 0.1 W, 0603 resistor"
 R14,1,47k,YAGEO,RC0603FR-0747KL,311-47.0KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-0747KL/727253,"47 kohm, 1%, 0.1 W, 0603 resistor"
-"R17, R18",2,4.7k,YAGEO,RC0603FR-074K7L,311-4.70KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-074K7L/727212,"4.7 kohm, 1%, 0.1 W, 0603 resistor"
+"R17, R18, R27",3,4.7k,YAGEO,RC0603FR-074K7L,311-4.70KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-074K7L/727212,"4.7 kohm, 1%, 0.1 W, 0603 resistor"
 "R9, R10",2,5.1k,YAGEO,RC0603FR-075K1L,311-5.10KHRCT-ND,DigiKey,https://www.digikey.com/en/products/detail/yageo/RC0603FR-075K1L/727268,"5.1 kohm, 1%, 0.1 W, 0603 resistor"

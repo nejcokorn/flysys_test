@@ -183,13 +183,6 @@
 		(descr "atopile: part lib: JST_S2B_PH_SM4_TB")
 	)
 	(lib
-		(name "Local_DebugPads")
-		(type "KiCad")
-		(uri "${KIPRJMOD}/../../parts/Local_DebugPads")
-		(options "")
-		(descr "atopile: part lib: Local_DebugPads")
-	)
-	(lib
 		(name "Local_OptionalMagnetometerPads")
 		(type "KiCad")
 		(uri "${KIPRJMOD}/../../parts/Local_OptionalMagnetometerPads")
@@ -202,5 +195,19 @@
 		(uri "${KIPRJMOD}/../../parts/Same_Sky_CSS_J4D20_SMT_TR")
 		(options "")
 		(descr "atopile: part lib: Same_Sky_CSS_J4D20_SMT_TR")
+	)
+	(lib
+		(name "Diodes_Inc_1N4148W")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/../../parts/Diodes_Inc_1N4148W")
+		(options "")
+		(descr "atopile: part lib: Diodes_Inc_1N4148W")
+	)
+	(lib
+		(name "Diodes_Inc_DMP3098L")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/../../parts/Diodes_Inc_DMP3098L")
+		(options "")
+		(descr "atopile: part lib: Diodes_Inc_DMP3098L")
 	)
 )

@@ -14,7 +14,7 @@ Build a compact FlySys variometer board with:
 - LiPo charging and battery operation.
 - Loud firmware-controlled audio output.
 - USB mass-storage device access for logs/configuration.
-- Simple button, power LED, BLE LED, USB, and debug access.
+- Power, BOOT, and RESET buttons, power LED, BLE LED, USB, and firmware update access without debug pads.
 
 ## Selected Components
 
@@ -28,10 +28,10 @@ Build a compact FlySys variometer board with:
 | 3.3 V regulator | TI `TLV75533PDBVR` | Replaces `AP2112K-3.3TRG1` because AP2112 was 0 stock in the DigiKey.si audit. Recheck current and thermal margin with ESP32-S3 peaks. Add local bulk capacitance near the module. |
 | USB | GCT `USB4105-GF-A` + ST `USBLC6-2SC6` | USB-C 2.0 receptacle and USB ESD for charging, ESP32-S3 native USB, USBMSD, logs, and flashing. |
 | Audio | Same Sky `CSS-J4D20-SMT-TR` + `AO3400A` N-MOSFET | Externally driven SMD magnetic transducer from the old device BOM. Drive from the 1S battery/SYS rail; keep firmware tone, carrier-duty, and envelope control. |
-| User input | C&K `KMR211NG LFS` | Momentary active-low tactile switch. Final actuator geometry still depends on enclosure height. |
+| User input | C&K `KMR211NG LFS` | Momentary active-low tactile switches for power/user input, BOOT, and RESET. Final actuator geometry still depends on enclosure height. |
 | Indicators | Lite-On `LTST-C190GKT` + `LTST-C190TBKT` | 0603 LEDs: green low-current `POWER_LED`, blue firmware-controlled `BLE_LED`. The blue LED is driven from `SYS` with a GPIO-controlled low-side MOSFET. |
 | Battery | JST `S2B-PH-SM4-TB` | 2-pin JST-PH right-angle SMD header. Confirm protected pack and cable polarity. |
-| Debug | ESP32-S3 USB Serial/JTAG, `EN`, `BOOT`, optional UART0/plain JTAG pads | ESP32-S3 does not use SWD. With the internal USB PHY, USB Serial/JTAG and USB OTG/TinyUSB do not run at the same time; keep UART0/plain JTAG pads for debug while USBMSD is active, or add an external USB PHY if simultaneous USB debug and USBMSD is required. |
+| Firmware update | ESP32-S3 native USB + BOOT/RESET buttons | Debug pads are not fitted. Hold BOOT and tap RESET to enter the ESP32-S3 ROM USB bootloader for recovery/flashing. |
 
 ## DigiKey.si Availability Audit
 
@@ -48,7 +48,9 @@ Initial audit checked: 2026-05-31. Audio and LED changes rechecked: 2026-06-01. 
 | USB ESD | `USBLC6-2SC6` | `497-5235-1-ND` | 86,224 in stock | Selected |
 | Battery connector | `S2B-PH-SM4-TB` | `455-S2B-PH-SM4-TBCT-ND` | 71,350 in stock | Selected |
 | Loud SMD buzzer | `CSS-J4D20-SMT-TR` | `102-1198-1-ND` | 2,332 in stock | Selected old-device buzzer: externally driven magnetic transducer, 90 dB at 3.6 V, 5 cm, 80 mA, 3.1 kHz |
-| Buzzer/BLE LED MOSFETs | 2x `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Selected low-side drivers for buzzer PWM and blue BLE LED switching |
+| N-MOSFETs | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Low-side drivers for buzzer PWM, blue BLE LED switching, and power-latch control |
+| Battery switch P-MOSFET | `DMP3098L-7` | `DMP3098L-7DICT-ND` | Recheck before ordering | High-side hard-off switch between battery connector and internal `BAT` rail |
+| Power-start diodes | `1N4148W-7-F` | `1N4148W-FDICT-ND` | Recheck before ordering | Diode isolation for power button, battery switch gate, and charger `SYSOFF` |
 | User button | `KMR211NG LFS` | `CKN10243CT-ND` | 44,917 in stock | Selected |
 | Power LED | `LTST-C190GKT` | `160-LTST-C190GKTCT-ND` | 1,068,260 in stock | Selected 0603 green LED, 2.1 V typical Vf |
 | BLE LED | `LTST-C190TBKT` | `160-1646-1-ND` | 92,246 in stock | Selected 0603 blue LED, 3.3 V typical Vf |
@@ -62,18 +64,20 @@ Main audit result: all selected active semiconductors, sensors, connector choice
 
 - `USB_VBUS`: USB-C 5 V input to charger and USB VBUS sense divider/comparator.
 - `SYS`: BQ24075 system output.
-- `BAT`: protected 1S LiPo positive terminal.
+- `BAT_RAW`: protected 1S LiPo positive terminal at the connector.
+- `BAT`: switched internal battery rail after the hard-off P-MOSFET.
 - `+3V3`: TLV75533 output powering ESP32-S3, BMP581, BMI323, and optional magnetometer pads.
 - `I2C_SCL`, `I2C_SDA`: shared sensor bus for BMP581, BMI323, and DNP magnetometer option.
 - `USB_OTG_DP`, `USB_OTG_DM`: USB full-speed pair to ESP32-S3 native USB pins (`GPIO20` D+, `GPIO19` D-).
 - `BUZZER_VM`: battery/SYS-powered audio rail feeding the buzzer; no boost in the baseline.
 - `BUZZER_PWM`: ESP32-S3 PWM-capable GPIO to the MOSFET gate.
-- `USER_BTN_N`: active-low button input.
-- `BAT_SENSE`: high-value battery divider to ESP32-S3 ADC-capable GPIO.
+- `PWR_SW_N`: raw active-low power switch node.
+- `PWR_BTN_N`: diode-isolated active-low button input to ESP32-S3.
+- `BOOT_USER_BTN_N`: ESP32-S3 GPIO0 boot strap, pulled low by the BOOT button for ROM bootloader entry.
+- `BAT_SENSE`: high-value divider from switched `BAT` to ESP32-S3 ADC-capable GPIO; it has no DC path to `BAT_RAW` when the hard-off switch is open.
 - `POWER_LED`: low-current green `+3V3` rail indicator with series resistor.
 - `BLE_LED`: low-current blue indicator for BLE advertising/connection state. Because the blue LED has high forward voltage, prefer `SYS` plus a current-limit resistor and a small GPIO-controlled low-side switch instead of direct `+3V3` GPIO drive.
-- `EN`, `BOOT`: required ESP32-S3 bring-up/programming access.
-- `UART0_TX`, `UART0_RX`, optional plain JTAG pads: debug fallback while the USB PHY is used by USBMSD.
+- `EN`, `BOOT`: physical RESET and BOOT buttons for ESP32-S3 ROM bootloader entry.
 
 ## USBMSD / Storage Plan
 
@@ -148,7 +152,7 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 - Add direct BMP581 driver support.
 - Add direct BMI323 driver support.
 - Remove required magnetometer reads from the baseline firmware path.
-- Rework GPIO mapping for ESP32-S3, including `BUZZER_PWM`, `USER_BTN_N`, `BAT_SENSE`, `BLE_LED`, I2C, USB, `EN`, `BOOT`, UART0, and optional plain JTAG.
+- Rework GPIO mapping for ESP32-S3, including `BUZZER_PWM`, `PWR_BTN_N`, `PWR_HOLD`, `BAT_SENSE`, `BLE_LED`, I2C, USB, `EN`, and `BOOT`.
 - Add configurable audio profiles for vario use: climb cadence, sink alarm, mute, startup check, and volume/power-saving modes.
 - Port the old single-PWM buzzer model, then retune frequency and volume tables around the `CSS-J4D20-SMT-TR` response on the new PCB.
 - Revalidate sensor axis mapping and calibration on the actual PCB.
@@ -172,7 +176,7 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 1. Create Atopile project scaffold.
 2. Add verified packages for ESP32-S3-MINI-1-N8, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, CSS-J4D20 buzzer, MOSFET driver, button, green power LED, blue BLE LED, and passives.
 3. Capture power path and 3.3 V rail.
-4. Capture ESP32-S3 native USB OTG, USB VBUS sense, `EN`, `BOOT`, UART0, and debug access.
+4. Capture ESP32-S3 native USB OTG, USB VBUS sense, `EN`, `BOOT`, and user-accessible bootloader buttons.
 5. Capture BMP581 and BMI323 on shared I2C.
 6. Add unpopulated magnetometer I2C pads or optional footprint.
 7. Add the selected USBMSD storage backend if external storage is selected.
@@ -186,13 +190,13 @@ Atopile is now the active project source in this repo:
 
 - `ato.yaml`: Atopile 0.15.7 project config.
 - `main.ato`: FlySysVario schematic source and Atopile `RectangularBoardShape` board outline.
-- `parts/`: generated and local part definitions, including local draft footprints for battery, buzzer, MOSFETs, button, debug pads, and optional magnetometer pads.
+- `parts/`: generated and local part definitions, including local draft footprints for battery, buzzer, MOSFETs, signal diodes, buttons, and optional magnetometer pads.
 - `layouts/default/default.kicad_pcb`: Atopile-generated layout artifact used by the Atopile Autolayout panel.
 - `docs/components-and-placement.md`: component map, passive explanations, and placement intent.
 
-Current modeled nets include USB-C, USB ESD, BQ24075 power path, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, BMP581, BMI323, battery connector, battery/USB sense dividers, buzzer MOSFET driver, green power LED, blue BLE LED low-side switch, user/BOOT button, debug pads, and optional future magnetometer pads.
+Current modeled nets include USB-C, USB ESD, BQ24075 power path, P-MOS battery hard-off switch, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, BMP581, BMI323, battery connector, switched battery/USB sense dividers, buzzer MOSFET driver, green power LED, blue BLE LED low-side switch, power/user button, BOOT and RESET buttons, and optional future magnetometer pads.
 
-`ato --non-interactive build` completes the current Atopile workflow. The 52 mm x 40 mm board outline is defined in `main.ato` with `RectangularBoardShape`, so the Atopile Autolayout panel has a board boundary to place and route against. The remaining warnings are expected for local or DigiKey-only parts because the current picker support is not covering those local packages. Before production, verify the local draft footprints for `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `KMR211NG LFS`, debug pads, and optional magnetometer pads against manufacturer land patterns and enclosure mechanics.
+`ato --non-interactive build` completes the current Atopile workflow. The 90 mm x 45 mm board outline is defined in `main.ato` with `RectangularBoardShape`, so the Atopile Autolayout panel has a board boundary to place and route against. The remaining warnings are expected for local or DigiKey-only parts because the current picker support is not covering those local packages. Before production, verify the local draft footprints for `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `DMP3098L`, `1N4148W`, `KMR211NG LFS`, and optional magnetometer pads against manufacturer land patterns and enclosure mechanics.
 
 ## Source Links
 

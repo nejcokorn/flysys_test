@@ -1,6 +1,88 @@
 (kicad_symbol_lib
 	(version 20220914)
 	(generator codex)
+	(symbol "1N4148W"
+		(pin_names
+			(offset 0.508)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "D"
+			(id 0)
+			(at 0 6.27 0)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Value" "1N4148W"
+			(id 1)
+			(at 0 -6.27 0)
+			(effects (font (size 1.27 1.27)))
+		)
+		(property "Footprint" ""
+			(id 2)
+			(at 0 -9.27 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "Datasheet" ""
+			(id 3)
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(property "Description" ""
+			(id 4)
+			(at 0 0 0)
+			(effects (font (size 1.27 1.27)) hide)
+		)
+		(symbol "1N4148W_0_1"
+			(rectangle
+				(start -3.81 1.27)
+				(end 3.81 -1.27)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(pin passive line
+				(at -5.08 0.00 0)
+				(length 2.54)
+				(name "K"
+					(effects
+						(font
+							(size 1.00 1.00)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.00 1.00)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 5.08 0.00 180)
+				(length 2.54)
+				(name "A"
+					(effects
+						(font
+							(size 1.00 1.00)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.00 1.00)
+						)
+					)
+				)
+			)
+		)
+	)
 	(symbol "AO3400A"
 		(pin_names
 			(offset 0.508)
@@ -1141,26 +1223,26 @@
 			)
 		)
 	)
-	(symbol "DebugPads_1x06_1.27mm"
+	(symbol "DMP3098L"
 		(pin_names
 			(offset 0.508)
 		)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(property "Reference" "J"
+		(property "Reference" "Q"
 			(id 0)
-			(at 0 12.62 0)
+			(at 0 8.81 0)
 			(effects (font (size 1.27 1.27)))
 		)
-		(property "Value" "DebugPads_1x06_1.27mm"
+		(property "Value" "DMP3098L"
 			(id 1)
-			(at 0 -12.62 0)
+			(at 0 -8.81 0)
 			(effects (font (size 1.27 1.27)))
 		)
 		(property "Footprint" ""
 			(id 2)
-			(at 0 -15.62 0)
+			(at 0 -11.81 0)
 			(effects (font (size 1.27 1.27)) hide)
 		)
 		(property "Datasheet" ""
@@ -1173,10 +1255,10 @@
 			(at 0 0 0)
 			(effects (font (size 1.27 1.27)) hide)
 		)
-		(symbol "DebugPads_1x06_1.27mm_0_1"
+		(symbol "DMP3098L_0_1"
 			(rectangle
-				(start -5.08 7.62)
-				(end -2.54 -7.62)
+				(start -5.08 3.81)
+				(end 5.08 -3.81)
 				(stroke
 					(width 0.254)
 					(type default)
@@ -1186,9 +1268,9 @@
 				)
 			)
 			(pin passive line
-				(at -6.35 6.35 0)
+				(at -6.35 0.00 0)
 				(length 2.54)
-				(name "GND"
+				(name "G"
 					(effects
 						(font
 							(size 1.00 1.00)
@@ -1204,9 +1286,9 @@
 				)
 			)
 			(pin passive line
-				(at -6.35 3.81 0)
+				(at 6.35 -2.54 180)
 				(length 2.54)
-				(name "+3V3"
+				(name "S"
 					(effects
 						(font
 							(size 1.00 1.00)
@@ -1222,9 +1304,9 @@
 				)
 			)
 			(pin passive line
-				(at -6.35 1.27 0)
+				(at 6.35 2.54 180)
 				(length 2.54)
-				(name "EN"
+				(name "D"
 					(effects
 						(font
 							(size 1.00 1.00)
@@ -1232,60 +1314,6 @@
 					)
 				)
 				(number "3"
-					(effects
-						(font
-							(size 1.00 1.00)
-						)
-					)
-				)
-			)
-			(pin passive line
-				(at -6.35 -1.27 0)
-				(length 2.54)
-				(name "BOOT"
-					(effects
-						(font
-							(size 1.00 1.00)
-						)
-					)
-				)
-				(number "4"
-					(effects
-						(font
-							(size 1.00 1.00)
-						)
-					)
-				)
-			)
-			(pin passive line
-				(at -6.35 -3.81 0)
-				(length 2.54)
-				(name "TXD0"
-					(effects
-						(font
-							(size 1.00 1.00)
-						)
-					)
-				)
-				(number "5"
-					(effects
-						(font
-							(size 1.00 1.00)
-						)
-					)
-				)
-			)
-			(pin passive line
-				(at -6.35 -6.35 0)
-				(length 2.54)
-				(name "RXD0"
-					(effects
-						(font
-							(size 1.00 1.00)
-						)
-					)
-				)
-				(number "6"
 					(effects
 						(font
 							(size 1.00 1.00)

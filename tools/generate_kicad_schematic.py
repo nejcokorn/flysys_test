@@ -60,6 +60,7 @@ class SupplierPart:
 KINDS: dict[str, Kind] = {
     "USB4105": Kind("GCT_USB4105_GF_A", "USB4105-GF-A", "USB4105-GF-A.kicad_sym", "GCT_USB4105_GF_A:TYPE-C-SMD_SBC-160S1A-20-S412"),
     "USBLC6": Kind("STMicroelectronics_USBLC6_2SC6", "USBLC6-2SC6", "USBLC6-2SC6.kicad_sym", "STMicroelectronics_USBLC6_2SC6:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"),
+    "DIODE_1N4148W": Kind("Diodes_Inc_1N4148W", "1N4148W", "1N4148W.kicad_sym", "Diodes_Inc_1N4148W:1N4148W"),
     "BQ24075": Kind("Texas_Instruments_BQ24075RGTR", "BQ24075RGTR", "BQ24075RGTR.kicad_sym", "Texas_Instruments_BQ24075RGTR:QFN-16_L3.0-W3.0-P0.50-TL-EP1.7"),
     "TLV75533": Kind("Texas_Instruments_TLV75533PDBVR", "TLV75533PDBVR", "TLV75533PDBVR.kicad_sym", "Texas_Instruments_TLV75533PDBVR:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR"),
     "JST_PH_2": Kind("JST_S2B_PH_SM4_TB", "S2B-PH-SM4-TB", "S2B-PH-SM4-TB.kicad_sym", "JST_S2B_PH_SM4_TB:S2B-PH-SM4-TB"),
@@ -68,10 +69,10 @@ KINDS: dict[str, Kind] = {
     "BMI323": Kind("Bosch_Sensortec_BMI323", "BMI323", "BMI323.kicad_sym", "Bosch_Sensortec_BMI323:LGA-14_L3.0-W2.5-P0.50-TL_QMI8658A"),
     "BUZZER": Kind("Same_Sky_CSS_J4D20_SMT_TR", "CSS-J4D20-SMT-TR", "CSS-J4D20-SMT-TR.kicad_sym", "Same_Sky_CSS_J4D20_SMT_TR:CSS-J4D20-SMT-TR"),
     "AO3400A": Kind("Alpha_Omega_AO3400A", "AO3400A", "AO3400A.kicad_sym", "Alpha_Omega_AO3400A:AO3400A"),
+    "DMP3098L": Kind("Diodes_Inc_DMP3098L", "DMP3098L", "DMP3098L.kicad_sym", "Diodes_Inc_DMP3098L:DMP3098L"),
     "BUTTON": Kind("CK_KMR211NG_LFS", "KMR211NG_LFS", "KMR211NG_LFS.kicad_sym", "CK_KMR211NG_LFS:KMR211NG_LFS"),
     "LED_GREEN": Kind("Lite_On_LTST_C190GKT", "LTST-C190GKT", "LTST-C190GKT.kicad_sym", "Lite_On_LTST_C190GKT:LED0603-RD"),
     "LED_BLUE": Kind("Lite_On_LTST_C190TBKT", "LTST-C190TBKT", "LTST-C190TBKT.kicad_sym", "Lite_On_LTST_C190TBKT:LED0603-RD"),
-    "DEBUG_1X6": Kind("Local_DebugPads", "DebugPads_1x06_1.27mm", "DebugPads_1x06_1.27mm.kicad_sym", "Local_DebugPads:DebugPads_1x06_1.27mm"),
     "R100": Kind("UNI_ROYAL_0603WAF1000T5E", "0603WAF1000T5E", "0603WAF1000T5E.kicad_sym", "UNI_ROYAL_0603WAF1000T5E:R0603"),
     "R1K": Kind("UNI_ROYAL_0603WAF1001T5E", "0603WAF1001T5E", "0603WAF1001T5E.kicad_sym", "UNI_ROYAL_0603WAF1001T5E:R0603"),
     "R2K": Kind("UNI_ROYAL_0603WAF2001T5E", "0603WAF2001T5E", "0603WAF2001T5E.kicad_sym", "UNI_ROYAL_0603WAF2001T5E:R0603"),
@@ -92,6 +93,7 @@ KINDS: dict[str, Kind] = {
 DIGIKEY_PARTS: dict[str, SupplierPart] = {
     "USB4105": SupplierPart("GCT", "USB4105-GF-A", "2073-USB4105-GF-ACT-ND", "https://www.digikey.com/en/products/detail/gct/USB4105-GF-A/11198441", "USB-C receptacle, USB 2.0, right angle"),
     "USBLC6": SupplierPart("STMicroelectronics", "USBLC6-2SC6", "497-5235-1-ND", "https://www.digikey.com/en/products/detail/stmicroelectronics/USBLC6-2SC6/1040559", "USB ESD protection diode array"),
+    "DIODE_1N4148W": SupplierPart("Diodes Incorporated", "1N4148W-7-F", "1N4148W-FDICT-ND", "https://www.digikey.com/en/products/detail/diodes-incorporated/1N4148W-7-F/815280", "Small-signal switching diode, SOD-123"),
     "BQ24075": SupplierPart("Texas Instruments", "BQ24075RGTR", "296-38874-1-ND", "https://www.digikey.com/en/products/detail/texas-instruments/BQ24075RGTR/2047273", "Li-ion charger and power-path controller"),
     "TLV75533": SupplierPart("Texas Instruments", "TLV75533PDBVR", "296-50411-1-ND", "https://www.digikey.com/en/products/detail/texas-instruments/TLV75533PDBVR/9356541", "3.3 V 500 mA LDO regulator"),
     "JST_PH_2": SupplierPart("JST Sales America Inc.", "S2B-PH-SM4-TB", "455-S2B-PH-SM4-TBCT-ND", "https://www.digikey.com/en/products/detail/jst-sales-america-inc/S2B-PH-SM4-TB/926655", "2-pin JST PH side-entry SMT header"),
@@ -100,10 +102,10 @@ DIGIKEY_PARTS: dict[str, SupplierPart] = {
     "BMI323": SupplierPart("Bosch Sensortec", "BMI323", "828-BMI323CT-ND", "https://www.digikey.com/en/products/detail/bosch-sensortec/BMI323/16719593", "6-axis IMU"),
     "BUZZER": SupplierPart("Same Sky (Formerly CUI Devices)", "CSS-J4D20-SMT-TR", "102-1198-1-ND", "https://www.digikey.com/en/products/detail/same-sky-formerly-cui-devices/CSS-J4D20-SMT-TR/504819", "Externally driven magnetic buzzer"),
     "AO3400A": SupplierPart("Alpha & Omega Semiconductor Inc.", "AO3400A", "785-1000-1-ND", "https://www.digikey.com/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772", "N-channel MOSFET, SOT-23"),
+    "DMP3098L": SupplierPart("Diodes Incorporated", "DMP3098L-7", "DMP3098L-7DICT-ND", "https://www.digikey.com/en/products/detail/diodes-incorporated/DMP3098L-7/1964698", "P-channel MOSFET, SOT-23"),
     "BUTTON": SupplierPart("C&K", "KMR211NG LFS", "CKN10243CT-ND", "https://www.digikey.com/en/products/detail/c-k/KMR211NG-LFS/2176482", "Low-profile tactile switch"),
     "LED_GREEN": SupplierPart("Lite-On Inc.", "LTST-C190GKT", "160-LTST-C190GKTCT-ND", "https://www.digikey.com/en/products/detail/lite-on-inc/LTST-C190GKT/269255", "Green 0603 LED"),
     "LED_BLUE": SupplierPart("Lite-On Inc.", "LTST-C190TBKT", "160-1646-1-ND", "https://www.digikey.com/en/products/detail/lite-on-inc/LTST-C190TBKT/388529", "Blue 0603 LED"),
-    "DEBUG_1X6": SupplierPart("PCB fabrication", "DebugPads_1x06_1.27mm", "", "", "PCB copper pads only; not a purchased component", "PCB only", False),
     "R100": SupplierPart("YAGEO", "RC0603FR-07100RL", "311-100HRCT-ND", "https://www.digikey.com/en/products/detail/yageo/RC0603FR-07100RL/726888", "100 ohm, 1%, 0.1 W, 0603 resistor"),
     "R1K": SupplierPart("YAGEO", "RC0603FR-071KL", "311-1.00KHRCT-ND", "https://www.digikey.com/en/products/detail/yageo/RC0603FR-071KL/726843", "1 kohm, 1%, 0.1 W, 0603 resistor"),
     "R2K": SupplierPart("YAGEO", "RC0603FR-072KL", "311-2.00KHRCT-ND", "https://www.digikey.com/en/products/detail/yageo/RC0603FR-072KL/727009", "2 kohm, 1%, 0.1 W, 0603 resistor"),
@@ -137,10 +139,10 @@ COMPONENTS: list[Component] = [
     Component("U1", "BQ24075RGTR", "BQ24075", 95.0, 185.0, {
         "1": "CHG_TS", "2": "BAT", "3": "BAT", "4": "GND", "5": "SYS", "6": "GND",
         "7": "nPGOOD", "8": "GND", "9": "nCHG", "10": "SYS", "11": "SYS",
-        "12": "CHG_ILIM", "13": "USB_VBUS", "14": "CHG_TMR", "15": "GND",
+        "12": "CHG_ILIM", "13": "USB_VBUS", "14": "CHG_TMR", "15": "CHG_SYSOFF",
         "16": "CHG_ISET", "17": "GND",
     }),
-    Component("J1", "S2B-PH-SM4-TB", "JST_PH_2", 35.0, 185.0, {"1": "BAT", "2": "GND"}),
+    Component("J1", "S2B-PH-SM4-TB", "JST_PH_2", 35.0, 185.0, {"1": "BAT_RAW", "2": "GND"}),
     Component("U3", "TLV75533PDBVR", "TLV75533", 185.0, 185.0, {
         "1": "SYS", "2": "GND", "3": "SYS", "4": None, "5": "+3V3",
     }),
@@ -148,23 +150,26 @@ COMPONENTS: list[Component] = [
         "1": "GND", "2": "GND", "3": "+3V3", "4": "BOOT_USER_BTN_N",
         "5": "BAT_SENSE", "6": "USB_VBUS_SENSE", "7": None,
         "8": "BMP581_INT", "9": "BMI323_INT1", "10": "BMI323_INT2",
-        "11": None, "12": "I2C_SCL", "13": "I2C_SDA",
-        "14": None, "15": None, "16": None, "17": None, "18": None, "19": None,
+        "11": "PWR_BTN_N", "12": "I2C_SCL", "13": "I2C_SDA",
+        "14": "PWR_HOLD", "15": None, "16": None, "17": None, "18": None, "19": None,
         "20": None, "21": "BUZZER_PWM", "22": "BLE_LED_PWM",
         "23": "USB_OTG_DM", "24": "USB_OTG_DP", "25": None, "26": None,
         "27": None, "28": None, "29": None, "30": None, "31": None, "32": None,
         "33": "nCHG", "34": "nPGOOD", "35": None, "36": None, "37": None, "38": None,
-        "39": "TXD0", "40": "RXD0", "41": None, "42": "GND", "43": "GND",
+        "39": None, "40": None, "41": None, "42": "GND", "43": "GND",
         "44": None, "45": "EN", "46": "GND", "47": "GND", "48": "GND",
         "49": "GND", "50": "GND", "51": "GND", "52": "GND", "53": "GND",
         "54": "GND", "55": "GND", "56": "GND", "57": "GND", "58": "GND",
         "59": "GND", "60": "GND", "GND": "GND",
     }),
-    Component("J2", "Debug pads 1x6", "DEBUG_1X6", 430.0, 78.0, {
-        "1": "GND", "2": "+3V3", "3": "EN", "4": "BOOT_USER_BTN_N", "5": "TXD0", "6": "RXD0",
-    }),
     Component("SW1", "KMR211NG LFS", "BUTTON", 430.0, 135.0, {
+        "1": "PWR_SW_N", "2": "PWR_SW_N", "3": "GND", "4": "GND",
+    }),
+    Component("SW2", "KMR211NG LFS", "BUTTON", 430.0, 78.0, {
         "1": "BOOT_USER_BTN_N", "2": "BOOT_USER_BTN_N", "3": "GND", "4": "GND",
+    }),
+    Component("SW3", "KMR211NG LFS", "BUTTON", 430.0, 105.0, {
+        "1": "EN", "2": "EN", "3": "GND", "4": "GND",
     }),
     Component("U5", "BMP581", "BMP581", 520.0, 80.0, {
         "1": "+3V3", "2": "I2C_SCL", "3": "GND", "4": "I2C_SDA", "5": "GND",
@@ -178,8 +183,14 @@ COMPONENTS: list[Component] = [
     Component("BZ1", "CSS-J4D20-SMT-TR", "BUZZER", 680.0, 80.0, {"1": "SYS", "2": "BUZZER_NEG"}),
     Component("Q1", "AO3400A", "AO3400A", 760.0, 80.0, {"1": "BUZZER_GATE", "2": "GND", "3": "BUZZER_NEG"}),
     Component("Q2", "AO3400A", "AO3400A", 760.0, 155.0, {"1": "BLE_LED_GATE", "2": "GND", "3": "BLE_LED_K"}),
+    Component("Q3", "AO3400A", "AO3400A", 760.0, 210.0, {"1": "PWR_HOLD_GATE", "2": "GND", "3": "CHG_SYSOFF"}),
+    Component("Q4", "DMP3098L", "DMP3098L", 760.0, 265.0, {"1": "BAT_SWITCH_GATE", "2": "BAT_RAW", "3": "BAT"}),
+    Component("Q5", "AO3400A", "AO3400A", 760.0, 320.0, {"1": "PWR_HOLD_GATE", "2": "GND", "3": "BAT_SWITCH_GATE"}),
     Component("LED2", "LTST-C190GKT", "LED_GREEN", 680.0, 230.0, {"1": "GND", "2": "POWER_LED_A"}),
     Component("LED1", "LTST-C190TBKT", "LED_BLUE", 680.0, 155.0, {"1": "BLE_LED_K", "2": "BLE_LED_A"}),
+    Component("D2", "1N4148W", "DIODE_1N4148W", 545.0, 315.0, {"1": "PWR_SW_N", "2": "PWR_BTN_N"}),
+    Component("D3", "1N4148W", "DIODE_1N4148W", 595.0, 315.0, {"1": "PWR_SW_N", "2": "BAT_SWITCH_GATE"}),
+    Component("D4", "1N4148W", "DIODE_1N4148W", 645.0, 315.0, {"1": "PWR_SW_N", "2": "CHG_SYSOFF"}),
 
     Component("C14", "1uF", "C1U", 55.0, 128.0, {"1": "USB_VBUS", "2": "GND"}),
     Component("R9", "5.1k", "R5K1", 115.0, 126.0, {"1": "CC1", "2": "GND"}),
@@ -195,12 +206,18 @@ COMPONENTS: list[Component] = [
     Component("R14", "47k", "R47K", 175.0, 285.0, {"1": "CHG_TMR", "2": "GND"}),
     Component("R13", "10k", "R10K", 225.0, 285.0, {"1": "nCHG", "2": "+3V3"}),
     Component("R19", "10k", "R10K", 275.0, 285.0, {"1": "nPGOOD", "2": "+3V3"}),
+    Component("R23", "1M", "R1M", 325.0, 285.0, {"1": "CHG_SYSOFF", "2": "BAT"}),
+    Component("R24", "100k", "R100K", 375.0, 285.0, {"1": "PWR_HOLD_GATE", "2": "+3V3"}),
+    Component("R25", "100R", "R100", 425.0, 285.0, {"1": "PWR_HOLD", "2": "PWR_HOLD_GATE"}),
+    Component("R26", "1M", "R1M", 475.0, 285.0, {"1": "PWR_HOLD_GATE", "2": "GND"}),
+    Component("R28", "1M", "R1M", 525.0, 285.0, {"1": "BAT_SWITCH_GATE", "2": "BAT_RAW"}),
 
     Component("C9", "10uF", "C10U", 255.0, 255.0, {"1": "+3V3", "2": "GND"}),
     Component("C10", "100nF", "C100N", 305.0, 255.0, {"1": "+3V3", "2": "GND"}),
     Component("R16", "10k", "R10K", 365.0, 255.0, {"1": "EN", "2": "+3V3"}),
     Component("C4", "100nF", "C100N", 415.0, 255.0, {"1": "EN", "2": "GND"}),
     Component("R6", "10k", "R10K", 465.0, 255.0, {"1": "BOOT_USER_BTN_N", "2": "+3V3"}),
+    Component("R27", "4.7k", "R4K7", 515.0, 255.0, {"1": "PWR_BTN_N", "2": "+3V3"}),
     Component("R2", "1M", "R1M", 260.0, 315.0, {"1": "BAT", "2": "BAT_SENSE"}),
     Component("R1", "1M", "R1M", 310.0, 315.0, {"1": "BAT_SENSE", "2": "GND"}),
     Component("C2", "100nF", "C100N", 360.0, 315.0, {"1": "BAT_SENSE", "2": "GND"}),
@@ -303,12 +320,6 @@ def pins_for_kind(kind: Kind) -> dict[str, Pin]:
             walk(item)
 
     walk(symbol)
-    if kind.symbol == "DebugPads_1x06_1.27mm":
-        ys = ["6.35", "3.81", "1.27", "-1.27", "-3.81", "-6.35"]
-        pins = {
-            number: Pin(number, pins[number].name, -6.35, float(ys[index]), 0)
-            for index, number in enumerate(["1", "2", "3", "4", "5", "6"])
-        }
     return pins
 
 
@@ -361,15 +372,17 @@ def ref_prefix(symbol_name: str) -> str:
         return "USB"
     if symbol_name == "USBLC6-2SC6":
         return "D"
+    if symbol_name == "1N4148W":
+        return "D"
     if symbol_name == "CSS-J4D20-SMT-TR":
         return "BZ"
-    if symbol_name == "AO3400A":
+    if symbol_name in {"AO3400A", "DMP3098L"}:
         return "Q"
     if symbol_name == "KMR211NG_LFS":
         return "SW"
     if symbol_name.startswith("LTST"):
         return "LED"
-    if symbol_name.startswith("S2B") or symbol_name.startswith("DebugPads") or symbol_name.startswith("Optional"):
+    if symbol_name.startswith("S2B") or symbol_name.startswith("Optional"):
         return "J"
     if symbol_name == "R":
         return "R"
@@ -678,9 +691,10 @@ def schematic_connection_items(pins_by_kind: dict[str, dict[str, Pin]]) -> list[
                 items.append(wire)
 
     preferred_order = [
-        "GND", "+3V3", "SYS", "BAT", "USB_VBUS",
+        "GND", "+3V3", "SYS", "BAT_RAW", "BAT", "USB_VBUS",
         "USB_DP_CONN", "USB_DM_CONN", "USB_OTG_DP", "USB_OTG_DM",
         "I2C_SCL", "I2C_SDA", "EN", "BOOT_USER_BTN_N",
+        "PWR_SW_N", "PWR_BTN_N", "CHG_SYSOFF", "PWR_HOLD", "PWR_HOLD_GATE", "BAT_SWITCH_GATE",
         "BAT_SENSE", "USB_VBUS_SENSE", "nCHG", "nPGOOD",
         "BUZZER_PWM", "BUZZER_GATE", "BUZZER_NEG",
         "BLE_LED_PWM", "BLE_LED_GATE", "BLE_LED_A", "BLE_LED_K", "POWER_LED_A",
@@ -871,7 +885,7 @@ def write_digikey_bom() -> None:
 
     csv_path = KICAD / f"{PROJECT}_digikey_bom.csv"
     with csv_path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fields)
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -880,9 +894,9 @@ def write_digikey_bom() -> None:
     md_lines = [
         "# FlySys DigiKey BOM",
         "",
-        "Updated: 2026-06-01",
+        "Updated: 2026-06-02",
         "",
-        "All purchased components in the KiCad schematic use DigiKey order lines. `J2` is PCB copper debug pads only and is intentionally excluded from the purchasing BOM.",
+        "All purchased components in the KiCad schematic use DigiKey order lines. Debug pads are not fitted; ESP32-S3 bootloader entry uses USB plus the BOOT and RESET buttons.",
         "",
         "| References | Qty | Value | Manufacturer | MPN | DigiKey PN | Description |",
         "| --- | ---: | --- | --- | --- | --- | --- |",

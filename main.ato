@@ -10,13 +10,20 @@ from "parts/Bosch_Sensortec_BMI323/Bosch_Sensortec_BMI323.ato" import Bosch_Sens
 from "parts/Bosch_Sensortec_BMP581/Bosch_Sensortec_BMP581.ato" import Bosch_Sensortec_BMP581_package
 from "parts/Alpha_Omega_AO3400A/Alpha_Omega_AO3400A.ato" import Alpha_Omega_AO3400A_Q1_package
 from "parts/Alpha_Omega_AO3400A/Alpha_Omega_AO3400A.ato" import Alpha_Omega_AO3400A_Q2_package
+from "parts/Alpha_Omega_AO3400A/Alpha_Omega_AO3400A.ato" import Alpha_Omega_AO3400A_Q3_package
+from "parts/Alpha_Omega_AO3400A/Alpha_Omega_AO3400A.ato" import Alpha_Omega_AO3400A_Q5_package
 from "parts/CK_KMR211NG_LFS/CK_KMR211NG_LFS.ato" import CK_KMR211NG_LFS_package
+from "parts/CK_KMR211NG_LFS/CK_KMR211NG_LFS.ato" import CK_KMR211NG_LFS_SW2_package
+from "parts/CK_KMR211NG_LFS/CK_KMR211NG_LFS.ato" import CK_KMR211NG_LFS_SW3_package
+from "parts/Diodes_Inc_1N4148W/Diodes_Inc_1N4148W.ato" import Diodes_Inc_1N4148W_D2_package
+from "parts/Diodes_Inc_1N4148W/Diodes_Inc_1N4148W.ato" import Diodes_Inc_1N4148W_D3_package
+from "parts/Diodes_Inc_1N4148W/Diodes_Inc_1N4148W.ato" import Diodes_Inc_1N4148W_D4_package
+from "parts/Diodes_Inc_DMP3098L/DMP3098L.ato" import Diodes_Inc_DMP3098L_Q4_package
 from "parts/Espressif_Systems_ESP32_S3_MINI_1_N8/Espressif_Systems_ESP32_S3_MINI_1_N8.ato" import Espressif_Systems_ESP32_S3_MINI_1_N8_package
 from "parts/GCT_USB4105_GF_A/GCT_USB4105_GF_A.ato" import GCT_USB4105_GF_A_package
 from "parts/JST_S2B_PH_SM4_TB/JST_S2B_PH_SM4_TB.ato" import JST_S2B_PH_SM4_TB_package
 from "parts/Lite_On_LTST_C190GKT/Lite_On_LTST_C190GKT.ato" import Lite_On_LTST_C190GKT_package
 from "parts/Lite_On_LTST_C190TBKT/Lite_On_LTST_C190TBKT.ato" import Lite_On_LTST_C190TBKT_package
-from "parts/Local_DebugPads/Local_DebugPads.ato" import DebugPads_package
 from "parts/Same_Sky_CSS_J4D20_SMT_TR/Same_Sky_CSS_J4D20_SMT_TR.ato" import Same_Sky_CSS_J4D20_SMT_TR_package
 from "parts/STMicroelectronics_USBLC6_2SC6/STMicroelectronics_USBLC6_2SC6.ato" import STMicroelectronics_USBLC6_2SC6_package
 from "parts/Texas_Instruments_BQ24075RGTR/Texas_Instruments_BQ24075RGTR.ato" import Texas_Instruments_BQ24075RGTR_package
@@ -33,22 +40,26 @@ module FlySysVario:
     usb_vbus = new ElectricPower
     sys = new ElectricPower
     v3v3 = new ElectricPower
+    bat_raw = new ElectricPower
     bat = new ElectricPower
 
     gnd.override_net_name = "GND"
     usb_vbus.hv.override_net_name = "USB_VBUS"
     sys.hv.override_net_name = "SYS"
     v3v3.hv.override_net_name = "+3V3"
+    bat_raw.hv.override_net_name = "BAT_RAW"
     bat.hv.override_net_name = "BAT"
 
     usb_vbus.lv ~ gnd
     sys.lv ~ gnd
     v3v3.lv ~ gnd
+    bat_raw.lv ~ gnd
     bat.lv ~ gnd
 
     assert usb_vbus.voltage within 4.75V to 5.25V
     assert sys.voltage within 3.0V to 5.5V
     assert v3v3.voltage within 3.3V +/- 5%
+    assert bat_raw.voltage within 3.0V to 4.2V
     assert bat.voltage within 3.0V to 4.2V
 
     usb = new GCT_USB4105_GF_A_package
@@ -62,10 +73,17 @@ module FlySysVario:
     buzzer = new Same_Sky_CSS_J4D20_SMT_TR_package
     q_buzzer = new Alpha_Omega_AO3400A_Q1_package
     q_ble_led = new Alpha_Omega_AO3400A_Q2_package
+    q_sysoff = new Alpha_Omega_AO3400A_Q3_package
+    q_bat_switch = new Diodes_Inc_DMP3098L_Q4_package
+    q_bat_gate = new Alpha_Omega_AO3400A_Q5_package
+    d_pwr_btn_sense = new Diodes_Inc_1N4148W_D2_package
+    d_bat_gate_button = new Diodes_Inc_1N4148W_D3_package
+    d_sysoff_button = new Diodes_Inc_1N4148W_D4_package
     user_button = new CK_KMR211NG_LFS_package
+    boot_button = new CK_KMR211NG_LFS_SW2_package
+    reset_button = new CK_KMR211NG_LFS_SW3_package
     power_led = new Lite_On_LTST_C190GKT_package
     ble_led = new Lite_On_LTST_C190TBKT_package
-    debug = new DebugPads_package
 
     usb_dp_conn = new Electrical
     usb_dm_conn = new Electrical
@@ -75,6 +93,12 @@ module FlySysVario:
     i2c_sda = new Electrical
     en = new Electrical
     boot_user_btn_n = new Electrical
+    pwr_sw_n = new Electrical
+    pwr_btn_n = new Electrical
+    chg_sysoff = new Electrical
+    pwr_hold = new Electrical
+    pwr_hold_gate = new Electrical
+    bat_switch_gate = new Electrical
     bat_sense = new Electrical
     usb_vbus_sense = new Electrical
     buzzer_gate = new Electrical
@@ -88,6 +112,12 @@ module FlySysVario:
     i2c_sda.override_net_name = "I2C_SDA"
     en.override_net_name = "EN"
     boot_user_btn_n.override_net_name = "BOOT_USER_BTN_N"
+    pwr_sw_n.override_net_name = "PWR_SW_N"
+    pwr_btn_n.override_net_name = "PWR_BTN_N"
+    chg_sysoff.override_net_name = "CHG_SYSOFF"
+    pwr_hold.override_net_name = "PWR_HOLD"
+    pwr_hold_gate.override_net_name = "PWR_HOLD_GATE"
+    bat_switch_gate.override_net_name = "BAT_SWITCH_GATE"
     bat_sense.override_net_name = "BAT_SENSE"
     usb_vbus_sense.override_net_name = "USB_VBUS_SENSE"
     buzzer_gate.override_net_name = "BUZZER_GATE"
@@ -129,7 +159,27 @@ module FlySysVario:
     charger.nCE ~ gnd
     charger.EN1 ~ gnd
     charger.EN2 ~ sys.hv
-    charger.SYSOFF ~ gnd
+    charger.SYSOFF ~ chg_sysoff
+    chg_sysoff ~> r_sysoff_pullup ~> bat.hv
+    chg_sysoff ~ q_sysoff.DRAIN
+    q_sysoff.SOURCE ~ gnd
+    mcu.IO10 ~> r_pwr_hold_gate ~> pwr_hold_gate
+    pwr_hold_gate ~ q_sysoff.GATE
+    pwr_hold_gate ~> r_pwr_hold_gate_pu ~> v3v3.hv
+    pwr_hold_gate ~> r_pwr_hold_gate_pd ~> gnd
+    q_bat_switch.SOURCE ~ bat_raw.hv
+    q_bat_switch.DRAIN ~ bat.hv
+    q_bat_switch.GATE ~ bat_switch_gate
+    bat_switch_gate ~> r_bat_switch_gate_pu ~> bat_raw.hv
+    bat_switch_gate ~ q_bat_gate.DRAIN
+    q_bat_gate.SOURCE ~ gnd
+    q_bat_gate.GATE ~ pwr_hold_gate
+    d_pwr_btn_sense.A ~ pwr_btn_n
+    d_pwr_btn_sense.K ~ pwr_sw_n
+    d_bat_gate_button.A ~ bat_switch_gate
+    d_bat_gate_button.K ~ pwr_sw_n
+    d_sysoff_button.A ~ chg_sysoff
+    d_sysoff_button.K ~ pwr_sw_n
     charger.TS ~> r_chg_ts ~> gnd
     charger.ISET ~> r_chg_iset ~> gnd
     charger.ILIM ~> r_chg_ilim ~> gnd
@@ -145,20 +195,35 @@ module FlySysVario:
     r_chg_tmr = new Resistor
     r_chg_pullup = new Resistor
     r_pgood_pullup = new Resistor
+    r_sysoff_pullup = new Resistor
+    r_pwr_hold_gate = new Resistor
+    r_pwr_hold_gate_pu = new Resistor
+    r_pwr_hold_gate_pd = new Resistor
+    r_bat_switch_gate_pu = new Resistor
     r_chg_ts.resistance = 10kohm +/- 1%
     r_chg_iset.resistance = 2kohm +/- 1%
     r_chg_ilim.resistance = 1.1kohm +/- 1%
     r_chg_tmr.resistance = 47kohm +/- 1%
     r_chg_pullup.resistance = 10kohm +/- 1%
     r_pgood_pullup.resistance = 10kohm +/- 1%
+    r_sysoff_pullup.resistance = 1Mohm +/- 1%
+    r_pwr_hold_gate.resistance = 100ohm +/- 5%
+    r_pwr_hold_gate_pu.resistance = 100kohm +/- 5%
+    r_pwr_hold_gate_pd.resistance = 1Mohm +/- 1%
+    r_bat_switch_gate_pu.resistance = 1Mohm +/- 1%
     r_chg_ts.package = "0603"
     r_chg_iset.package = "0603"
     r_chg_ilim.package = "0603"
     r_chg_tmr.package = "0603"
     r_chg_pullup.package = "0603"
     r_pgood_pullup.package = "0603"
+    r_sysoff_pullup.package = "0603"
+    r_pwr_hold_gate.package = "0603"
+    r_pwr_hold_gate_pu.package = "0603"
+    r_pwr_hold_gate_pd.package = "0603"
+    r_bat_switch_gate_pu.package = "0603"
 
-    battery.BAT_POS ~ bat.hv
+    battery.BAT_POS ~ bat_raw.hv
     battery.BAT_NEG ~ gnd
 
     ldo_3v3.IN ~ sys.hv
@@ -196,25 +261,34 @@ module FlySysVario:
     c_mcu_bulk.package = "0603"
     c_mcu_decoup.package = "0603"
 
-    # ESP32-S3 bring-up, USB VBUS sense, battery sense, and debug access.
+    # ESP32-S3 bring-up, USB VBUS sense, battery sense, and button access.
     mcu.P3V3 ~ v3v3.hv
     mcu.SIG_GND ~ gnd
     mcu.EN ~ en
     en ~> r_en_pullup ~> v3v3.hv
     en ~> c_en ~> gnd
+    reset_button.A ~ en
+    reset_button.B ~ gnd
     mcu.IO0 ~ boot_user_btn_n
     boot_user_btn_n ~> r_boot_pullup ~> v3v3.hv
-    user_button.A ~ boot_user_btn_n
+    boot_button.A ~ boot_user_btn_n
+    boot_button.B ~ gnd
+    mcu.IO7 ~ pwr_btn_n
+    pwr_btn_n ~> r_pwr_btn_pullup ~> v3v3.hv
+    user_button.A ~ pwr_sw_n
     user_button.B ~ gnd
 
     r_en_pullup = new Resistor
     r_boot_pullup = new Resistor
+    r_pwr_btn_pullup = new Resistor
     c_en = new Capacitor
     r_en_pullup.resistance = 10kohm +/- 1%
     r_boot_pullup.resistance = 10kohm +/- 1%
+    r_pwr_btn_pullup.resistance = 4.7kohm +/- 1%
     c_en.capacitance = 100nF +/- 10%
     r_en_pullup.package = "0603"
     r_boot_pullup.package = "0603"
+    r_pwr_btn_pullup.package = "0603"
     c_en.package = "0603"
 
     bat.hv ~> r_bat_sense_top ~> bat_sense ~> r_bat_sense_bottom ~> gnd
@@ -238,13 +312,6 @@ module FlySysVario:
     r_vbus_sense_top.package = "0603"
     r_vbus_sense_bottom.package = "0603"
     c_bat_sense.package = "0603"
-
-    debug.GND ~ gnd
-    debug.P3V3 ~ v3v3.hv
-    debug.EN ~ en
-    debug.BOOT ~ boot_user_btn_n
-    debug.TXD0 ~ mcu.TXD0
-    debug.RXD0 ~ mcu.RXD0
 
     # Shared I2C sensor bus.
     mcu.IO8 ~ i2c_scl

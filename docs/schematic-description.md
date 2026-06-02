@@ -18,9 +18,15 @@ The board uses the following main nets:
 | Net | Meaning |
 | --- | --- |
 | `USB_VBUS` | 5 V from USB-C connector. Feeds charger input and USB VBUS sense divider. |
-| `BAT` | LiPo battery positive terminal. Feeds charger battery pin and battery ADC divider. |
-| `SYS` | Charger power-path output. Feeds 3.3 V regulator and high-current buzzer/blue LED loads. |
-| `+3V3` | Regulated logic rail for ESP32-S3, sensors, pull-ups, and debug pads. |
+| `BAT_RAW` | LiPo battery positive terminal at `J1`, before the hard-off battery switch. |
+| `BAT` | Switched internal battery rail after `Q4`. Feeds charger battery pin and battery ADC divider only while the battery switch is on. |
+| `SYS` | Charger power-path output. Feeds 3.3 V regulator and high-current buzzer/blue LED loads when the system is on. |
+| `+3V3` | Regulated logic rail for ESP32-S3, sensors, pull-ups, and LEDs. |
+| `CHG_SYSOFF` | BQ24075 ship-mode control. High disconnects battery from `SYS`; low enables battery-to-`SYS` operation. |
+| `PWR_SW_N` | Raw active-low power button node from `SW1`, isolated from MCU and latch nodes by diodes. |
+| `PWR_BTN_N` | Isolated active-low power/user button input read by the MCU on GPIO7. |
+| `PWR_HOLD` | MCU GPIO10 output that can release the self-latching power circuit by driving `PWR_HOLD_GATE` low. |
+| `BAT_SWITCH_GATE` | Gate of the battery high-side P-channel MOSFET `Q4`. |
 | `GND` | Common ground and USB shield reference. |
 
 ## USB-C And ESD
@@ -41,28 +47,53 @@ unconnected during PCB update.
 
 ## Charger And Power Path
 
-`U1` (`BQ24075RGTR`) receives `USB_VBUS` on `IN`, connects the LiPo battery on
-`BAT`, and produces the system rail on `OUT`/`SYS`. The charger is enabled by
-tying `nCE` low. `EN1`, `EN2`, `SYSOFF`, `TS`, `ISET`, `ILIM`, and `TMR` are
-configured with fixed resistors, so the current limits and timer behavior are
-set in hardware.
+`U1` (`BQ24075RGTR`) receives `USB_VBUS` on `IN`, connects to the switched
+internal battery rail on `BAT`, and produces the system rail on `OUT`/`SYS`.
+The charger is enabled by tying `nCE` low. `EN1`, `EN2`, `TS`, `ISET`, `ILIM`,
+and `TMR` are configured with fixed resistors, so the current limits and timer
+behavior are set in hardware.
+
+`Q4` (`DMP3098L`) is a high-side P-channel MOSFET between `BAT_RAW` and `BAT`.
+`R28` pulls `BAT_SWITCH_GATE` up to `BAT_RAW`, so the default battery-only state
+physically disconnects the battery from the BQ24075 `BAT` pin and from the
+`BAT_SENSE` divider. In this state the board has no intentional DC battery load;
+only MOSFET/diode leakage remains.
+
+`SYSOFF` is still used as the BQ24075 power-path off control. `R23` pulls
+`CHG_SYSOFF` up to the switched `BAT` rail, while `Q3` pulls it low when the
+power latch is active. Pressing `SW1` grounds `PWR_SW_N`; `D3` pulls
+`BAT_SWITCH_GATE` low to turn `Q4` on, and `D4` pulls `CHG_SYSOFF` low so
+`SYS` turns on from the battery. Once `+3V3` is up, `R24` pulls
+`PWR_HOLD_GATE` high and turns on both `Q3` and `Q5`, which latches
+`CHG_SYSOFF` and `BAT_SWITCH_GATE` low after `SW1` is released. `R26` keeps the
+latch off before `+3V3` is present.
+
+Firmware can shut the board down from battery power by driving GPIO10
+(`PWR_HOLD`) low through `R25`; this turns off `Q3` and `Q5`, after which `R23`
+and `R28` return the charger and battery switch to their off states. During
+normal operation and during the ESP32-S3 ROM bootloader, `PWR_HOLD` may remain
+high impedance because `R24` provides the hardware hold.
+
+When USB is present, the BQ24075 can still power `SYS` from `USB_VBUS`. Firmware
+should keep the latch active while battery charging is desired so `Q4` is on and
+the BQ24075 `BAT` pin is connected to the pack.
 
 `nCHG` and `nPGOOD` are open-drain charger status outputs. `R13` and `R19` pull
 them up to `+3V3`, and the MCU reads them on GPIOs. These nets should not be
 pulled to `SYS` because the ESP32-S3 GPIOs are 3.3 V only.
 
-`J1` is the 2-pin LiPo connector. `BAT_POS` goes to `BAT`, and `BAT_NEG` goes to
-`GND`. The final build must confirm connector polarity against the actual
-battery harness before ordering or assembly.
+`J1` is the 2-pin LiPo connector. `BAT_POS` goes to `BAT_RAW`, and `BAT_NEG`
+goes to `GND`. The final build must confirm connector polarity against the
+actual battery harness before ordering or assembly.
 
 ## 3.3 V Regulation
 
 `U3` (`TLV75533PDBVR`) converts `SYS` into `+3V3`. The regulator enable pin is
-tied to `SYS`, so the 3.3 V rail is on whenever the charger power path has a
-valid input from USB or battery.
+tied to `SYS`, so the 3.3 V rail is on whenever `SYS` is present. On battery
+power, `SYS` is present only after `CHG_SYSOFF` is pulled low by `SW1` or `Q3`.
 
 `+3V3` powers the ESP32-S3 module, BMP581 pressure sensor, BMI323 IMU, I2C
-pull-ups, charger status pull-ups, green power LED, and debug pads.
+pull-ups, charger status pull-ups, green power LED, and button/latch pull-ups.
 
 ## ESP32-S3 MCU
 
@@ -72,13 +103,17 @@ the I2C sensor bus, drives the buzzer PWM MOSFET, and drives the BLE status LED
 MOSFET.
 
 `EN` has a 10 kohm pull-up (`R16`) and 100 nF capacitor (`C4`) for a simple reset
-RC network. `BOOT_USER_BTN_N` is pulled up by `R6` and pulled to ground by
-`SW1`; this doubles as user input and ESP32 boot-mode control. Firmware and
-mechanical design must avoid holding this button during reset unless USB boot
-mode is intended.
+RC network. `SW3` pulls `EN` low for a user-accessible reset button.
 
-`J2` exposes `GND`, `+3V3`, `EN`, `BOOT_USER_BTN_N`, `TXD0`, and `RXD0` as PCB
-debug pads. It is not a purchase part.
+`BOOT_USER_BTN_N` is pulled up by `R6` and pulled low by `SW2`. To enter the
+ESP32-S3 ROM USB bootloader, hold `SW2` (`BOOT`) and press/release `SW3`
+(`RESET`) while USB is connected. From a fully off battery state, press `SW1`
+first to latch power, then use the same `BOOT` + `RESET` sequence. No debug pads
+are fitted.
+
+`SW1` is the active-low power button on `PWR_SW_N`. `D2` lets the MCU read this
+button as `PWR_BTN_N` on GPIO7 while preventing `BAT_RAW` or latch nodes from
+feeding the unpowered MCU in hard-off.
 
 ## Sensor Bus
 
@@ -119,7 +154,7 @@ high impedance.
 | Ref | Value | Net | Role |
 | --- | --- | --- | --- |
 | `C14` | 1 uF | `USB_VBUS` to `GND` | USB input decoupling. It supplies short input-current pulses and should sit close to `USB1`/`U1 IN`. |
-| `C1` | 10 uF | `BAT` to `GND` | Battery rail bulk capacitance. It stabilizes the charger battery pin and absorbs cable/connector transients. |
+| `C1` | 10 uF | `BAT` to `GND` | Switched battery rail bulk capacitance. It stabilizes the charger battery pin after `Q4` is on. |
 | `C13` | 10 uF | `SYS` to `GND` | Main system rail bulk. It helps the charger power-path output handle load changes from the LDO and buzzer. |
 | `C7` | 1 uF | `SYS` to `GND` | LDO input capacitor. It must be placed at `U3 IN/GND` to keep the regulator stable. |
 | `C8` | 1 uF | `+3V3` to `GND` | LDO output capacitor. It must be placed at `U3 OUT/GND` to meet regulator stability requirements. |
@@ -131,7 +166,7 @@ high impedance.
 | `C5` | 100 nF | `BMI323 VDDIO` to `GND` | IMU I/O decoupling. Place next to `U2`. |
 | `C3` | 10 uF | `SYS` to `GND` | Local buzzer reservoir. Place close to `BZ1` and `Q1` so buzzer current does not disturb the rest of `SYS`. |
 | `C4` | 100 nF | `EN` to `GND` | ESP32-S3 enable/reset RC capacitor with `R16`. Place close to `U4 EN`. |
-| `C2` | 100 nF | `BAT_SENSE` to `GND` | ADC filter for the battery divider midpoint. Place near `R1`/`R2` and the MCU ADC input. |
+| `C2` | 100 nF | `BAT_SENSE` to `GND` | ADC filter for the switched-battery divider midpoint. Place near `R1`/`R2` and the MCU ADC input. |
 
 ## No-Connect Rules
 
@@ -149,7 +184,7 @@ For this design, the intentionally unused pins are:
 | --- | --- | --- |
 | `USB1` | `A8`, `B8` | USB-C SBU pins are unused. Leave floating and mark no-connect. |
 | `U3` | `4` | TLV75533 `NC` pin. Leave floating and mark no-connect. |
-| `U4` | `7`, `11`, `14`, `15`, `16`, `17`, `18`, `19`, `20`, `25`, `26`, `27`, `28`, `29`, `30`, `31`, `32`, `35`, `36`, `37`, `38`, `41`, `44` | Unused ESP32-S3 GPIO/module pins. Leave floating and mark no-connect. Do not tie unused GPIOs to rails in hardware. |
+| `U4` | `7`, `15`, `16`, `17`, `18`, `19`, `20`, `25`, `26`, `27`, `28`, `29`, `30`, `31`, `32`, `35`, `36`, `37`, `38`, `39`, `40`, `41`, `44` | Unused ESP32-S3 GPIO/module pins. Leave floating and mark no-connect. Do not tie unused GPIOs to rails in hardware. |
 | `U2` | `2`, `3`, `10`, `11` | BMI323 datasheet NC pins. Leave floating and mark no-connect. |
 
 The USB-C shell pads are not `NC`; they are part of the connector shield and are
@@ -178,14 +213,8 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `D1` | `4` | `IO2_B` | `USB_OTG_DM` | MCU-side D- output from ESD device. |
 | `D1` | `5` | `VBUS` | `USB_VBUS` | ESD reference to USB VBUS. |
 | `D1` | `6` | `IO1_B` | `USB_OTG_DP` | MCU-side D+ output from ESD device. |
-| `J1` | `1` | `BAT+` | `BAT` | LiPo positive terminal. Confirm pack polarity before assembly. |
+| `J1` | `1` | `BAT+` | `BAT_RAW` | LiPo positive terminal before the hard-off battery switch. Confirm pack polarity before assembly. |
 | `J1` | `2` | `BAT-` | `GND` | LiPo negative terminal. |
-| `J2` | `1` | `GND` | `GND` | Debug pad ground reference. |
-| `J2` | `2` | `+3V3` | `+3V3` | Debug pad logic supply reference. Do not use as a high-current external supply output. |
-| `J2` | `3` | `EN` | `EN` | ESP32 reset/enable debug access. |
-| `J2` | `4` | `BOOT` | `BOOT_USER_BTN_N` | ESP32 boot/user-button debug access. |
-| `J2` | `5` | `TXD0` | `TXD0` | UART0 transmit from ESP32. |
-| `J2` | `6` | `RXD0` | `RXD0` | UART0 receive into ESP32. |
 
 ### Power Management
 
@@ -203,9 +232,15 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `U1` | `12` | `ILIM` | `CHG_ILIM` | Connect to `R11` then `GND`. |
 | `U1` | `13` | `IN` | `USB_VBUS` | USB input power. Keep short to `USB1` and `C14`. |
 | `U1` | `14` | `TMR` | `CHG_TMR` | Connect to `R14` then `GND`. |
-| `U1` | `15` | `SYSOFF` | `GND` | System output remains enabled. |
+| `U1` | `15` | `SYSOFF` | `CHG_SYSOFF` | Ship-mode control. High disconnects battery from `SYS`; low enables battery-to-`SYS` operation. |
 | `U1` | `16` | `ISET` | `CHG_ISET` | Connect to `R12` then `GND`. |
 | `U1` | `17` | `EP` | `GND` | Exposed pad. Stitch to ground plane for thermal and electrical return. |
+| `Q4` | `1` | `G` | `BAT_SWITCH_GATE` | P-channel battery switch gate. Pull high to `BAT_RAW` for off, pull low to connect `BAT_RAW` to `BAT`. |
+| `Q4` | `2` | `S` | `BAT_RAW` | P-channel source to raw battery connector positive. |
+| `Q4` | `3` | `D` | `BAT` | P-channel drain to switched internal battery rail. |
+| `Q5` | `1` | `G` | `PWR_HOLD_GATE` | N-channel gate driven by the hardware hold node. |
+| `Q5` | `2` | `S` | `GND` | Low-side switch source. |
+| `Q5` | `3` | `D` | `BAT_SWITCH_GATE` | Pulls `Q4` gate low while the power latch is active. |
 | `U3` | `1` | `IN` | `SYS` | LDO input. Place `C7` at this pin. |
 | `U3` | `2` | `GND` | `GND` | LDO ground. |
 | `U3` | `3` | `EN` | `SYS` | LDO enabled whenever `SYS` is present. |
@@ -218,17 +253,18 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | --- | --- | --- | --- | --- |
 | `U4` | `1`, `2`, `42`, `43`, `46`, `47`, `48`, `49`, `50`, `51`, `52`, `53`, `54`, `55`, `56`, `57`, `58`, `59`, `60`, `GND` | `GND` | `GND` | Tie all module grounds to the ground plane. Do not leave any ground pad isolated. |
 | `U4` | `3` | `3V3` | `+3V3` | Main module supply. Place `C9` and `C10` close to the module. |
-| `U4` | `4` | `IO0` | `BOOT_USER_BTN_N` | Boot/user button net with pull-up `R6` and switch `SW1` to ground. |
+| `U4` | `4` | `IO0` | `BOOT_USER_BTN_N` | Boot-mode strap/debug net with pull-up `R6`; not connected to `SW1`. |
 | `U4` | `5` | `IO1` | `BAT_SENSE` | Battery ADC sense divider midpoint with filter `C2`. |
 | `U4` | `6` | `IO2` | `USB_VBUS_SENSE` | USB VBUS ADC sense divider midpoint. |
 | `U4` | `7` | `IO3` | `NC` | Leave floating and mark no-connect. |
 | `U4` | `8` | `IO4` | `BMP581_INT` | Pressure sensor interrupt input. |
 | `U4` | `9` | `IO5` | `BMI323_INT1` | IMU interrupt input 1. |
 | `U4` | `10` | `IO6` | `BMI323_INT2` | IMU interrupt input 2. |
-| `U4` | `11` | `IO7` | `NC` | Leave floating and mark no-connect. This was previously reserved for removed magnetometer pads. |
+| `U4` | `11` | `IO7` | `PWR_BTN_N` | Active-low power/user button input from `SW1`. |
 | `U4` | `12` | `IO8` | `I2C_SCL` | I2C clock with pull-up `R17`. |
 | `U4` | `13` | `IO9` | `I2C_SDA` | I2C data with pull-up `R18`. |
-| `U4` | `14`, `15`, `16`, `17`, `18`, `19`, `20` | `IO10` to `IO16` | `NC` | Leave floating and mark no-connect. |
+| `U4` | `14` | `IO10` | `PWR_HOLD` | Power-hold release output. Leave high-Z/high for normal hold; drive low to shut down from battery. |
+| `U4` | `15`, `16`, `17`, `18`, `19`, `20` | `IO11` to `IO16` | `NC` | Leave floating and mark no-connect. |
 | `U4` | `21` | `IO17` | `BUZZER_PWM` | PWM output to `Q1` through `R8`. |
 | `U4` | `22` | `IO18` | `BLE_LED_PWM` | LED control output to `Q2` through `R4`. |
 | `U4` | `23` | `IO19` | `USB_OTG_DM` | Native USB D-. Route as controlled short USB pair with pin 24. |
@@ -237,8 +273,8 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `U4` | `33` | `IO37` | `nCHG` | Charger status input from `U1`, pulled up to `+3V3` by `R13`. |
 | `U4` | `34` | `IO38` | `nPGOOD` | Charger power-good input from `U1`, pulled up to `+3V3` by `R19`. |
 | `U4` | `35`, `36`, `37`, `38` | `IO39` to `IO42` | `NC` | Leave floating and mark no-connect. |
-| `U4` | `39` | `TXD0` | `TXD0` | UART transmit to debug pad `J2.5`. |
-| `U4` | `40` | `RXD0` | `RXD0` | UART receive from debug pad `J2.6`. |
+| `U4` | `39` | `TXD0` | `NC` | Debug pads are not fitted. Leave floating and mark no-connect. |
+| `U4` | `40` | `RXD0` | `NC` | Debug pads are not fitted. Leave floating and mark no-connect. |
 | `U4` | `41` | `IO45` | `NC` | Leave floating and mark no-connect. |
 | `U4` | `44` | `IO46` | `NC` | Leave floating and mark no-connect. |
 | `U4` | `45` | `EN` | `EN` | Module enable/reset net with `R16` pull-up and `C4` to ground. |
@@ -271,8 +307,12 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 
 | Ref | Pin | Pin name | Connect to | Instruction |
 | --- | --- | --- | --- | --- |
-| `SW1` | `1`, `2` | `A` | `BOOT_USER_BTN_N` | Button side connected to boot/user net. |
+| `SW1` | `1`, `2` | `A` | `PWR_SW_N` | Button side connected to raw active-low power switch net. |
 | `SW1` | `3`, `4` | `B` | `GND` | Button side connected to ground. |
+| `SW2` | `1`, `2` | `A` | `BOOT_USER_BTN_N` | BOOT button side connected to ESP32-S3 GPIO0 strap. |
+| `SW2` | `3`, `4` | `B` | `GND` | BOOT button pulls GPIO0 low for ROM bootloader entry. |
+| `SW3` | `1`, `2` | `A` | `EN` | RESET button side connected to ESP32-S3 enable/reset net. |
+| `SW3` | `3`, `4` | `B` | `GND` | RESET button pulls `EN` low. |
 | `BZ1` | `1` | `+` | `SYS` | Buzzer positive terminal. Keep current path local to `C3`. |
 | `BZ1` | `2` | `-` | `BUZZER_NEG` | Buzzer switched return to `Q1.3`. |
 | `Q1` | `1` | `G` | `BUZZER_GATE` | Gate drive from `R8`, pulldown by `R7`. |
@@ -281,6 +321,15 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `Q2` | `1` | `G` | `BLE_LED_GATE` | Gate drive from `R4`, pulldown by `R3`. |
 | `Q2` | `2` | `S` | `GND` | Low-side switch source. |
 | `Q2` | `3` | `D` | `BLE_LED_K` | Low-side switch drain to blue LED cathode. |
+| `Q3` | `1` | `G` | `PWR_HOLD_GATE` | Gate drive from the hardware hold node. |
+| `Q3` | `2` | `S` | `GND` | Low-side switch source. |
+| `Q3` | `3` | `D` | `CHG_SYSOFF` | Pulls BQ24075 `SYSOFF` low while the power latch is active. |
+| `D2` | `1` | `K` | `PWR_SW_N` | Isolates the raw power switch node from the MCU button input. |
+| `D2` | `2` | `A` | `PWR_BTN_N` | Lets `SW1` pull the MCU button input low when the board is on. |
+| `D3` | `1` | `K` | `PWR_SW_N` | Lets `SW1` pull `BAT_SWITCH_GATE` low during power-on. |
+| `D3` | `2` | `A` | `BAT_SWITCH_GATE` | Diode-isolated start path for `Q4` gate. |
+| `D4` | `1` | `K` | `PWR_SW_N` | Lets `SW1` pull `CHG_SYSOFF` low during power-on. |
+| `D4` | `2` | `A` | `CHG_SYSOFF` | Diode-isolated start path for BQ24075 `SYSOFF`. |
 | `LED1` | `1` | `K` | `BLE_LED_K` | Blue LED cathode to `Q2.3`. |
 | `LED1` | `2` | `A` | `BLE_LED_A` | Blue LED anode through `R5` to `SYS`. |
 | `LED2` | `1` | `-` | `GND` | Green power LED cathode. |
@@ -299,7 +348,13 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `R13` | `nCHG` | `+3V3` | Pull-up for charger `nCHG`. |
 | `R19` | `nPGOOD` | `+3V3` | Pull-up for charger `nPGOOD`. |
 | `R16` | `EN` | `+3V3` | ESP32 enable pull-up. |
-| `R6` | `BOOT_USER_BTN_N` | `+3V3` | ESP32 boot/user button pull-up. |
+| `R6` | `BOOT_USER_BTN_N` | `+3V3` | ESP32 boot strap pull-up. |
+| `R23` | `CHG_SYSOFF` | `BAT` | Pulls `SYSOFF` high after the switched battery rail is present. |
+| `R24` | `PWR_HOLD_GATE` | `+3V3` | Pulls the latch gate high after `+3V3` starts, so bootloader mode stays powered without firmware. |
+| `R25` | `PWR_HOLD` | `PWR_HOLD_GATE` | Power-hold MOSFET gate series resistor. |
+| `R26` | `PWR_HOLD_GATE` | `GND` | Keeps `Q3`/`Q5` off while `+3V3` is absent. |
+| `R27` | `PWR_BTN_N` | `+3V3` | Pull-up for the active-low power/user button input. |
+| `R28` | `BAT_SWITCH_GATE` | `BAT_RAW` | Pulls the P-channel battery switch gate high so the raw battery is disconnected by default. |
 | `R2` | `BAT` | `BAT_SENSE` | Battery divider top resistor. |
 | `R1` | `BAT_SENSE` | `GND` | Battery divider bottom resistor. |
 | `R22` | `USB_VBUS` | `USB_VBUS_SENSE` | USB VBUS divider top resistor. |
@@ -313,7 +368,7 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `R3` | `BLE_LED_GATE` | `GND` | BLE LED MOSFET gate pulldown. |
 | `R20` | `+3V3` | `POWER_LED_A` | Green power LED current limit resistor. |
 | `C14` | `USB_VBUS` | `GND` | USB input capacitor. |
-| `C1` | `BAT` | `GND` | Battery bulk capacitor. |
+| `C1` | `BAT` | `GND` | Switched battery bulk capacitor. |
 | `C13` | `SYS` | `GND` | System rail bulk capacitor. |
 | `C7` | `SYS` | `GND` | LDO input capacitor. |
 | `C8` | `+3V3` | `GND` | LDO output capacitor. |
@@ -348,10 +403,16 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
   data matters. Record final axis orientation in firmware.
 - Keep `BZ1`, `Q1`, `R8`, `R7`, and `C3` together. The buzzer switching loop
   should not run under `U5`, `U2`, or the I2C pull-ups.
-- `BOOT_USER_BTN_N` is both a user button and ESP32 boot strap. The enclosure
-  must not press `SW1` during power-up or reset unless flashing mode is desired.
+- `SW1`, `D2`, `D3`, `D4`, `Q3`, `Q4`, `Q5`, `R23`, `R24`, `R26`, and `R28`
+  form the hard-off latch. Keep `CHG_SYSOFF` and `BAT_SWITCH_GATE` short and
+  away from noisy switching nodes.
+- Firmware must leave `PWR_HOLD` high-Z/high for normal operation and drive it
+  low only when intentionally shutting down from battery power.
+- `SW2` and `SW3` provide user-accessible ESP32-S3 ROM bootloader entry without
+  debug pads: hold `BOOT` (`SW2`) and tap `RESET` (`SW3`) with USB connected.
 - `J1` polarity must be checked against the intended LiPo connector and pack
   wiring. JST PH-compatible parts are often assembled with opposite cable
   conventions.
-- The local footprints for `J1`, `BZ1`, `Q1`, `Q2`, `SW1`, and `J2` should be
-  checked against manufacturer land-pattern drawings before production.
+- The local footprints for `J1`, `BZ1`, `Q1`, `Q2`, `Q3`, `Q4`, `Q5`,
+  `D2`-`D4`, and `SW1`-`SW3` should be checked against manufacturer
+  land-pattern drawings before production.

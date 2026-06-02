@@ -6,9 +6,9 @@ This table lists the components that Atopile currently resolves through its
 built-in LCSC picker path. It is generated from the active Atopile BOM at
 `build/builds/default/default.bom.csv`.
 
-The project also has parts that are not in this LCSC set: `Q1`, `Q2`, `U5`,
-`SW1`, `J1`, and `BZ1` are handled in the DigiKey BOM. `J2` is PCB copper debug
-pads only and is not a purchased component.
+The project also has parts that are not in this LCSC set: `D2`, `D3`, `D4`,
+`Q1`, `Q2`, `Q3`, `Q4`, `Q5`, `U5`, `SW1`, `SW2`, `SW3`, `J1`, and `BZ1` are
+handled in the DigiKey BOM. Debug pads are not fitted.
 
 | References | Qty | Value | Manufacturer | MPN | LCSC Part |
 | --- | ---: | --- | --- | --- | --- |
@@ -18,16 +18,16 @@ pads only and is not a purchased component.
 | `D1` | 1 | USB ESD protection | STMicroelectronics | `USBLC6-2SC6` | `C7519` |
 | `LED1` | 1 | Blue 0603 LED | Lite-On | `LTST-C190TBKT` | `C125096` |
 | `LED2` | 1 | Green 0603 LED | Lite-On | `LTST-C190GKT` | `C125093` |
-| `R1`, `R2`, `R22` | 3 | 1 Mohm, 1%, 0603 | UNI-ROYAL | `0603WAF1004T5E` | `C22935` |
-| `R3`, `R7` | 2 | 100 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF1003T5E` | `C25803` |
-| `R4`, `R8` | 2 | 100 ohm, 1%, 0603 | UNI-ROYAL | `0603WAF1000T5E` | `C22775` |
+| `R1`, `R2`, `R22`, `R23`, `R26`, `R28` | 6 | 1 Mohm, 1%, 0603 | UNI-ROYAL | `0603WAF1004T5E` | `C22935` |
+| `R3`, `R7`, `R24` | 3 | 100 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF1003T5E` | `C25803` |
+| `R4`, `R8`, `R25` | 3 | 100 ohm, 1%, 0603 | UNI-ROYAL | `0603WAF1000T5E` | `C22775` |
 | `R5`, `R20` | 2 | 1 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF1001T5E` | `C21190` |
 | `R6`, `R13`, `R15`, `R16`, `R19` | 5 | 10 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF1002T5E` | `C25804` |
 | `R9`, `R10` | 2 | 5.1 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF5101T5E` | `C23186` |
 | `R11` | 1 | 1.1 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF1101T5E` | `C22764` |
 | `R12` | 1 | 2 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF2001T5E` | `C22975` |
 | `R14` | 1 | 47 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF4702T5E` | `C25819` |
-| `R17`, `R18` | 2 | 4.7 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF4701T5E` | `C23162` |
+| `R17`, `R18`, `R27` | 3 | 4.7 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF4701T5E` | `C23162` |
 | `R21` | 1 | 330 kohm, 1%, 0603 | UNI-ROYAL | `0603WAF3303T5E` | `C23137` |
 | `U1` | 1 | LiPo charger and power-path controller | Texas Instruments | `BQ24075RGTR` | `C15464` |
 | `U2` | 1 | 6-axis IMU | Bosch Sensortec | `BMI323` | `C5368700` |

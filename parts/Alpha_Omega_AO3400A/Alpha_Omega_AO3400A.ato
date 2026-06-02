@@ -24,3 +24,26 @@ component Alpha_Omega_AO3400A_Q2_package:
     signal GATE ~ pin 1
     signal SOURCE ~ pin 2
     signal DRAIN ~ pin 3
+
+component Alpha_Omega_AO3400A_Q3_package:
+    """AO3400A N-channel MOSFET in SOT-23."""
+
+    trait is_atomic_part<manufacturer="Alpha & Omega Semiconductor", partnumber="AO3400A", footprint="AO3400A.kicad_mod", symbol="AO3400A.kicad_sym">
+    trait has_designator<designator="Q3">
+    trait has_designator_prefix<prefix="Q">
+
+    signal GATE ~ pin 1
+    signal SOURCE ~ pin 2
+    signal DRAIN ~ pin 3
+
+
+component Alpha_Omega_AO3400A_Q5_package:
+    """AO3400A N-channel MOSFET in SOT-23."""
+
+    trait is_atomic_part<manufacturer="Alpha & Omega Semiconductor", partnumber="AO3400A", footprint="AO3400A.kicad_mod", symbol="AO3400A.kicad_sym">
+    trait has_designator<designator="Q5">
+    trait has_designator_prefix<prefix="Q">
+
+    signal GATE ~ pin 1
+    signal SOURCE ~ pin 2
+    signal DRAIN ~ pin 3

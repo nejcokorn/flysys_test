@@ -12,6 +12,111 @@
 		(comment 1 "KiCad schematic generated from main.ato net plan")
 	)
 	(lib_symbols
+				(symbol "FlySys:1N4148W"
+					(pin_names
+						(offset 0.508)
+					)
+					(exclude_from_sim no)
+					(in_bom yes)
+					(on_board yes)
+					(property "Reference" "D"
+						(id 0)
+						(at 0 6.27 0)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(property "Value" "1N4148W"
+						(id 1)
+						(at 0 -6.27 0)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(property "Footprint" ""
+						(id 2)
+						(at 0 -9.27 0)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+							(hide yes)
+						)
+					)
+					(property "Datasheet" ""
+						(id 3)
+						(at 0 0 0)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+							(hide yes)
+						)
+					)
+					(property "Description" ""
+						(id 4)
+						(at 0 0 0)
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+							(hide yes)
+						)
+					)
+					(symbol "1N4148W_0_1"
+						(rectangle
+							(start -3.81 1.27)
+							(end 3.81 -1.27)
+							(stroke
+								(width 0.254)
+								(type default)
+							)
+							(fill
+								(type background)
+							)
+						)
+						(pin passive line
+							(at -5.08 0.00 0)
+							(length 2.54)
+							(name "K"
+								(effects
+									(font
+										(size 1.00 1.00)
+									)
+								)
+							)
+							(number "1"
+								(effects
+									(font
+										(size 1.00 1.00)
+									)
+								)
+							)
+						)
+						(pin passive line
+							(at 5.08 0.00 180)
+							(length 2.54)
+							(name "A"
+								(effects
+									(font
+										(size 1.00 1.00)
+									)
+								)
+							)
+							(number "2"
+								(effects
+									(font
+										(size 1.00 1.00)
+									)
+								)
+							)
+						)
+					)
+				)
 				(symbol "FlySys:AO3400A"
 					(pin_names
 						(offset 0.508)
@@ -1290,25 +1395,25 @@
 						)
 					)
 				)
-				(symbol "FlySys:DebugPads_1x06_1.27mm"
+				(symbol "FlySys:DMP3098L"
 					(pin_names
 						(offset 0.508)
 					)
 					(exclude_from_sim no)
 					(in_bom yes)
 					(on_board yes)
-					(property "Reference" "J"
+					(property "Reference" "Q"
 						(id 0)
-						(at 0 12.62 0)
+						(at 0 8.81 0)
 						(effects
 							(font
 								(size 1.27 1.27)
 							)
 						)
 					)
-					(property "Value" "DebugPads_1x06_1.27mm"
+					(property "Value" "DMP3098L"
 						(id 1)
-						(at 0 -12.62 0)
+						(at 0 -8.81 0)
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1317,7 +1422,7 @@
 					)
 					(property "Footprint" ""
 						(id 2)
-						(at 0 -15.62 0)
+						(at 0 -11.81 0)
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1345,10 +1450,10 @@
 							(hide yes)
 						)
 					)
-					(symbol "DebugPads_1x06_1.27mm_0_1"
+					(symbol "DMP3098L_0_1"
 						(rectangle
-							(start -5.08 7.62)
-							(end -2.54 -7.62)
+							(start -5.08 3.81)
+							(end 5.08 -3.81)
 							(stroke
 								(width 0.254)
 								(type default)
@@ -1358,9 +1463,9 @@
 							)
 						)
 						(pin passive line
-							(at -6.35 6.35 0)
+							(at -6.35 0.00 0)
 							(length 2.54)
-							(name "GND"
+							(name "G"
 								(effects
 									(font
 										(size 1.00 1.00)
@@ -1376,9 +1481,9 @@
 							)
 						)
 						(pin passive line
-							(at -6.35 3.81 0)
+							(at 6.35 -2.54 180)
 							(length 2.54)
-							(name "+3V3"
+							(name "S"
 								(effects
 									(font
 										(size 1.00 1.00)
@@ -1394,9 +1499,9 @@
 							)
 						)
 						(pin passive line
-							(at -6.35 1.27 0)
+							(at 6.35 2.54 180)
 							(length 2.54)
-							(name "EN"
+							(name "D"
 								(effects
 									(font
 										(size 1.00 1.00)
@@ -1404,60 +1509,6 @@
 								)
 							)
 							(number "3"
-								(effects
-									(font
-										(size 1.00 1.00)
-									)
-								)
-							)
-						)
-						(pin passive line
-							(at -6.35 -1.27 0)
-							(length 2.54)
-							(name "BOOT"
-								(effects
-									(font
-										(size 1.00 1.00)
-									)
-								)
-							)
-							(number "4"
-								(effects
-									(font
-										(size 1.00 1.00)
-									)
-								)
-							)
-						)
-						(pin passive line
-							(at -6.35 -3.81 0)
-							(length 2.54)
-							(name "TXD0"
-								(effects
-									(font
-										(size 1.00 1.00)
-									)
-								)
-							)
-							(number "5"
-								(effects
-									(font
-										(size 1.00 1.00)
-									)
-								)
-							)
-						)
-						(pin passive line
-							(at -6.35 -6.35 0)
-							(length 2.54)
-							(name "RXD0"
-								(effects
-									(font
-										(size 1.00 1.00)
-									)
-								)
-							)
-							(number "6"
 								(effects
 									(font
 										(size 1.00 1.00)
@@ -4625,7 +4676,7 @@
 		)
 		(uuid "b7dc66e8-31ce-5b08-b866-854102d75432")
 	)
-	(label "GND"
+	(label "CHG_SYSOFF"
 		(at 115.57 191.77 0)
 			(effects
 				(font
@@ -4685,7 +4736,7 @@
 		)
 		(uuid "1ad43f8a-3531-55f6-ad6e-0151c6c37b0f")
 	)
-	(label "BAT"
+	(label "BAT_RAW"
 		(at 24.13 184.15 180)
 			(effects
 				(font
@@ -4983,9 +5034,25 @@
 			)
 		(uuid "df0d1311-46bc-58ec-976a-09aade77cb43")
 	)
-	(no_connect
-		(at 303.53 168.91)
-		(uuid "8a7b8402-4568-5703-a961-26c8a10996d5")
+	(wire
+		(pts
+			(xy 303.53 168.91) (xy 298.45 168.91)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "3a60d30e-60ed-50a4-88c9-26428db38da5")
+	)
+	(label "PWR_BTN_N"
+		(at 298.45 168.91 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "86099163-d263-54d8-828d-2672a179096f")
 	)
 	(wire
 		(pts
@@ -5027,9 +5094,25 @@
 			)
 		(uuid "c0fd0be7-92c3-559e-8e50-19ae6e8178ab")
 	)
-	(no_connect
-		(at 303.53 176.53)
-		(uuid "73844e8e-6b6b-561b-8163-3c3ea52028dd")
+	(wire
+		(pts
+			(xy 303.53 176.53) (xy 298.45 176.53)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "46855c38-0036-5003-81fc-6321b3b92881")
+	)
+	(label "PWR_HOLD"
+		(at 298.45 176.53 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "6ffbfca4-7f72-5d7a-ad42-6bc3a54ae9d3")
 	)
 	(no_connect
 		(at 303.53 179.07)
@@ -5223,45 +5306,13 @@
 		(at 326.39 199.39)
 		(uuid "fef08d46-4cd5-5f40-8efb-24a4e37acff5")
 	)
-	(wire
-		(pts
-			(xy 326.39 196.85) (xy 331.47 196.85)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "a99f3c2a-cebc-5efc-a1eb-7ed747f97ac5")
+	(no_connect
+		(at 326.39 196.85)
+		(uuid "a7dc1f9f-bdb3-5e6d-995c-27741e0c87fa")
 	)
-	(label "TXD0"
-		(at 331.47 196.85 0)
-			(effects
-				(font
-					(size 1.00 1.00)
-				)
-				(justify right bottom)
-			)
-		(uuid "a8080a0e-1302-52cd-adc9-a5cf9c201413")
-	)
-	(wire
-		(pts
-			(xy 326.39 194.31) (xy 331.47 194.31)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "4d0f6378-0337-59d0-8c88-7a337ee47ed2")
-	)
-	(label "RXD0"
-		(at 331.47 194.31 0)
-			(effects
-				(font
-					(size 1.00 1.00)
-				)
-				(justify right bottom)
-			)
-		(uuid "3ed9a074-b7c3-52d5-a5aa-d2eb8d47acbb")
+	(no_connect
+		(at 326.39 194.31)
+		(uuid "d2601aad-9c4a-58a4-8aee-7bac50b039f7")
 	)
 	(no_connect
 		(at 326.39 191.77)
@@ -5653,126 +5704,6 @@
 	)
 	(wire
 		(pts
-			(xy 424.18 71.12) (xy 419.10 71.12)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "3aac49c7-1a86-546e-8d56-66e1ff0b3b56")
-	)
-	(label "GND"
-		(at 419.10 71.12 180)
-			(effects
-				(font
-					(size 1.00 1.00)
-				)
-				(justify left bottom)
-			)
-		(uuid "6761e23c-7ac2-5441-ab4b-09693d5898ba")
-	)
-	(wire
-		(pts
-			(xy 424.18 73.66) (xy 419.10 73.66)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "f03760a7-f7df-58d0-8a0a-0983f1d9c91f")
-	)
-	(label "+3V3"
-		(at 419.10 73.66 180)
-			(effects
-				(font
-					(size 1.00 1.00)
-				)
-				(justify left bottom)
-			)
-		(uuid "3d4f6257-fae2-59ad-9a52-9ffc7ce5201d")
-	)
-	(wire
-		(pts
-			(xy 424.18 76.20) (xy 419.10 76.20)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "0b4c203c-7740-5bc0-a1fa-efdd7941e124")
-	)
-	(label "EN"
-		(at 419.10 76.20 180)
-			(effects
-				(font
-					(size 1.00 1.00)
-				)
-				(justify left bottom)
-			)
-		(uuid "0ac2aedd-eb9b-50e4-906a-1769e09e070f")
-	)
-	(wire
-		(pts
-			(xy 424.18 78.74) (xy 419.10 78.74)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "f0aa260f-8c89-51c9-b49b-e5e858167937")
-	)
-	(label "BOOT_USER_BTN_N"
-		(at 419.10 78.74 180)
-			(effects
-				(font
-					(size 1.00 1.00)
-				)
-				(justify left bottom)
-			)
-		(uuid "ab768bde-6e0d-57a1-a099-abd758915daa")
-	)
-	(wire
-		(pts
-			(xy 424.18 81.28) (xy 419.10 81.28)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "f36f0566-36b5-588a-9159-d986df64d80b")
-	)
-	(label "TXD0"
-		(at 419.10 81.28 180)
-			(effects
-				(font
-					(size 1.00 1.00)
-				)
-				(justify left bottom)
-			)
-		(uuid "e65169fa-01fc-5a0a-9905-3b790479981b")
-	)
-	(wire
-		(pts
-			(xy 424.18 83.82) (xy 419.10 83.82)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "a0c0d181-8353-5c86-aa7e-45053edec670")
-	)
-	(label "RXD0"
-		(at 419.10 83.82 180)
-			(effects
-				(font
-					(size 1.00 1.00)
-				)
-				(justify left bottom)
-			)
-		(uuid "8131891b-d3d9-5cb6-b73b-f536badd9379")
-	)
-	(wire
-		(pts
 			(xy 424.18 132.08) (xy 419.10 132.08)
 		)
 		(stroke
@@ -5781,7 +5712,7 @@
 		)
 		(uuid "fd5aaa22-f14b-570b-b49c-7d75ae2d838c")
 	)
-	(label "BOOT_USER_BTN_N"
+	(label "PWR_SW_N"
 		(at 419.10 132.08 180)
 			(effects
 				(font
@@ -5801,7 +5732,7 @@
 		)
 		(uuid "69506794-375b-58e9-9d73-228353928c41")
 	)
-	(label "BOOT_USER_BTN_N"
+	(label "PWR_SW_N"
 		(at 419.10 137.16 180)
 			(effects
 				(font
@@ -5850,6 +5781,166 @@
 				(justify right bottom)
 			)
 		(uuid "6427b657-7115-53e0-b925-babc65357d1f")
+	)
+	(wire
+		(pts
+			(xy 424.18 74.93) (xy 419.10 74.93)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "3055eb2d-94c8-592e-9347-ea25e97c9284")
+	)
+	(label "BOOT_USER_BTN_N"
+		(at 419.10 74.93 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "350a7677-6c72-5584-ba4d-58a80e454382")
+	)
+	(wire
+		(pts
+			(xy 424.18 80.01) (xy 419.10 80.01)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "66e16465-9f4a-52de-a252-d344b65d3dc6")
+	)
+	(label "BOOT_USER_BTN_N"
+		(at 419.10 80.01 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "92436f8b-d519-5ca9-883c-4193d0569de1")
+	)
+	(wire
+		(pts
+			(xy 436.88 74.93) (xy 441.96 74.93)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "40531dea-14dd-5ceb-9064-0b83c49e5c68")
+	)
+	(label "GND"
+		(at 441.96 74.93 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "f67c82fe-a8b8-52b3-b339-fd7888bd310a")
+	)
+	(wire
+		(pts
+			(xy 436.88 80.01) (xy 441.96 80.01)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "1cd3744f-53f4-50d0-8129-24816bdb42e6")
+	)
+	(label "GND"
+		(at 441.96 80.01 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "5869b6cf-d46b-5b00-984c-7e445abd528f")
+	)
+	(wire
+		(pts
+			(xy 424.18 102.87) (xy 419.10 102.87)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "d49e8c07-49e8-5640-8733-cebc9e012165")
+	)
+	(label "EN"
+		(at 419.10 102.87 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "12c6679d-b29a-57d5-8ce7-24c7d1c6d3d9")
+	)
+	(wire
+		(pts
+			(xy 424.18 107.95) (xy 419.10 107.95)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "a804a654-9f01-5283-835c-45518df19c8c")
+	)
+	(label "EN"
+		(at 419.10 107.95 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "57ced329-8aa4-5852-810a-dd0e52f495f9")
+	)
+	(wire
+		(pts
+			(xy 436.88 102.87) (xy 441.96 102.87)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "1fa149eb-c884-5f9f-bb9c-8fa66fef4191")
+	)
+	(label "GND"
+		(at 441.96 102.87 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "93afa244-a8a2-5f39-86c7-0ac3c2069e2c")
+	)
+	(wire
+		(pts
+			(xy 436.88 107.95) (xy 441.96 107.95)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "4b96000f-f73d-5142-96b8-46e3bbf12b16")
+	)
+	(label "GND"
+		(at 441.96 107.95 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "5973a892-76e2-58ae-a2af-eb101e9866a3")
 	)
 	(wire
 		(pts
@@ -6429,6 +6520,186 @@
 	)
 	(wire
 		(pts
+			(xy 753.11 209.55) (xy 748.03 209.55)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "28cc19f3-0b69-5ee3-a37a-b42b34a778c8")
+	)
+	(label "PWR_HOLD_GATE"
+		(at 748.03 209.55 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "0adf5225-ffff-5b7f-b378-21a3396b446e")
+	)
+	(wire
+		(pts
+			(xy 765.81 212.09) (xy 770.89 212.09)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "b8c6d69e-238c-5dbb-97fe-4d8f7291e06c")
+	)
+	(label "GND"
+		(at 770.89 212.09 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "0de40fe0-e996-5d84-b7bb-12384eb91082")
+	)
+	(wire
+		(pts
+			(xy 765.81 207.01) (xy 770.89 207.01)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "b78c59a0-7a74-5e42-93a9-209178be03da")
+	)
+	(label "CHG_SYSOFF"
+		(at 770.89 207.01 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "68ceadf9-bbac-51d9-8840-677e9a8633a0")
+	)
+	(wire
+		(pts
+			(xy 753.11 265.43) (xy 748.03 265.43)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "3dca4253-9477-592c-8722-11793c6a128f")
+	)
+	(label "BAT_SWITCH_GATE"
+		(at 748.03 265.43 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "2d5c51aa-6cb0-5728-8d3c-5c6ce825c77b")
+	)
+	(wire
+		(pts
+			(xy 765.81 267.97) (xy 770.89 267.97)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "5173fac8-8ce0-5ae4-a526-67766650668f")
+	)
+	(label "BAT_RAW"
+		(at 770.89 267.97 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "1a7c5503-d793-5c8b-b318-200e1331eae0")
+	)
+	(wire
+		(pts
+			(xy 765.81 262.89) (xy 770.89 262.89)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "4b6f0b96-92bb-5d5c-94bf-64a1164b1c38")
+	)
+	(label "BAT"
+		(at 770.89 262.89 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "9b359d25-3b18-5380-a51a-8eac917d6acf")
+	)
+	(wire
+		(pts
+			(xy 753.11 320.04) (xy 748.03 320.04)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "ffd89b0d-9a07-590b-816a-a3994fda3bd5")
+	)
+	(label "PWR_HOLD_GATE"
+		(at 748.03 320.04 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "c6b2a79f-e5cf-542d-8d7e-75d84dcd50d7")
+	)
+	(wire
+		(pts
+			(xy 765.81 322.58) (xy 770.89 322.58)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "0fff2126-247f-511d-8bfa-00b5ff94a437")
+	)
+	(label "GND"
+		(at 770.89 322.58 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "2dbcdd2b-5a10-5a80-ba57-3632051e20c9")
+	)
+	(wire
+		(pts
+			(xy 765.81 317.50) (xy 770.89 317.50)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "0ffa9803-6531-5a62-bb8a-9691b4b34ede")
+	)
+	(label "BAT_SWITCH_GATE"
+		(at 770.89 317.50 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "7e679ad1-44c2-5c3b-a119-e9f891193c93")
+	)
+	(wire
+		(pts
 			(xy 674.37 232.41) (xy 669.29 232.41)
 		)
 		(stroke
@@ -6506,6 +6777,126 @@
 				(justify right bottom)
 			)
 		(uuid "a077f730-252b-5cd3-9759-05eddbe793be")
+	)
+	(wire
+		(pts
+			(xy 539.75 314.96) (xy 534.67 314.96)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "019705db-2be1-5fd6-be1f-93c4513550dc")
+	)
+	(label "PWR_SW_N"
+		(at 534.67 314.96 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "6dc9d28a-5ef0-51e1-8ef7-e9e1a9e3d25c")
+	)
+	(wire
+		(pts
+			(xy 549.91 314.96) (xy 554.99 314.96)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "9f6b9cf3-760f-54fc-bc05-36ef2148b8eb")
+	)
+	(label "PWR_BTN_N"
+		(at 554.99 314.96 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "300ab582-16a6-512f-bbab-4abcf1d2a078")
+	)
+	(wire
+		(pts
+			(xy 590.55 314.96) (xy 585.47 314.96)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "df862146-0584-5396-843e-ec66c44e3f44")
+	)
+	(label "PWR_SW_N"
+		(at 585.47 314.96 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "ab1211e5-2064-5c82-b867-735aaeb817e6")
+	)
+	(wire
+		(pts
+			(xy 600.71 314.96) (xy 605.79 314.96)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "cfe1b572-2c6a-5082-8e4a-1e5a84a46046")
+	)
+	(label "BAT_SWITCH_GATE"
+		(at 605.79 314.96 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "c057edcb-c976-527f-abc7-259435c20d45")
+	)
+	(wire
+		(pts
+			(xy 640.08 314.96) (xy 635.00 314.96)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "5c6db814-a475-5cd4-93f4-3d405b97fd06")
+	)
+	(label "PWR_SW_N"
+		(at 635.00 314.96 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "3f332f25-4a33-511c-8354-ecd44a12c5d0")
+	)
+	(wire
+		(pts
+			(xy 650.24 314.96) (xy 655.32 314.96)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "486a0ae2-7ca1-54f0-a8e3-5369d5671398")
+	)
+	(label "CHG_SYSOFF"
+		(at 655.32 314.96 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "35300e19-49c4-5bc2-9bc0-c074c7f7068c")
 	)
 	(wire
 		(pts
@@ -7029,6 +7420,206 @@
 	)
 	(wire
 		(pts
+			(xy 320.04 284.48) (xy 314.96 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "68f6b630-fc23-54c4-90ee-dfd686aec8a5")
+	)
+	(label "CHG_SYSOFF"
+		(at 314.96 284.48 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "16825677-c469-58cc-a405-407932eb098b")
+	)
+	(wire
+		(pts
+			(xy 330.20 284.48) (xy 335.28 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "a0c55c57-5484-53a9-adc2-a271106e9bce")
+	)
+	(label "BAT"
+		(at 335.28 284.48 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "a6953a7f-d207-5c76-bc49-cb16d26adb77")
+	)
+	(wire
+		(pts
+			(xy 369.57 284.48) (xy 364.49 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "e311fd9a-fa8a-525f-92c4-93524880448f")
+	)
+	(label "PWR_HOLD_GATE"
+		(at 364.49 284.48 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "2b134487-5afe-5930-8781-91b4be57b087")
+	)
+	(wire
+		(pts
+			(xy 379.73 284.48) (xy 384.81 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "7999fc42-c22f-5dca-8b09-0cdca9b8265e")
+	)
+	(label "+3V3"
+		(at 384.81 284.48 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "e5c7f9be-39e0-5420-9e68-669c07400130")
+	)
+	(wire
+		(pts
+			(xy 420.37 284.48) (xy 415.29 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "85884d92-e41a-5bf8-b1b4-3f0e27f229df")
+	)
+	(label "PWR_HOLD"
+		(at 415.29 284.48 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "3bcb47cf-ffde-5433-9e12-6c49d66fd4b7")
+	)
+	(wire
+		(pts
+			(xy 430.53 284.48) (xy 435.61 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "6d39bcbe-6a2e-5361-8036-4121234c1add")
+	)
+	(label "PWR_HOLD_GATE"
+		(at 435.61 284.48 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "660639f3-f3ab-59fa-9079-a24be2afdc36")
+	)
+	(wire
+		(pts
+			(xy 469.90 284.48) (xy 464.82 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "c90ee6c5-67f4-5e48-a99e-dadb02ab0678")
+	)
+	(label "PWR_HOLD_GATE"
+		(at 464.82 284.48 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "027c9499-6833-5d9f-bb0b-ade54cef38f5")
+	)
+	(wire
+		(pts
+			(xy 480.06 284.48) (xy 485.14 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "17c83009-01ba-5e04-a3b1-6f52be3d1dcf")
+	)
+	(label "GND"
+		(at 485.14 284.48 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "13c11e28-2058-5c0a-9224-091ae5deca0f")
+	)
+	(wire
+		(pts
+			(xy 519.43 284.48) (xy 514.35 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "3942cd63-b889-519d-84db-50cc701d1455")
+	)
+	(label "BAT_SWITCH_GATE"
+		(at 514.35 284.48 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "09242a90-f5ea-558a-a612-b772a82fc360")
+	)
+	(wire
+		(pts
+			(xy 529.59 284.48) (xy 534.67 284.48)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "53ebb3e5-fbd7-5d74-9335-0eba9331f0bc")
+	)
+	(label "BAT_RAW"
+		(at 534.67 284.48 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "8992afac-ef6c-5974-9d56-973e34049635")
+	)
+	(wire
+		(pts
 			(xy 250.19 255.27) (xy 245.11 255.27)
 		)
 		(stroke
@@ -7226,6 +7817,46 @@
 				(justify right bottom)
 			)
 		(uuid "c6f1faf4-54f1-5eb8-94e4-d88c18b16f4a")
+	)
+	(wire
+		(pts
+			(xy 510.54 255.27) (xy 505.46 255.27)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "6e0f8e12-dcfe-5809-9458-3071a1f4715f")
+	)
+	(label "PWR_BTN_N"
+		(at 505.46 255.27 180)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify left bottom)
+			)
+		(uuid "51e3c532-0279-51e6-a24e-97cc1d20b429")
+	)
+	(wire
+		(pts
+			(xy 520.70 255.27) (xy 525.78 255.27)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(uuid "73023eff-98f7-59c4-bf8c-8eb956c20885")
+	)
+	(label "+3V3"
+		(at 525.78 255.27 0)
+			(effects
+				(font
+					(size 1.00 1.00)
+				)
+				(justify right bottom)
+			)
+		(uuid "c2c42011-4300-5b8a-808a-ff16a88bce46")
 	)
 	(wire
 		(pts
@@ -8908,130 +9539,6 @@
 		)
 	)
 	(symbol
-		(lib_id "FlySys:DebugPads_1x06_1.27mm")
-		(at 430.53 77.47 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "88de7d05-90b0-5999-a5c3-183e89b1c7bf")
-		(property "Reference" "J2"
-			(at 430.53 66.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Debug pads 1x6"
-			(at 430.53 88.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Local_DebugPads:DebugPads_1x06_1.27mm"
-			(at 430.53 91.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 430.53 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "PCB copper pads only; not a purchased component"
-			(at 430.53 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer" "PCB fabrication"
-			(at 430.53 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "DebugPads_1x06_1.27mm"
-			(at 430.53 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Supplier" "PCB only"
-			(at 430.53 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "DigiKey Part Number" ""
-			(at 430.53 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "DigiKey URL" ""
-			(at 430.53 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "59ae3e07-526e-5ae1-9146-ac30aca0ca2d")
-		)
-		(pin "2"
-			(uuid "dbc55f44-78b3-521e-8654-38a3d7ad5ed7")
-		)
-		(pin "3"
-			(uuid "339e4817-9948-58bd-bc3a-40205b535dc7")
-		)
-		(pin "4"
-			(uuid "af11e371-beac-5f9f-8708-78b647305bad")
-		)
-		(pin "5"
-			(uuid "57aeffb4-2b4d-57ea-90ab-9349fa9ae16b")
-		)
-		(pin "6"
-			(uuid "caca269d-57bb-5bb6-854e-169787108c43")
-		)
-		(instances
-			(project "flysys_vario"
-				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
-					(reference "J2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "FlySys:KMR211NG_LFS")
 		(at 430.53 134.62 0)
 		(unit 1)
@@ -9144,6 +9651,242 @@
 			(project "flysys_vario"
 				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
 					(reference "SW1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:KMR211NG_LFS")
+		(at 430.53 77.47 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3d036e19-a485-5df7-86c9-8cf0fcd6f987")
+		(property "Reference" "SW2"
+			(at 430.53 69.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "KMR211NG LFS"
+			(at 430.53 85.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CK_KMR211NG_LFS:KMR211NG_LFS"
+			(at 430.53 88.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 430.53 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Low-profile tactile switch"
+			(at 430.53 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "C&K"
+			(at 430.53 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "KMR211NG LFS"
+			(at 430.53 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 430.53 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "CKN10243CT-ND"
+			(at 430.53 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/c-k/KMR211NG-LFS/2176482"
+			(at 430.53 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dd9ddbb2-8801-541f-8fc3-c39186e5f0a7")
+		)
+		(pin "2"
+			(uuid "e512b100-db85-5ec3-922c-09f2715e3a98")
+		)
+		(pin "3"
+			(uuid "c8f1d0e0-cefb-52f2-8713-2414dd559848")
+		)
+		(pin "4"
+			(uuid "3166d997-8afc-5ee8-8aaf-3305564b3ae4")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "SW2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:KMR211NG_LFS")
+		(at 430.53 105.41 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fd39489f-16d9-5e5c-93bc-a6aa1c94ee5b")
+		(property "Reference" "SW3"
+			(at 430.53 97.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "KMR211NG LFS"
+			(at 430.53 112.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "CK_KMR211NG_LFS:KMR211NG_LFS"
+			(at 430.53 115.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 430.53 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Low-profile tactile switch"
+			(at 430.53 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "C&K"
+			(at 430.53 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "KMR211NG LFS"
+			(at 430.53 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 430.53 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "CKN10243CT-ND"
+			(at 430.53 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/c-k/KMR211NG-LFS/2176482"
+			(at 430.53 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "bf20735f-e3f2-5d9e-aae4-7260b8ed0d9b")
+		)
+		(pin "2"
+			(uuid "99c36455-12c1-5304-ac85-025de09bc7c2")
+		)
+		(pin "3"
+			(uuid "9d31d74d-1898-5b9a-8ec6-40a6a97236e4")
+		)
+		(pin "4"
+			(uuid "122705d0-794b-53e1-b691-93cdad18e8ce")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "SW3")
 					(unit 1)
 				)
 			)
@@ -9776,6 +10519,351 @@
 		)
 	)
 	(symbol
+		(lib_id "FlySys:AO3400A")
+		(at 759.46 209.55 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "877996b0-e943-5292-a979-e410efdc25ff")
+		(property "Reference" "Q3"
+			(at 759.46 202.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AO3400A"
+			(at 759.46 217.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Alpha_Omega_AO3400A:AO3400A"
+			(at 759.46 220.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 759.46 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "N-channel MOSFET, SOT-23"
+			(at 759.46 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Alpha & Omega Semiconductor Inc."
+			(at 759.46 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "AO3400A"
+			(at 759.46 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 759.46 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "785-1000-1-ND"
+			(at 759.46 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772"
+			(at 759.46 209.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "146df082-7ba4-50f6-80e8-a265312efabd")
+		)
+		(pin "2"
+			(uuid "a56196f1-ad0c-582e-a5c0-931f90f8e4a7")
+		)
+		(pin "3"
+			(uuid "c7ed01fe-29d9-5f52-b269-2e509f6e6931")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "Q3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:DMP3098L")
+		(at 759.46 265.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "65d5139a-912f-5d31-94e0-92e46c2577fc")
+		(property "Reference" "Q4"
+			(at 759.46 257.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "DMP3098L"
+			(at 759.46 272.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diodes_Inc_DMP3098L:DMP3098L"
+			(at 759.46 275.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 759.46 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "P-channel MOSFET, SOT-23"
+			(at 759.46 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Diodes Incorporated"
+			(at 759.46 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "DMP3098L-7"
+			(at 759.46 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 759.46 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "DMP3098L-7DICT-ND"
+			(at 759.46 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/diodes-incorporated/DMP3098L-7/1964698"
+			(at 759.46 265.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7efe9012-1a16-54a1-bec2-de2f9c970fb1")
+		)
+		(pin "2"
+			(uuid "d2f4e416-ca59-56f4-a58e-2b56ec232ab9")
+		)
+		(pin "3"
+			(uuid "205bdb2f-902a-568a-8b2f-3cc53b8cd5a8")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "Q4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:AO3400A")
+		(at 759.46 320.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e6909902-e745-59b3-ac72-603b1e163206")
+		(property "Reference" "Q5"
+			(at 759.46 312.50 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "AO3400A"
+			(at 759.46 327.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Alpha_Omega_AO3400A:AO3400A"
+			(at 759.46 330.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 759.46 320.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "N-channel MOSFET, SOT-23"
+			(at 759.46 320.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Alpha & Omega Semiconductor Inc."
+			(at 759.46 320.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "AO3400A"
+			(at 759.46 320.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 759.46 320.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "785-1000-1-ND"
+			(at 759.46 320.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772"
+			(at 759.46 320.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ac7896d3-da21-550d-b56d-7d47ce6b29ad")
+		)
+		(pin "2"
+			(uuid "727ac800-a5dc-5882-8c4b-6fa2144c563c")
+		)
+		(pin "3"
+			(uuid "5da38824-3305-5a73-8889-b629195c4b36")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "Q5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "FlySys:LTST-C190GKT")
 		(at 679.45 229.87 0)
 		(unit 1)
@@ -9994,6 +11082,342 @@
 			(project "flysys_vario"
 				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
 					(reference "LED1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:1N4148W")
+		(at 544.83 314.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "529e9f09-eb17-5740-a5fb-d5f3a227d55e")
+		(property "Reference" "D2"
+			(at 544.83 309.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1N4148W"
+			(at 544.83 319.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diodes_Inc_1N4148W:1N4148W"
+			(at 544.83 322.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 544.83 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Small-signal switching diode, SOD-123"
+			(at 544.83 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Diodes Incorporated"
+			(at 544.83 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "1N4148W-7-F"
+			(at 544.83 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 544.83 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "1N4148W-FDICT-ND"
+			(at 544.83 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/diodes-incorporated/1N4148W-7-F/815280"
+			(at 544.83 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9eabe3dd-d25d-5de4-b338-80d3c03f3ff8")
+		)
+		(pin "2"
+			(uuid "92a03b59-9204-5b03-af2e-407d0ae2df27")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "D2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:1N4148W")
+		(at 595.63 314.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ba08fc41-f170-528a-9141-e8102151a02e")
+		(property "Reference" "D3"
+			(at 595.63 309.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1N4148W"
+			(at 595.63 319.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diodes_Inc_1N4148W:1N4148W"
+			(at 595.63 322.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 595.63 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Small-signal switching diode, SOD-123"
+			(at 595.63 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Diodes Incorporated"
+			(at 595.63 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "1N4148W-7-F"
+			(at 595.63 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 595.63 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "1N4148W-FDICT-ND"
+			(at 595.63 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/diodes-incorporated/1N4148W-7-F/815280"
+			(at 595.63 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fec6989f-98e9-5c06-b8fd-63ccaf563bbc")
+		)
+		(pin "2"
+			(uuid "473b02cd-a558-5de7-93e0-bc7f9a38c994")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "D3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:1N4148W")
+		(at 645.16 314.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5b2385a8-c1ba-5797-b95c-dcb09455911f")
+		(property "Reference" "D4"
+			(at 645.16 309.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1N4148W"
+			(at 645.16 319.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Diodes_Inc_1N4148W:1N4148W"
+			(at 645.16 322.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 645.16 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Small-signal switching diode, SOD-123"
+			(at 645.16 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Diodes Incorporated"
+			(at 645.16 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "1N4148W-7-F"
+			(at 645.16 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 645.16 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "1N4148W-FDICT-ND"
+			(at 645.16 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/diodes-incorporated/1N4148W-7-F/815280"
+			(at 645.16 314.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c32bbd42-19d8-5e89-b4ac-ab5f7dd76db4")
+		)
+		(pin "2"
+			(uuid "4f854e75-8407-54b7-9012-df82d0a66059")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "D4")
 					(unit 1)
 				)
 			)
@@ -11456,6 +12880,566 @@
 		)
 	)
 	(symbol
+		(lib_id "FlySys:R")
+		(at 325.12 284.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9eb9d78f-5bcf-5b85-9fc7-97f858943daf")
+		(property "Reference" "R23"
+			(at 325.12 279.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1M"
+			(at 325.12 289.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "UNI_ROYAL_0603WAF1004T5E:R0603"
+			(at 325.12 292.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 325.12 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "1 Mohm, 1%, 0.1 W, 0603 resistor"
+			(at 325.12 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 325.12 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-071ML"
+			(at 325.12 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 325.12 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "311-1.00MHRCT-ND"
+			(at 325.12 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/yageo/RC0603FR-071ML/729791"
+			(at 325.12 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "48800c59-2cc0-593b-b6e5-bebf6719d434")
+		)
+		(pin "2"
+			(uuid "27ef2f33-d629-5f4a-a22f-4c6b76900e1a")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "R23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:R")
+		(at 374.65 284.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "607cc7d4-08db-5546-9fa3-adc3ddf4378c")
+		(property "Reference" "R24"
+			(at 374.65 279.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100k"
+			(at 374.65 289.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "UNI_ROYAL_0603WAF1003T5E:R0603"
+			(at 374.65 292.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 374.65 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "100 kohm, 1%, 0.1 W, 0603 resistor"
+			(at 374.65 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 374.65 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-07100KL"
+			(at 374.65 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 374.65 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "311-100KHRCT-ND"
+			(at 374.65 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/yageo/RC0603FR-07100KL/726889"
+			(at 374.65 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1fcb0480-d60b-5ae0-880a-6f9f0df93534")
+		)
+		(pin "2"
+			(uuid "6b5f57f7-0ddc-523f-bf95-5a884aed2361")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "R24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:R")
+		(at 425.45 284.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8458f949-6f47-5199-b4b9-b6170cd27620")
+		(property "Reference" "R25"
+			(at 425.45 279.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100R"
+			(at 425.45 289.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "UNI_ROYAL_0603WAF1000T5E:R0603"
+			(at 425.45 292.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 425.45 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "100 ohm, 1%, 0.1 W, 0603 resistor"
+			(at 425.45 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 425.45 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-07100RL"
+			(at 425.45 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 425.45 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "311-100HRCT-ND"
+			(at 425.45 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/yageo/RC0603FR-07100RL/726888"
+			(at 425.45 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fb2a905b-26eb-57a6-8e3d-e17c5ad6c103")
+		)
+		(pin "2"
+			(uuid "5475d87f-9527-5ae6-a031-881edca5c9bc")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "R25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:R")
+		(at 474.98 284.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9f45d5f8-e383-55c6-a076-ff9999d50c35")
+		(property "Reference" "R26"
+			(at 474.98 279.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1M"
+			(at 474.98 289.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "UNI_ROYAL_0603WAF1004T5E:R0603"
+			(at 474.98 292.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 474.98 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "1 Mohm, 1%, 0.1 W, 0603 resistor"
+			(at 474.98 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 474.98 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-071ML"
+			(at 474.98 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 474.98 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "311-1.00MHRCT-ND"
+			(at 474.98 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/yageo/RC0603FR-071ML/729791"
+			(at 474.98 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e0d06a91-06b0-5e82-8726-5753639cc473")
+		)
+		(pin "2"
+			(uuid "5ff4c234-81d1-5f65-86b7-8c8cb45f703e")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "R26")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:R")
+		(at 524.51 284.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "268c4017-270e-5901-b1cd-9ed2ba7b6d7a")
+		(property "Reference" "R28"
+			(at 524.51 279.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1M"
+			(at 524.51 289.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "UNI_ROYAL_0603WAF1004T5E:R0603"
+			(at 524.51 292.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 524.51 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "1 Mohm, 1%, 0.1 W, 0603 resistor"
+			(at 524.51 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 524.51 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-071ML"
+			(at 524.51 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 524.51 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "311-1.00MHRCT-ND"
+			(at 524.51 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/yageo/RC0603FR-071ML/729791"
+			(at 524.51 284.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "83ea982c-91d1-52e2-b9f2-f13a37cfa7f6")
+		)
+		(pin "2"
+			(uuid "35694aa1-4b8f-5597-910c-61f99ee78151")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "R28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "FlySys:C")
 		(at 255.27 255.27 0)
 		(unit 1)
@@ -12010,6 +13994,118 @@
 			(project "flysys_vario"
 				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
 					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "FlySys:R")
+		(at 515.62 255.27 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1c166db9-136e-5238-af58-f7a58d0d5f21")
+		(property "Reference" "R27"
+			(at 515.62 250.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 515.62 260.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "UNI_ROYAL_0603WAF4701T5E:R0603"
+			(at 515.62 263.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 515.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "4.7 kohm, 1%, 0.1 W, 0603 resistor"
+			(at 515.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 515.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RC0603FR-074K7L"
+			(at 515.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Supplier" "DigiKey"
+			(at 515.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey Part Number" "311-4.70KHRCT-ND"
+			(at 515.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/yageo/RC0603FR-074K7L/727212"
+			(at 515.62 255.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0064cf30-e095-5352-ae5f-a982bc154101")
+		)
+		(pin "2"
+			(uuid "29572f33-cd08-5b75-b411-4cc167eba36d")
+		)
+		(instances
+			(project "flysys_vario"
+				(path "/a7db589c-c53c-50ae-af11-c9b139f1110d"
+					(reference "R27")
 					(unit 1)
 				)
 			)
