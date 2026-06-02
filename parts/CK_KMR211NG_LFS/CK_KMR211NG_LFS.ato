@@ -1,0 +1,15 @@
+import has_designator
+import has_designator_prefix
+import is_atomic_part
+
+component CK_KMR211NG_LFS_package:
+    """C&K KMR211NG LFS momentary tactile switch."""
+
+    trait is_atomic_part<manufacturer="C&K", partnumber="KMR211NG LFS", footprint="KMR211NG_LFS.kicad_mod", symbol="KMR211NG_LFS.kicad_sym">
+    trait has_designator<designator="SW1">
+    trait has_designator_prefix<prefix="SW">
+
+    signal A ~ pin 1
+    A ~ pin 2
+    signal B ~ pin 3
+    B ~ pin 4

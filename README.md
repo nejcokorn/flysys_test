@@ -180,18 +180,19 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 9. Assign supplier/manufacturer metadata for audit.
 10. Run electrical/package checks before PCB routing.
 
-## Atopile Schematic Status
+## Atopile Project Status
 
-Initial Atopile schematic capture is in this repo:
+Atopile is now the active project source in this repo:
 
 - `ato.yaml`: Atopile 0.15.7 project config.
-- `main.ato`: FlySysVario schematic source.
-- `parts/`: generated and local part definitions plus picked passives.
-- `layouts/default/default.kicad_pcb`: Atopile-generated KiCad PCB container.
+- `main.ato`: FlySysVario schematic source and Atopile `RectangularBoardShape` board outline.
+- `parts/`: generated and local part definitions, including local draft footprints for battery, buzzer, MOSFETs, button, debug pads, and optional magnetometer pads.
+- `layouts/default/default.kicad_pcb`: Atopile-generated layout artifact used by the Atopile Autolayout panel.
+- `docs/components-and-placement.md`: component map, passive explanations, and placement intent.
 
 Current modeled nets include USB-C, USB ESD, BQ24075 power path, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, BMP581, BMI323, battery connector, battery/USB sense dividers, buzzer MOSFET driver, green power LED, blue BLE LED low-side switch, user/BOOT button, debug pads, and optional future magnetometer pads.
 
-`ato --non-interactive build` completes successfully. The remaining warnings are expected for local or schematic-only custom parts. `BMP581` has a local KiCad footprint generated from the Bosch land pattern, but no Atopile supplier picker yet. `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `KMR211NG LFS`, debug pads, and optional magnetometer pads still need verified footprints or importable CAD models before layout. Generated/picked footprints already exist for ESP32-S3-MINI-1-N8, BQ24075RGTR, TLV75533PDBVR, BMI323, USB4105-GF-A, USBLC6-2SC6, LTST-C190GKT, LTST-C190TBKT, and current passives.
+`ato --non-interactive build` completes the current Atopile workflow. The 52 mm x 40 mm board outline is defined in `main.ato` with `RectangularBoardShape`, so the Atopile Autolayout panel has a board boundary to place and route against. The remaining warnings are expected for local or DigiKey-only parts because the current picker support is not covering those local packages. Before production, verify the local draft footprints for `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `KMR211NG LFS`, debug pads, and optional magnetometer pads against manufacturer land patterns and enclosure mechanics.
 
 ## Source Links
 

@@ -1,0 +1,10 @@
+(sym_lib_table
+	(version 7)
+	(lib
+		(name "FlySys")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/flysys_symbols.kicad_sym")
+		(options "")
+		(descr "FlySys generated schematic symbols")
+	)
+)

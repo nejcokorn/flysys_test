@@ -1,0 +1,62 @@
+
+(rules PCB default.dsn
+  (snap_angle 
+    fortyfive_degree
+  )
+  (rule
+    (width 200.0)
+    (clearance 200.0)
+    (clearance 100.0 (type smd_to_turn_gap))
+    (clearance 50.0 (type smd))
+    (clearance 200.0 (type "kicad_default"))
+  )
+  (padstack "Via[0-1]_600:300_um"
+    (shape
+      (circle F.Cu 600.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 600.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_600:300_um" "Via[0-1]_600:300_um" default
+  )
+  (via 
+    "Via[0-1]_600:300_um-kicad_default" "Via[0-1]_600:300_um" "kicad_default"
+  )
+  (via_rule
+    default "Via[0-1]_600:300_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_600:300_um-kicad_default"
+  )
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 200.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    DRAIN A EN "c_vbus_in-power-hv" TS "c_sys_bulk-power-hv" ILIM hv
+    GND nCHG TXD0 "4" "10" INT "I2C_SDA" "14"
+    "15" "16" "17" "18" "19" "20" "21" "USB_OTG_DP"
+    "25" "26" "27" "28" "29" "30" "31" "32"
+    "35" "36" "37" "38" RXD0 "41" "44" "7"
+    "I2C_SCL" "INT-1" "DRAIN-1" "BAT_SENSE" "22" "BLE_LED_GATE" "BOOT_USER_BTN_N" "c_pressure_vddio-power-hv"
+    "BUZZER_GATE" A5 B5 ISET TMR nPGOOD pos "USB_VBUS_SENSE"
+    A8 "USB_DM_CONN" B8 "USB_DP_CONN" "USB_OTG_DM"
+    (clearance_class "kicad_default")
+    (via_rule "kicad_default")
+    (rule
+      (width 200.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)

@@ -1,0 +1,26 @@
+import has_designator
+import has_designator_prefix
+import is_atomic_part
+
+component Alpha_Omega_AO3400A_Q1_package:
+    """AO3400A N-channel MOSFET in SOT-23."""
+
+    trait is_atomic_part<manufacturer="Alpha & Omega Semiconductor", partnumber="AO3400A", footprint="AO3400A.kicad_mod", symbol="AO3400A.kicad_sym">
+    trait has_designator<designator="Q1">
+    trait has_designator_prefix<prefix="Q">
+
+    signal GATE ~ pin 1
+    signal SOURCE ~ pin 2
+    signal DRAIN ~ pin 3
+
+
+component Alpha_Omega_AO3400A_Q2_package:
+    """AO3400A N-channel MOSFET in SOT-23."""
+
+    trait is_atomic_part<manufacturer="Alpha & Omega Semiconductor", partnumber="AO3400A", footprint="AO3400A.kicad_mod", symbol="AO3400A.kicad_sym">
+    trait has_designator<designator="Q2">
+    trait has_designator_prefix<prefix="Q">
+
+    signal GATE ~ pin 1
+    signal SOURCE ~ pin 2
+    signal DRAIN ~ pin 3

@@ -1,0 +1,13 @@
+import has_designator
+import has_designator_prefix
+import is_atomic_part
+
+component Same_Sky_CSS_J4D20_SMT_TR_package:
+    """Same Sky CSS-J4D20-SMT-TR externally driven magnetic transducer."""
+
+    trait is_atomic_part<manufacturer="Same Sky", partnumber="CSS-J4D20-SMT-TR", footprint="CSS-J4D20-SMT-TR.kicad_mod", symbol="CSS-J4D20-SMT-TR.kicad_sym">
+    trait has_designator<designator="BZ1">
+    trait has_designator_prefix<prefix="BZ">
+
+    signal POS ~ pin 1
+    signal NEG ~ pin 2

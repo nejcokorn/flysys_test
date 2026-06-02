@@ -1,0 +1,13 @@
+import has_designator
+import has_designator_prefix
+import is_atomic_part
+
+component JST_S2B_PH_SM4_TB_package:
+    """JST S2B-PH-SM4-TB 2-pin right-angle LiPo connector."""
+
+    trait is_atomic_part<manufacturer="JST", partnumber="S2B-PH-SM4-TB", footprint="S2B-PH-SM4-TB.kicad_mod", symbol="S2B-PH-SM4-TB.kicad_sym">
+    trait has_designator<designator="J1">
+    trait has_designator_prefix<prefix="J">
+
+    signal BAT_POS ~ pin 1
+    signal BAT_NEG ~ pin 2
