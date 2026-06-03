@@ -21,7 +21,7 @@ The board uses the following main nets:
 | `BAT_RAW` | LiPo battery positive terminal at `J1`, before the hard-off battery switch. |
 | `BAT` | Switched internal battery rail after `Q4`. Feeds charger battery pin and battery ADC divider only while the battery switch is on. |
 | `SYS` | Charger power-path output. Feeds 3.3 V regulator and high-current buzzer/blue LED loads when the system is on. |
-| `+3V3` | Regulated logic rail for ESP32-S3, sensors, pull-ups, and LEDs. |
+| `+3V3` | Regulated logic rail for ESP32-S3, sensors, pull-ups, and the green power LED. |
 | `CHG_SYSOFF` | BQ24075 ship-mode control. High disconnects battery from `SYS`; low enables battery-to-`SYS` operation. |
 | `PWR_SW_N` | Raw active-low power button node from `SW1`, isolated from MCU and latch nodes by diodes. |
 | `PWR_BTN_N` | Isolated active-low power/user button input read by the MCU on GPIO7. |
@@ -94,14 +94,15 @@ tied to `SYS`, so the 3.3 V rail is on whenever `SYS` is present. On battery
 power, `SYS` is present only after `CHG_SYSOFF` is pulled low by `SW1` or `Q3`.
 
 `+3V3` powers the ESP32-S3 module, BMP581 pressure sensor, BMI323 IMU, I2C
-pull-ups, charger status pull-ups, green power LED, and button/latch pull-ups.
+pull-ups, charger status pull-ups, the always-on green power LED, and
+button/latch pull-ups.
 
 ## ESP32-S3 MCU
 
 `U4` is the main controller. It uses native USB through `USB_OTG_DP` and
 `USB_OTG_DM`, reads battery and USB voltage dividers, reads charger status, runs
-the I2C sensor bus, drives the buzzer PWM MOSFET, and drives the BLE status LED
-MOSFET.
+the I2C sensor bus, drives the buzzer PWM MOSFET, and drives the BLE
+pairing/advertising LED MOSFET.
 
 `EN` has a 10 kohm pull-up (`R16`) and 100 nF capacitor (`C4`) for a simple reset
 RC network. `SW3` pulls `EN` low for a hidden service reset button labeled
@@ -170,12 +171,15 @@ and kept away from the pressure sensor and I2C lines.
 ## LEDs
 
 `LED2` is the green power LED. It is powered from `+3V3` through `R20`, then
-returns directly to `GND`.
+returns directly to `GND`. It is a power-present indicator and is on whenever
+`+3V3` is up; firmware does not control it.
 
-`LED1` is the blue BLE status LED. It is powered from `SYS` through `R5` and
+`LED1` is the blue BLE pairing LED. It is powered from `SYS` through `R5` and
 switched by `Q2`, another low-side `AO3400A`. `R4` is the series gate resistor,
 and `R3` is the gate pulldown. This keeps the LED off while the ESP32-S3 GPIO is
-high impedance.
+high impedance. Firmware should drive `BLE_LED_PWM` active only while BLE
+pairing/connectable advertising mode is active, and keep it low or high-Z
+otherwise.
 
 ## Capacitors And Their Roles
 
@@ -294,7 +298,7 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `U4` | `14` | `IO10` | `PWR_HOLD` | Power-hold release output. Leave high-Z/high for normal hold; drive low to shut down from battery. |
 | `U4` | `15`, `16`, `17`, `18`, `19`, `20` | `IO11` to `IO16` | `NC` | Leave floating and mark no-connect. |
 | `U4` | `21` | `IO17` | `BUZZER_PWM` | PWM output to `Q1` through `R8`. |
-| `U4` | `22` | `IO18` | `BLE_LED_PWM` | LED control output to `Q2` through `R4`. |
+| `U4` | `22` | `IO18` | `BLE_LED_PWM` | BLE pairing/advertising LED control output to `Q2` through `R4`. |
 | `U4` | `23` | `IO19` | `USB_OTG_DM` | Native USB D-. Route as controlled short USB pair with pin 24. |
 | `U4` | `24` | `IO20` | `USB_OTG_DP` | Native USB D+. Route as controlled short USB pair with pin 23. |
 | `U4` | `25`, `26`, `27`, `28`, `29`, `30`, `31`, `32` | `IO21`, `IO26`, `IO47`, `IO33`, `IO34`, `IO48`, `IO35`, `IO36` | `NC` | Leave floating and mark no-connect. |
@@ -348,7 +352,7 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `Q1` | `3` | `D` | `BUZZER_NEG` | Low-side switch drain to buzzer negative terminal. |
 | `Q2` | `1` | `G` | `BLE_LED_GATE` | Gate drive from `R4`, pulldown by `R3`. |
 | `Q2` | `2` | `S` | `GND` | Low-side switch source. |
-| `Q2` | `3` | `D` | `BLE_LED_K` | Low-side switch drain to blue LED cathode. |
+| `Q2` | `3` | `D` | `BLE_LED_K` | Low-side switch drain to blue BLE pairing LED cathode. |
 | `Q3` | `1` | `G` | `PWR_HOLD_GATE` | Gate drive from the hardware hold node. |
 | `Q3` | `2` | `S` | `GND` | Low-side switch source. |
 | `Q3` | `3` | `D` | `CHG_SYSOFF` | Pulls BQ24075 `SYSOFF` low while the power latch is active. |
@@ -358,10 +362,10 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `D3` | `2` | `A` | `BAT_SWITCH_GATE` | Diode-isolated start path for `Q4` gate. |
 | `D4` | `1` | `K` | `PWR_SW_N` | Lets `SW1` pull `CHG_SYSOFF` low during power-on. |
 | `D4` | `2` | `A` | `CHG_SYSOFF` | Diode-isolated start path for BQ24075 `SYSOFF`. |
-| `LED1` | `1` | `K` | `BLE_LED_K` | Blue LED cathode to `Q2.3`. |
-| `LED1` | `2` | `A` | `BLE_LED_A` | Blue LED anode through `R5` to `SYS`. |
-| `LED2` | `1` | `-` | `GND` | Green power LED cathode. |
-| `LED2` | `2` | `+` | `POWER_LED_A` | Green power LED anode through `R20` to `+3V3`. |
+| `LED1` | `1` | `K` | `BLE_LED_K` | Blue BLE pairing LED cathode to `Q2.3`. |
+| `LED1` | `2` | `A` | `BLE_LED_A` | Blue BLE pairing LED anode through `R5` to `SYS`. |
+| `LED2` | `1` | `-` | `GND` | Always-on green power LED cathode. |
+| `LED2` | `2` | `+` | `POWER_LED_A` | Always-on green power LED anode through `R20` to `+3V3`. |
 
 ### Resistors And Capacitors
 
@@ -391,10 +395,10 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `R18` | `I2C_SDA` | `+3V3` | I2C SDA pull-up. |
 | `R8` | `BUZZER_PWM` | `BUZZER_GATE` | Buzzer MOSFET gate series resistor. |
 | `R7` | `BUZZER_GATE` | `GND` | Buzzer MOSFET gate pulldown. |
-| `R5` | `SYS` | `BLE_LED_A` | Blue LED current limit resistor. |
-| `R4` | `BLE_LED_PWM` | `BLE_LED_GATE` | BLE LED MOSFET gate series resistor. |
-| `R3` | `BLE_LED_GATE` | `GND` | BLE LED MOSFET gate pulldown. |
-| `R20` | `+3V3` | `POWER_LED_A` | Green power LED current limit resistor. |
+| `R5` | `SYS` | `BLE_LED_A` | Blue BLE pairing LED current limit resistor. |
+| `R4` | `BLE_LED_PWM` | `BLE_LED_GATE` | BLE pairing LED MOSFET gate series resistor. |
+| `R3` | `BLE_LED_GATE` | `GND` | BLE pairing LED MOSFET gate pulldown. |
+| `R20` | `+3V3` | `POWER_LED_A` | Always-on green power LED current limit resistor. |
 | `C14` | `USB_VBUS` | `GND` | USB input capacitor. |
 | `C1` | `BAT` | `GND` | Switched battery bulk capacitor. |
 | `C13` | `SYS` | `GND` | System rail bulk capacitor. |

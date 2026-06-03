@@ -14,7 +14,7 @@ Build a compact FlySys variometer board with:
 - LiPo charging and battery operation.
 - Loud firmware-controlled audio output.
 - USB mass-storage device access for logs/configuration.
-- Power button, hidden BOOT/RESET recovery controls, power LED, BLE LED, USB, and software-first firmware update access without debug pads.
+- Power button, hidden BOOT/RESET recovery controls, green power LED, blue BLE pairing LED, USB, and software-first firmware update access without debug pads.
 
 ## Selected Components
 
@@ -29,7 +29,7 @@ Build a compact FlySys variometer board with:
 | USB | GCT `USB4105-GF-A` + ST `USBLC6-2SC6Y` | USB-C 2.0 receptacle and automotive/AEC-Q101 USB ESD for charging, ESP32-S3 native USB, USBMSD, logs, and flashing. |
 | Audio | Same Sky `CSS-J4D20-SMT-TR` + `AO3400A` N-MOSFET | Externally driven SMD magnetic transducer from the old device BOM. Drive from the 1S battery/SYS rail; keep firmware tone, carrier-duty, and envelope control. |
 | User input | C&K `KMR211NG LFS` | Momentary active-low tactile switch for power/user input plus hidden BOOT and RESET service switches. Final actuator and pinhole geometry still depends on enclosure height. |
-| Indicators | Lite-On `LTST-C190GKT` + `LTST-C190TBKT` | 0603 LEDs: green low-current `POWER_LED`, blue firmware-controlled `BLE_LED`. The blue LED is driven from `SYS` with a GPIO-controlled low-side MOSFET. |
+| Indicators | Lite-On `LTST-C190GKT` + `LTST-C190TBKT` | 0603 LEDs: green always-on `+3V3` power-present indicator, blue firmware-controlled BLE pairing/advertising indicator. The blue LED is driven from `SYS` with a GPIO-controlled low-side MOSFET. |
 | Battery | JST `S2B-PH-SM4-TB` | 2-pin JST-PH right-angle SMD header. Confirm protected pack and cable polarity. |
 | Firmware update | Application-level updater + hidden ESP32-S3 BOOT/RESET recovery | Normal users update through firmware while USB or another supported link is connected. Debug pads are not fitted; hidden BOOT+RESET remains the recovery fallback for the ESP32-S3 ROM USB bootloader. |
 
@@ -48,12 +48,12 @@ Initial audit checked: 2026-05-31. Audio and LED changes rechecked: 2026-06-01. 
 | USB ESD | `USBLC6-2SC6Y` | `497-11882-1-ND` | 35,783 in stock | Selected automotive/AEC-Q101 part; LCSC `C2969755` |
 | Battery connector | `S2B-PH-SM4-TB` | `455-S2B-PH-SM4-TBCT-ND` | 71,350 in stock | Selected |
 | Loud SMD buzzer | `CSS-J4D20-SMT-TR` | `102-1198-1-ND` | 2,332 in stock | Selected old-device buzzer: externally driven magnetic transducer, 90 dB at 3.6 V, 5 cm, 80 mA, 3.1 kHz |
-| N-MOSFETs | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Low-side drivers for buzzer PWM, blue BLE LED switching, and power-latch control |
+| N-MOSFETs | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Low-side drivers for buzzer PWM, blue BLE pairing LED switching, and power-latch control |
 | Battery switch P-MOSFET | `DMP3098L-7` | `DMP3098L-7DICT-ND` | Recheck before ordering | High-side hard-off switch between battery connector and internal `BAT` rail |
 | Power-start diodes | `1N4148W-7-F` | `1N4148W-FDICT-ND` | Recheck before ordering | Diode isolation for power button, battery switch gate, and charger `SYSOFF` |
 | User button | `KMR211NG LFS` | `CKN10243CT-ND` | 44,917 in stock | Selected |
 | Power LED | `LTST-C190GKT` | `160-LTST-C190GKTCT-ND` | 1,068,260 in stock | Selected 0603 green LED, 2.1 V typical Vf |
-| BLE LED | `LTST-C190TBKT` | `160-1646-1-ND` | 92,246 in stock | Selected 0603 blue LED, 3.3 V typical Vf |
+| BLE LED | `LTST-C190TBKT` | `160-1646-1-ND` | 92,246 in stock | Selected 0603 blue LED for BLE pairing/advertising indication, 3.3 V typical Vf |
 | Resistors | Yageo `RC0603FR` 1% 0603 family | Value-specific | `RC0603FR-0710KL` observed at 9,468,329 in stock | Use same family for 100R, 1k, 3k, 5.1k, 10k, 100k, 1M as needed |
 | 100 nF decoupling capacitor | Samsung `CL10B104KB8NNNC` | `1276-1000-1-ND` | 9,953,497 in stock | Selected family |
 | Other ceramics | Samsung CL-series MLCCs | Value-specific | Not individually locked yet | Select exact 1 uF, 10 uF, and 220 nF parts during Atopile binding |
@@ -75,8 +75,8 @@ Main audit result: all selected active semiconductors, sensors, connector choice
 - `PWR_BTN_N`: diode-isolated active-low button input to ESP32-S3.
 - `BOOT_USER_BTN_N`: ESP32-S3 GPIO0 boot strap, pulled low by the hidden BOOT service button for ROM bootloader recovery.
 - `BAT_SENSE`: high-value divider from switched `BAT` to ESP32-S3 ADC-capable GPIO; it has no DC path to `BAT_RAW` when the hard-off switch is open.
-- `POWER_LED`: low-current green `+3V3` rail indicator with series resistor.
-- `BLE_LED`: low-current blue indicator for BLE advertising/connection state. Because the blue LED has high forward voltage, prefer `SYS` plus a current-limit resistor and a small GPIO-controlled low-side switch instead of direct `+3V3` GPIO drive.
+- `POWER_LED`: low-current green `+3V3` rail indicator with series resistor. It is on whenever `+3V3` is up and is not firmware-controlled.
+- `BLE_LED`: low-current blue indicator for BLE pairing/advertising mode only. Firmware should drive `BLE_LED_PWM` active only while connectable BLE advertising/pairing is active and keep it low or high-Z otherwise. Because the blue LED has high forward voltage, prefer `SYS` plus a current-limit resistor and a small GPIO-controlled low-side switch instead of direct `+3V3` GPIO drive.
 - `EN`, `BOOT`: hidden physical RESET and BOOT service controls for ESP32-S3 ROM bootloader recovery only.
 
 ## USBMSD / Storage Plan
@@ -176,7 +176,7 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 - Add direct BMP581 driver support.
 - Add direct BMI323 driver support.
 - Remove required magnetometer reads from the baseline firmware path.
-- Rework GPIO mapping for ESP32-S3, including `BUZZER_PWM`, `PWR_BTN_N`, `PWR_HOLD`, `BAT_SENSE`, `BLE_LED`, I2C, USB, `EN`, and `BOOT`.
+- Rework GPIO mapping for ESP32-S3, including `BUZZER_PWM`, `PWR_BTN_N`, `PWR_HOLD`, `BAT_SENSE`, `BLE_LED_PWM`, I2C, USB, `EN`, and `BOOT`.
 - Add configurable audio profiles for vario use: climb cadence, sink alarm, mute, startup check, and volume/power-saving modes.
 - Port the old single-PWM buzzer model, then retune frequency and volume tables around the `CSS-J4D20-SMT-TR` response on the new PCB.
 - Revalidate sensor axis mapping and calibration on the actual PCB.
@@ -198,7 +198,7 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 ## Atopile Build Order
 
 1. Create Atopile project scaffold.
-2. Add verified packages for ESP32-S3-MINI-1-N8, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, CSS-J4D20 buzzer, MOSFET driver, button, green power LED, blue BLE LED, and passives.
+2. Add verified packages for ESP32-S3-MINI-1-N8, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, CSS-J4D20 buzzer, MOSFET driver, button, green power LED, blue BLE pairing LED, and passives.
 3. Capture power path and 3.3 V rail.
 4. Capture ESP32-S3 native USB OTG, USB VBUS sense, `EN`, `BOOT`, and hidden service bootloader buttons.
 5. Capture BMP581 and BMI323 on shared I2C.
@@ -218,7 +218,7 @@ Atopile is now the active project source in this repo:
 - `layouts/default/default.kicad_pcb`: Atopile-generated layout artifact used by the Atopile Autolayout panel.
 - `docs/components-and-placement.md`: component map, passive explanations, and placement intent.
 
-Current modeled nets include USB-C, USB ESD, BQ24075 power path, P-MOS battery hard-off switch, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, BMP581, BMI323, battery connector, switched battery/USB sense dividers, buzzer MOSFET driver, green power LED, blue BLE LED low-side switch, power/user button, hidden BOOT and RESET service buttons, and optional future magnetometer pads. See `docs/firmware-update-ux.md` for the software-first update flow and recovery fallback.
+Current modeled nets include USB-C, USB ESD, BQ24075 power path, P-MOS battery hard-off switch, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, BMP581, BMI323, battery connector, switched battery/USB sense dividers, buzzer MOSFET driver, always-on green power LED, blue BLE pairing LED low-side switch, power/user button, hidden BOOT and RESET service buttons, and optional future magnetometer pads. See `docs/firmware-update-ux.md` for the software-first update flow and recovery fallback.
 
 `ato --non-interactive build` completes the current Atopile workflow. The 90 mm x 45 mm board outline is defined in `main.ato` with `RectangularBoardShape`, so the Atopile Autolayout panel has a board boundary to place and route against. The remaining warnings are expected for local or DigiKey-only parts because the current picker support is not covering those local packages. Before production, verify the local draft footprints for `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `DMP3098L`, `1N4148W`, `KMR211NG LFS`, and optional magnetometer pads against manufacturer land patterns and enclosure mechanics.
 

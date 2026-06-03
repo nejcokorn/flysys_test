@@ -44,7 +44,7 @@ routed.
 | `J1` | `battery` | `S2B-PH-SM4-TB` | 2-pin LiPo connector | Near charger `BAT` pins. Confirm protected pack polarity before ordering/build. |
 | `BZ1` | `buzzer` | `CSS-J4D20-SMT-TR` | Loud firmware-driven vario tone output | Lower/right side near acoustic outlet. Keep buzzer current loop local to `BZ1`, `Q1`, and `C3`. |
 | `Q1` | `q_buzzer` | `AO3400A` | Low-side MOSFET for buzzer PWM | Next to buzzer return pad. Keep drain loop compact. |
-| `Q2` | `q_ble_led` | `AO3400A` | Low-side MOSFET for blue BLE LED | Near `LED1`/`R5`. Needed because blue LED is powered from `SYS`. |
+| `Q2` | `q_ble_led` | `AO3400A` | Low-side MOSFET for blue BLE pairing LED | Near `LED1`/`R5`. Needed because blue LED is powered from `SYS`. |
 | `Q3` | `q_sysoff` | `AO3400A` | Low-side MOSFET that latches BQ24075 `SYSOFF` low | Near `U1`/`SYSOFF` control resistors. Keep `CHG_SYSOFF` compact and quiet. |
 | `Q4` | `q_bat_switch` | `DMP3098L` | P-channel high-side battery hard-off switch from `BAT_RAW` to `BAT` | Between `J1` and `U1 BAT`. Keep the switched battery path short and wide. |
 | `Q5` | `q_bat_gate` | `AO3400A` | Low-side MOSFET that holds `Q4` gate low while power is latched | Near `Q4` gate and `R28`. |
@@ -52,8 +52,8 @@ routed.
 | `SW1` | `user_button` | `KMR211NG LFS` | Active-low power/user button | Accessible edge area. Pressing it starts the board from battery hard-off and is read by the MCU through `D2`; firmware also uses it to leave USB-attached idle mode. |
 | `SW2` | `boot_button` | `KMR211NG LFS` | ESP32-S3 BOOT recovery button | Hidden service/pinhole access only. Label on PCB as `BOOT`; hold while tapping `RST` to enter ROM bootloader recovery. |
 | `SW3` | `reset_button` | `KMR211NG LFS` | ESP32-S3 RESET recovery button | Hidden service/pinhole access only. Label on PCB as `RST`; use with `BOOT` for ROM bootloader recovery. |
-| `LED2` | `power_led` | `LTST-C190GKT` green LED | Power indicator | Lower edge where visible; series resistor `R20` next to it. |
-| `LED1` | `ble_led` | `LTST-C190TBKT` blue LED | Firmware BLE status indicator | Lower/right visible edge; driven through `Q2`. |
+| `LED2` | `power_led` | `LTST-C190GKT` green LED | Always-on `+3V3` power indicator | Lower edge where visible; series resistor `R20` next to it. |
+| `LED1` | `ble_led` | `LTST-C190TBKT` blue LED | Firmware BLE pairing/advertising indicator | Lower/right visible edge; driven through `Q2`. Firmware should keep it off outside pairing/advertising mode. |
 
 ## Capacitors
 
@@ -102,10 +102,10 @@ routed.
 | `R18` | `r_i2c_sda_pullup` | 4.7 k | I2C SDA pull-up to `+3V3`. Place next to `R17`. |
 | `R8` | `r_buzzer_gate` | 100 ohm | Series gate resistor from ESP32 PWM to `Q1`. Place at `Q1` gate. |
 | `R7` | `r_buzzer_gate_pd` | 100 k | `Q1` gate pulldown so buzzer stays off at reset. Place at `Q1` gate/source. |
-| `R20` | `r_power_led` | 1 k | Green power LED current limit from `+3V3`. Place next to `LED2`. |
-| `R5` | `r_ble_led` | 1 k | Blue BLE LED current limit from `SYS`. Place next to `LED1`/`Q2`. |
+| `R20` | `r_power_led` | 1 k | Always-on green power LED current limit from `+3V3`. Place next to `LED2`. |
+| `R5` | `r_ble_led` | 1 k | Blue BLE pairing LED current limit from `SYS`. Place next to `LED1`/`Q2`. |
 | `R4` | `r_ble_gate` | 100 ohm | Series gate resistor from ESP32 GPIO to `Q2`. Place at `Q2` gate. |
-| `R3` | `r_ble_gate_pd` | 100 k | `Q2` gate pulldown so BLE LED stays off at reset. Place at `Q2` gate/source. |
+| `R3` | `r_ble_gate_pd` | 100 k | `Q2` gate pulldown so the BLE pairing LED stays off at reset. Place at `Q2` gate/source. |
 
 ## Routing Constraints for PCB Layout Review
 
@@ -115,7 +115,7 @@ and detailed connection constraints.
 - USB `D+`/`D-` must route from `USB1` through `D1` before going to `U4 GPIO20/GPIO19`. Keep this pair short and parallel in the final layout review.
 - `SW2` and `SW3` should be reachable only through service access or pinholes, not as normal exposed user controls. Add `BOOT` and `RST` PCB/service labels.
 - `USB_VBUS`, `BAT`, and `SYS` are routed wider than logic nets. These carry charger, regulator, and buzzer current.
-- `+3V3` fans out from `U3` to `U4`, `U5`, `U2`, pull-ups, and LEDs.
+- `+3V3` fans out from `U3` to `U4`, `U5`, `U2`, pull-ups, and the always-on green power LED.
 - `U5` and `U2` decoupling capacitors are placed adjacent to their devices rather than grouped with generic capacitors.
 - `BZ1`, `Q1`, `R8`, `R7`, and `C3` are grouped together to keep the buzzer switching current local.
 - `U1`, `Q3`, `Q4`, `Q5`, `D2`-`D4`, `R23`, `R24`, `R26`, and `R28` should keep the hard-off latch short and away from the buzzer gate and USB data routing.

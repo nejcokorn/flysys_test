@@ -382,7 +382,7 @@ module FlySysVario:
     r_buzzer_gate_pd.package = "0603"
     c_buzzer_bulk.package = "0603"
 
-    # Green power LED from +3V3 and blue BLE LED from SYS via low-side switch.
+    # Green power-present LED from +3V3 and blue BLE pairing LED from SYS.
     v3v3.hv ~> r_power_led ~> power_led.pos
     power_led.neg ~ gnd
     sys.hv ~> r_ble_led ~> ble_led.A
