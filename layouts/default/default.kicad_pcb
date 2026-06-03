@@ -522,7 +522,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C7519"
+		(property "LCSC" "C2969755"
 			(at 0 0 0)
 			(layer "User.9")
 			(hide yes)
@@ -534,13 +534,13 @@
 			(hide yes)
 			(uuid "afdb3a5e-33ec-4243-b62c-2e814642524b")
 		)
-		(property "Partnumber" "USBLC6-2SC6"
+		(property "Partnumber" "USBLC6-2SC6Y"
 			(at 0 0 0)
 			(layer "User.9")
 			(hide yes)
 			(uuid "f578b5a1-f2bd-4ac8-89e5-83f64642524b")
 		)
-		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121836_STMicroelectronics-USBLC6-2SC6_C7519.pdf"
+		(property "Datasheet" "https://www.st.com/resource/en/datasheet/usblc6-2sc6.pdf"
 			(at 0 0 0)
 			(layer "User.9")
 			(hide yes)
@@ -552,7 +552,7 @@
 			(hide yes)
 			(uuid "60044150-81c1-4d85-aea6-bd594642524b")
 		)
-		(property "lcsc_id" "C7519"
+		(property "lcsc_id" "C2969755"
 			(at 0 0 0)
 			(layer "User.9")
 			(hide yes)
@@ -13273,7 +13273,7 @@
 			(roundrect_rratio 0.25)
 		)
 	)
-	(footprint "CK_KMR211NG_LFS:KMR211NG_LFS"
+	(footprint "CK_KMR211NG_LFS:KMR211NG_LFS_BOOT"
 		(layer "F.Cu")
 		(uuid "509a27cd-8717-4ee2-9631-9f504642524b")
 		(at 60 0 0)
@@ -13378,6 +13378,16 @@
 			)
 			(layer "F.CrtYd")
 		)
+		(fp_text user "BOOT"
+			(at 0 -2.65 0)
+			(layer "F.SilkS")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.1)
+				)
+			)
+		)
 		(pad "1" smd roundrect
 			(at -2.25 0.75 0)
 			(size 1 0.65)
@@ -13407,7 +13417,7 @@
 			(roundrect_rratio 0.25)
 		)
 	)
-	(footprint "CK_KMR211NG_LFS:KMR211NG_LFS"
+	(footprint "CK_KMR211NG_LFS:KMR211NG_LFS_RST"
 		(layer "F.Cu")
 		(uuid "bf2798e5-c7ac-4e1f-978f-23734642524b")
 		(at 70 0 0)
@@ -13511,6 +13521,16 @@
 				(type solid)
 			)
 			(layer "F.CrtYd")
+		)
+		(fp_text user "RST"
+			(at 0 -2.65 0)
+			(layer "F.SilkS")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.1)
+				)
+			)
 		)
 		(pad "1" smd roundrect
 			(at -2.25 0.75 0)

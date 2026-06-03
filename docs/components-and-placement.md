@@ -1,6 +1,6 @@
 # FlySys KiCad Components and Placement
 
-Updated: 2026-06-02
+Updated: 2026-06-03
 
 The KiCad schematic is in `kicad/flysys_vario.kicad_sch`. It uses the generated
 local symbol library `kicad/flysys_symbols.kicad_sym` and footprint libraries
@@ -8,12 +8,15 @@ from `parts/`.
 
 The DigiKey purchasing BOM is generated at
 `kicad/flysys_vario_digikey_bom.csv`. A readable version is in
-`docs/digikey-bom.md`. Debug pads are not fitted in this design; ESP32-S3
-bootloader entry is through the USB connector plus `BOOT`/`RESET` buttons.
+`docs/digikey-bom.md`. Debug pads are not fitted in this design; normal firmware
+update is software-first, and ESP32-S3 ROM bootloader entry is a hidden service
+fallback through the USB connector plus `BOOT`/`RST` buttons.
 
 The Atopile/LCSC picked component set is documented separately in
 `docs/lcsc-bom.md`. The full text description of the schematic, capacitor
 roles, and wiring/layout constraints is in `docs/schematic-description.md`.
+The firmware update and USB-attached idle UX is in
+`docs/firmware-update-ux.md`.
 
 Regenerate and verify the schematic with:
 
@@ -32,7 +35,7 @@ routed.
 | Ref | Source instance | Component | Role | Placement intent |
 | --- | --- | --- | --- | --- |
 | `USB1` | `usb` | `USB4105-GF-A` USB-C receptacle | USB 2.0 device, charging input, flashing/log/config access | On board edge. Keep `D+`/`D-` short into `D1`; keep CC resistors next to connector. |
-| `D1` | `usb_esd` | `USBLC6-2SC6` | USB ESD protection | Between `USB1` and `U4`, close to `USB1`, before the USB pair enters the board. |
+| `D1` | `usb_esd` | `USBLC6-2SC6Y` | Automotive/AEC-Q101 USB ESD protection | Between `USB1` and `U4`, close to `USB1`, before the USB pair enters the board. Same SOT-23-6L placement intent as the previous part. |
 | `U1` | `charger` | `BQ24075RGTR` | LiPo charger and power-path management | Near USB VBUS and battery connector. Keep `IN`, `BAT`, `OUT`, and thermal ground paths short and wide. |
 | `U3` | `ldo_3v3` | `TLV75533PDBVR` | 3.3 V regulator from `SYS` | Near `U1` and the `+3V3` loads. Keep input/output caps tight to pins. |
 | `U4` | `mcu` | `ESP32-S3-MINI-1-N8` | BLE, USB device, application MCU | Top/right edge so the module antenna faces the board edge/keepout. Do not place copper or tall metal in antenna keepout. |
@@ -46,9 +49,9 @@ routed.
 | `Q4` | `q_bat_switch` | `DMP3098L` | P-channel high-side battery hard-off switch from `BAT_RAW` to `BAT` | Between `J1` and `U1 BAT`. Keep the switched battery path short and wide. |
 | `Q5` | `q_bat_gate` | `AO3400A` | Low-side MOSFET that holds `Q4` gate low while power is latched | Near `Q4` gate and `R28`. |
 | `D2`, `D3`, `D4` | power-start diodes | `1N4148W` | Diode isolation from raw power button to MCU input, `BAT_SWITCH_GATE`, and `CHG_SYSOFF` | Near `SW1` and the power latch nets. |
-| `SW1` | `user_button` | `KMR211NG LFS` | Active-low power/user button | Accessible edge area. Pressing it starts the board from battery hard-off and is read by the MCU through `D2`. |
-| `SW2` | `boot_button` | `KMR211NG LFS` | ESP32-S3 BOOT button | Accessible or service-accessible edge area. Hold while tapping reset to enter ROM bootloader. |
-| `SW3` | `reset_button` | `KMR211NG LFS` | ESP32-S3 RESET button | Accessible or service-accessible edge area for bootloader entry and recovery. |
+| `SW1` | `user_button` | `KMR211NG LFS` | Active-low power/user button | Accessible edge area. Pressing it starts the board from battery hard-off and is read by the MCU through `D2`; firmware also uses it to leave USB-attached idle mode. |
+| `SW2` | `boot_button` | `KMR211NG LFS` | ESP32-S3 BOOT recovery button | Hidden service/pinhole access only. Label on PCB as `BOOT`; hold while tapping `RST` to enter ROM bootloader recovery. |
+| `SW3` | `reset_button` | `KMR211NG LFS` | ESP32-S3 RESET recovery button | Hidden service/pinhole access only. Label on PCB as `RST`; use with `BOOT` for ROM bootloader recovery. |
 | `LED2` | `power_led` | `LTST-C190GKT` green LED | Power indicator | Lower edge where visible; series resistor `R20` next to it. |
 | `LED1` | `ble_led` | `LTST-C190TBKT` blue LED | Firmware BLE status indicator | Lower/right visible edge; driven through `Q2`. |
 
@@ -110,6 +113,7 @@ See `docs/schematic-description.md` for the full text version of the schematic
 and detailed connection constraints.
 
 - USB `D+`/`D-` must route from `USB1` through `D1` before going to `U4 GPIO20/GPIO19`. Keep this pair short and parallel in the final layout review.
+- `SW2` and `SW3` should be reachable only through service access or pinholes, not as normal exposed user controls. Add `BOOT` and `RST` PCB/service labels.
 - `USB_VBUS`, `BAT`, and `SYS` are routed wider than logic nets. These carry charger, regulator, and buzzer current.
 - `+3V3` fans out from `U3` to `U4`, `U5`, `U2`, pull-ups, and LEDs.
 - `U5` and `U2` decoupling capacitors are placed adjacent to their devices rather than grouped with generic capacitors.

@@ -2,19 +2,14 @@ import has_datasheet
 import has_designator_prefix
 import has_part_picked
 import is_atomic_part
-import is_auto_generated
 
-component STMicroelectronics_USBLC6_2SC6_package:
-    """USBLC6-2SC6"""
+component STMicroelectronics_USBLC6_2SC6Y_package:
+    """USBLC6-2SC6Y"""
 
-    # This trait marks this file as auto-generated
-    # If you want to manually change it, remove the trait
-    trait is_auto_generated<system="ato_part", source="easyeda:C7519", date="2026-06-01T08:27:51.973092+00:00", checksum="655f118bd96dd560192c97f625a8c0666bee774420f430933ef5ead84aeb6044">
-
-    trait is_atomic_part<manufacturer="STMicroelectronics", partnumber="USBLC6-2SC6", footprint="SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL.kicad_mod", symbol="USBLC6-2SC6.kicad_sym", model="SOT-23-6_L2.9-W1.6-H1.5-LS2.8-P0.95.step">
-    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C7519", manufacturer="STMicroelectronics", partno="USBLC6-2SC6">
+    trait is_atomic_part<manufacturer="STMicroelectronics", partnumber="USBLC6-2SC6Y", footprint="SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL.kicad_mod", symbol="USBLC6-2SC6.kicad_sym", model="SOT-23-6_L2.9-W1.6-H1.5-LS2.8-P0.95.step">
+    trait has_part_picked::by_supplier<supplier_id="lcsc", supplier_partno="C2969755", manufacturer="STMicroelectronics", partno="USBLC6-2SC6Y">
     trait has_designator_prefix<prefix="D">
-    trait has_datasheet<datasheet="https://www.lcsc.com/datasheet/lcsc_datasheet_2410121836_STMicroelectronics-USBLC6-2SC6_C7519.pdf">
+    trait has_datasheet<datasheet="https://www.st.com/resource/en/datasheet/usblc6-2sc6.pdf">
 
     # pins
     signal IO1_A ~ pin 1

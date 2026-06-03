@@ -25,7 +25,7 @@ from "parts/JST_S2B_PH_SM4_TB/JST_S2B_PH_SM4_TB.ato" import JST_S2B_PH_SM4_TB_pa
 from "parts/Lite_On_LTST_C190GKT/Lite_On_LTST_C190GKT.ato" import Lite_On_LTST_C190GKT_package
 from "parts/Lite_On_LTST_C190TBKT/Lite_On_LTST_C190TBKT.ato" import Lite_On_LTST_C190TBKT_package
 from "parts/Same_Sky_CSS_J4D20_SMT_TR/Same_Sky_CSS_J4D20_SMT_TR.ato" import Same_Sky_CSS_J4D20_SMT_TR_package
-from "parts/STMicroelectronics_USBLC6_2SC6/STMicroelectronics_USBLC6_2SC6.ato" import STMicroelectronics_USBLC6_2SC6_package
+from "parts/STMicroelectronics_USBLC6_2SC6/STMicroelectronics_USBLC6_2SC6.ato" import STMicroelectronics_USBLC6_2SC6Y_package
 from "parts/Texas_Instruments_BQ24075RGTR/Texas_Instruments_BQ24075RGTR.ato" import Texas_Instruments_BQ24075RGTR_package
 from "parts/Texas_Instruments_TLV75533PDBVR/Texas_Instruments_TLV75533PDBVR.ato" import Texas_Instruments_TLV75533PDBVR_package
 
@@ -63,7 +63,7 @@ module FlySysVario:
     assert bat.voltage within 3.0V to 4.2V
 
     usb = new GCT_USB4105_GF_A_package
-    usb_esd = new STMicroelectronics_USBLC6_2SC6_package
+    usb_esd = new STMicroelectronics_USBLC6_2SC6Y_package
     charger = new Texas_Instruments_BQ24075RGTR_package
     ldo_3v3 = new Texas_Instruments_TLV75533PDBVR_package
     battery = new JST_S2B_PH_SM4_TB_package
@@ -262,6 +262,8 @@ module FlySysVario:
     c_mcu_decoup.package = "0603"
 
     # ESP32-S3 bring-up, USB VBUS sense, battery sense, and button access.
+    # BOOT and RESET are hidden recovery controls; normal firmware update is
+    # handled by application firmware over USB/BLE/OTA.
     mcu.P3V3 ~ v3v3.hv
     mcu.SIG_GND ~ gnd
     mcu.EN ~ en

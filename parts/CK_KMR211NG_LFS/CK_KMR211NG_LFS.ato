@@ -18,7 +18,7 @@ component CK_KMR211NG_LFS_package:
 component CK_KMR211NG_LFS_SW2_package:
     """C&K KMR211NG LFS momentary tactile switch."""
 
-    trait is_atomic_part<manufacturer="C&K", partnumber="KMR211NG LFS", footprint="KMR211NG_LFS.kicad_mod", symbol="KMR211NG_LFS.kicad_sym">
+    trait is_atomic_part<manufacturer="C&K", partnumber="KMR211NG LFS", footprint="KMR211NG_LFS_BOOT.kicad_mod", symbol="KMR211NG_LFS.kicad_sym">
     trait has_designator<designator="SW2">
     trait has_designator_prefix<prefix="SW">
 
@@ -31,7 +31,7 @@ component CK_KMR211NG_LFS_SW2_package:
 component CK_KMR211NG_LFS_SW3_package:
     """C&K KMR211NG LFS momentary tactile switch."""
 
-    trait is_atomic_part<manufacturer="C&K", partnumber="KMR211NG LFS", footprint="KMR211NG_LFS.kicad_mod", symbol="KMR211NG_LFS.kicad_sym">
+    trait is_atomic_part<manufacturer="C&K", partnumber="KMR211NG LFS", footprint="KMR211NG_LFS_RST.kicad_mod", symbol="KMR211NG_LFS.kicad_sym">
     trait has_designator<designator="SW3">
     trait has_designator_prefix<prefix="SW">
 

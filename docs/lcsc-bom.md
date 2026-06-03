@@ -1,6 +1,6 @@
 # FlySys LCSC Component Set
 
-Updated: 2026-06-02
+Updated: 2026-06-03
 
 This table lists the components that Atopile currently resolves through its
 built-in LCSC picker path. It is generated from the active Atopile BOM at
@@ -15,7 +15,7 @@ handled in the DigiKey BOM. Debug pads are not fitted.
 | `C1`, `C3`, `C9`, `C13` | 4 | 10 uF, 10 V, X5R | Samsung Electro-Mechanics | `CL10A106KP8NNNC` | `C19702` |
 | `C2`, `C4`, `C5`, `C6`, `C10`, `C11`, `C12` | 7 | 100 nF, 50 V, X7R | YAGEO | `CC0603KRX7R9BB104` | `C14663` |
 | `C7`, `C8`, `C14` | 3 | 1 uF, 50 V, X5R | Samsung Electro-Mechanics | `CL10A105KB8NNNC` | `C15849` |
-| `D1` | 1 | USB ESD protection | STMicroelectronics | `USBLC6-2SC6` | `C7519` |
+| `D1` | 1 | Automotive USB ESD protection, SOT-23-6L | STMicroelectronics | `USBLC6-2SC6Y` | `C2969755` |
 | `LED1` | 1 | Blue 0603 LED | Lite-On | `LTST-C190TBKT` | `C125096` |
 | `LED2` | 1 | Green 0603 LED | Lite-On | `LTST-C190GKT` | `C125093` |
 | `R1`, `R2`, `R22`, `R23`, `R26`, `R28` | 6 | 1 Mohm, 1%, 0603 | UNI-ROYAL | `0603WAF1004T5E` | `C22935` |

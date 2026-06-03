@@ -59,7 +59,7 @@ class SupplierPart:
 
 KINDS: dict[str, Kind] = {
     "USB4105": Kind("GCT_USB4105_GF_A", "USB4105-GF-A", "USB4105-GF-A.kicad_sym", "GCT_USB4105_GF_A:TYPE-C-SMD_SBC-160S1A-20-S412"),
-    "USBLC6": Kind("STMicroelectronics_USBLC6_2SC6", "USBLC6-2SC6", "USBLC6-2SC6.kicad_sym", "STMicroelectronics_USBLC6_2SC6:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"),
+    "USBLC6": Kind("STMicroelectronics_USBLC6_2SC6", "USBLC6-2SC6Y", "USBLC6-2SC6.kicad_sym", "STMicroelectronics_USBLC6_2SC6:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"),
     "DIODE_1N4148W": Kind("Diodes_Inc_1N4148W", "1N4148W", "1N4148W.kicad_sym", "Diodes_Inc_1N4148W:1N4148W"),
     "BQ24075": Kind("Texas_Instruments_BQ24075RGTR", "BQ24075RGTR", "BQ24075RGTR.kicad_sym", "Texas_Instruments_BQ24075RGTR:QFN-16_L3.0-W3.0-P0.50-TL-EP1.7"),
     "TLV75533": Kind("Texas_Instruments_TLV75533PDBVR", "TLV75533PDBVR", "TLV75533PDBVR.kicad_sym", "Texas_Instruments_TLV75533PDBVR:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR"),
@@ -71,6 +71,8 @@ KINDS: dict[str, Kind] = {
     "AO3400A": Kind("Alpha_Omega_AO3400A", "AO3400A", "AO3400A.kicad_sym", "Alpha_Omega_AO3400A:AO3400A"),
     "DMP3098L": Kind("Diodes_Inc_DMP3098L", "DMP3098L", "DMP3098L.kicad_sym", "Diodes_Inc_DMP3098L:DMP3098L"),
     "BUTTON": Kind("CK_KMR211NG_LFS", "KMR211NG_LFS", "KMR211NG_LFS.kicad_sym", "CK_KMR211NG_LFS:KMR211NG_LFS"),
+    "BUTTON_BOOT": Kind("CK_KMR211NG_LFS", "KMR211NG_LFS", "KMR211NG_LFS.kicad_sym", "CK_KMR211NG_LFS:KMR211NG_LFS_BOOT"),
+    "BUTTON_RST": Kind("CK_KMR211NG_LFS", "KMR211NG_LFS", "KMR211NG_LFS.kicad_sym", "CK_KMR211NG_LFS:KMR211NG_LFS_RST"),
     "LED_GREEN": Kind("Lite_On_LTST_C190GKT", "LTST-C190GKT", "LTST-C190GKT.kicad_sym", "Lite_On_LTST_C190GKT:LED0603-RD"),
     "LED_BLUE": Kind("Lite_On_LTST_C190TBKT", "LTST-C190TBKT", "LTST-C190TBKT.kicad_sym", "Lite_On_LTST_C190TBKT:LED0603-RD"),
     "R100": Kind("UNI_ROYAL_0603WAF1000T5E", "0603WAF1000T5E", "0603WAF1000T5E.kicad_sym", "UNI_ROYAL_0603WAF1000T5E:R0603"),
@@ -92,7 +94,7 @@ KINDS: dict[str, Kind] = {
 
 DIGIKEY_PARTS: dict[str, SupplierPart] = {
     "USB4105": SupplierPart("GCT", "USB4105-GF-A", "2073-USB4105-GF-ACT-ND", "https://www.digikey.com/en/products/detail/gct/USB4105-GF-A/11198441", "USB-C receptacle, USB 2.0, right angle"),
-    "USBLC6": SupplierPart("STMicroelectronics", "USBLC6-2SC6", "497-5235-1-ND", "https://www.digikey.com/en/products/detail/stmicroelectronics/USBLC6-2SC6/1040559", "USB ESD protection diode array"),
+    "USBLC6": SupplierPart("STMicroelectronics", "USBLC6-2SC6Y", "497-11882-1-ND", "https://www.digikey.com/en/products/detail/stmicroelectronics/USBLC6-2SC6Y/2819177", "Automotive USB ESD protection diode array, SOT-23-6"),
     "DIODE_1N4148W": SupplierPart("Diodes Incorporated", "1N4148W-7-F", "1N4148W-FDICT-ND", "https://www.digikey.com/en/products/detail/diodes-incorporated/1N4148W-7-F/815280", "Small-signal switching diode, SOD-123"),
     "BQ24075": SupplierPart("Texas Instruments", "BQ24075RGTR", "296-38874-1-ND", "https://www.digikey.com/en/products/detail/texas-instruments/BQ24075RGTR/2047273", "Li-ion charger and power-path controller"),
     "TLV75533": SupplierPart("Texas Instruments", "TLV75533PDBVR", "296-50411-1-ND", "https://www.digikey.com/en/products/detail/texas-instruments/TLV75533PDBVR/9356541", "3.3 V 500 mA LDO regulator"),
@@ -104,6 +106,8 @@ DIGIKEY_PARTS: dict[str, SupplierPart] = {
     "AO3400A": SupplierPart("Alpha & Omega Semiconductor Inc.", "AO3400A", "785-1000-1-ND", "https://www.digikey.com/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772", "N-channel MOSFET, SOT-23"),
     "DMP3098L": SupplierPart("Diodes Incorporated", "DMP3098L-7", "DMP3098L-7DICT-ND", "https://www.digikey.com/en/products/detail/diodes-incorporated/DMP3098L-7/1964698", "P-channel MOSFET, SOT-23"),
     "BUTTON": SupplierPart("C&K", "KMR211NG LFS", "CKN10243CT-ND", "https://www.digikey.com/en/products/detail/c-k/KMR211NG-LFS/2176482", "Low-profile tactile switch"),
+    "BUTTON_BOOT": SupplierPart("C&K", "KMR211NG LFS", "CKN10243CT-ND", "https://www.digikey.com/en/products/detail/c-k/KMR211NG-LFS/2176482", "Low-profile tactile switch"),
+    "BUTTON_RST": SupplierPart("C&K", "KMR211NG LFS", "CKN10243CT-ND", "https://www.digikey.com/en/products/detail/c-k/KMR211NG-LFS/2176482", "Low-profile tactile switch"),
     "LED_GREEN": SupplierPart("Lite-On Inc.", "LTST-C190GKT", "160-LTST-C190GKTCT-ND", "https://www.digikey.com/en/products/detail/lite-on-inc/LTST-C190GKT/269255", "Green 0603 LED"),
     "LED_BLUE": SupplierPart("Lite-On Inc.", "LTST-C190TBKT", "160-1646-1-ND", "https://www.digikey.com/en/products/detail/lite-on-inc/LTST-C190TBKT/388529", "Blue 0603 LED"),
     "R100": SupplierPart("YAGEO", "RC0603FR-07100RL", "311-100HRCT-ND", "https://www.digikey.com/en/products/detail/yageo/RC0603FR-07100RL/726888", "100 ohm, 1%, 0.1 W, 0603 resistor"),
@@ -132,7 +136,7 @@ COMPONENTS: list[Component] = [
         "A7": "USB_DM_CONN", "B7": "USB_DM_CONN",
         "A8": None, "B8": None,
     }),
-    Component("D1", "USBLC6-2SC6", "USBLC6", 145.0, 75.0, {
+    Component("D1", "USBLC6-2SC6Y", "USBLC6", 145.0, 75.0, {
         "1": "USB_DP_CONN", "2": "GND", "3": "USB_DM_CONN",
         "4": "USB_OTG_DM", "5": "USB_VBUS", "6": "USB_OTG_DP",
     }),
@@ -165,10 +169,10 @@ COMPONENTS: list[Component] = [
     Component("SW1", "KMR211NG LFS", "BUTTON", 430.0, 135.0, {
         "1": "PWR_SW_N", "2": "PWR_SW_N", "3": "GND", "4": "GND",
     }),
-    Component("SW2", "KMR211NG LFS", "BUTTON", 430.0, 78.0, {
+    Component("SW2", "KMR211NG LFS", "BUTTON_BOOT", 430.0, 78.0, {
         "1": "BOOT_USER_BTN_N", "2": "BOOT_USER_BTN_N", "3": "GND", "4": "GND",
     }),
-    Component("SW3", "KMR211NG LFS", "BUTTON", 430.0, 105.0, {
+    Component("SW3", "KMR211NG LFS", "BUTTON_RST", 430.0, 105.0, {
         "1": "EN", "2": "EN", "3": "GND", "4": "GND",
     }),
     Component("U5", "BMP581", "BMP581", 520.0, 80.0, {
@@ -370,7 +374,7 @@ def schematic_symbol_name(kind_key: str) -> str:
 def ref_prefix(symbol_name: str) -> str:
     if symbol_name == "USB4105-GF-A":
         return "USB"
-    if symbol_name == "USBLC6-2SC6":
+    if symbol_name == "USBLC6-2SC6Y":
         return "D"
     if symbol_name == "1N4148W":
         return "D"
@@ -894,9 +898,9 @@ def write_digikey_bom() -> None:
     md_lines = [
         "# FlySys DigiKey BOM",
         "",
-        "Updated: 2026-06-02",
+        "Updated: 2026-06-03",
         "",
-        "All purchased components in the KiCad schematic use DigiKey order lines. Debug pads are not fitted; ESP32-S3 bootloader entry uses USB plus the BOOT and RESET buttons.",
+        "All purchased components in the KiCad schematic use DigiKey order lines. Debug pads are not fitted; normal firmware update is software-first, and ESP32-S3 bootloader recovery uses USB plus hidden BOOT and RST service buttons.",
         "",
         "| References | Qty | Value | Manufacturer | MPN | DigiKey PN | Description |",
         "| --- | ---: | --- | --- | --- | --- | --- |",

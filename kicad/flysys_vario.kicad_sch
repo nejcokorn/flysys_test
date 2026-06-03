@@ -3780,7 +3780,7 @@
 						)
 					)
 				)
-				(symbol "FlySys:USBLC6-2SC6"
+				(symbol "FlySys:USBLC6-2SC6Y"
 					(pin_names
 						(offset 0.508)
 					)
@@ -3796,7 +3796,7 @@
 							)
 						)
 					)
-					(property "Value" "USBLC6-2SC6"
+					(property "Value" "USBLC6-2SC6Y"
 						(id 1)
 						(at 0 -13.89 0)
 						(effects
@@ -3835,7 +3835,7 @@
 							(hide yes)
 						)
 					)
-					(symbol "USBLC6-2SC6_0_1"
+					(symbol "USBLC6-2SC6Y_0_1"
 						(rectangle
 							(start -15.24 8.89)
 							(end 15.24 -8.89)
@@ -8736,7 +8736,7 @@
 		)
 	)
 	(symbol
-		(lib_id "FlySys:USBLC6-2SC6")
+		(lib_id "FlySys:USBLC6-2SC6Y")
 		(at 144.78 74.93 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -8752,7 +8752,7 @@
 				)
 			)
 		)
-		(property "Value" "USBLC6-2SC6"
+		(property "Value" "USBLC6-2SC6Y"
 			(at 144.78 87.55 0)
 			(effects
 				(font
@@ -8778,7 +8778,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "USB ESD protection diode array"
+		(property "Description" "Automotive USB ESD protection diode array, SOT-23-6"
 			(at 144.78 74.93 0)
 			(effects
 				(font
@@ -8796,7 +8796,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "USBLC6-2SC6"
+		(property "MPN" "USBLC6-2SC6Y"
 			(at 144.78 74.93 0)
 			(effects
 				(font
@@ -8814,7 +8814,7 @@
 				(hide yes)
 			)
 		)
-		(property "DigiKey Part Number" "497-5235-1-ND"
+		(property "DigiKey Part Number" "497-11882-1-ND"
 			(at 144.78 74.93 0)
 			(effects
 				(font
@@ -8823,7 +8823,7 @@
 				(hide yes)
 			)
 		)
-		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/stmicroelectronics/USBLC6-2SC6/1040559"
+		(property "DigiKey URL" "https://www.digikey.com/en/products/detail/stmicroelectronics/USBLC6-2SC6Y/2819177"
 			(at 144.78 74.93 0)
 			(effects
 				(font
@@ -9681,7 +9681,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CK_KMR211NG_LFS:KMR211NG_LFS"
+		(property "Footprint" "CK_KMR211NG_LFS:KMR211NG_LFS_BOOT"
 			(at 430.53 88.01 0)
 			(effects
 				(font
@@ -9799,7 +9799,7 @@
 				)
 			)
 		)
-		(property "Footprint" "CK_KMR211NG_LFS:KMR211NG_LFS"
+		(property "Footprint" "CK_KMR211NG_LFS:KMR211NG_LFS_RST"
 			(at 430.53 115.95 0)
 			(effects
 				(font

@@ -1,6 +1,6 @@
 # FlySys Schematic Description
 
-Updated: 2026-06-02
+Updated: 2026-06-03
 
 This document describes the KiCad schematic in text form. The schematic file is
 `kicad/flysys_vario.kicad_sch`; the Atopile source net plan is `main.ato`.
@@ -25,6 +25,7 @@ The board uses the following main nets:
 | `CHG_SYSOFF` | BQ24075 ship-mode control. High disconnects battery from `SYS`; low enables battery-to-`SYS` operation. |
 | `PWR_SW_N` | Raw active-low power button node from `SW1`, isolated from MCU and latch nodes by diodes. |
 | `PWR_BTN_N` | Isolated active-low power/user button input read by the MCU on GPIO7. |
+| `USB_VBUS_SENSE` | Divided USB VBUS monitor read by the MCU on GPIO2. Firmware uses it to detect USB-attached idle/update mode. |
 | `PWR_HOLD` | MCU GPIO10 output that can release the self-latching power circuit by driving `PWR_HOLD_GATE` low. |
 | `BAT_SWITCH_GATE` | Gate of the battery high-side P-channel MOSFET `Q4`. |
 | `GND` | Common ground and USB shield reference. |
@@ -36,7 +37,7 @@ ground by `R9` and `R10`, both 5.1 kohm, so the board presents itself as a USB
 device/sink.
 
 USB data exits the connector as `USB_DP_CONN` and `USB_DM_CONN`, passes through
-`D1` (`USBLC6-2SC6`) for ESD protection, then continues to the ESP32-S3 as
+`D1` (`USBLC6-2SC6Y`) for ESD protection, then continues to the ESP32-S3 as
 `USB_OTG_DP` and `USB_OTG_DM`. `D1` must stay physically between `USB1` and
 `U4`, close to the connector, so ESD current is shunted before it reaches the
 MCU.
@@ -103,17 +104,44 @@ the I2C sensor bus, drives the buzzer PWM MOSFET, and drives the BLE status LED
 MOSFET.
 
 `EN` has a 10 kohm pull-up (`R16`) and 100 nF capacitor (`C4`) for a simple reset
-RC network. `SW3` pulls `EN` low for a user-accessible reset button.
+RC network. `SW3` pulls `EN` low for a hidden service reset button labeled
+`RST` on the PCB.
 
-`BOOT_USER_BTN_N` is pulled up by `R6` and pulled low by `SW2`. To enter the
-ESP32-S3 ROM USB bootloader, hold `SW2` (`BOOT`) and press/release `SW3`
-(`RESET`) while USB is connected. From a fully off battery state, press `SW1`
-first to latch power, then use the same `BOOT` + `RESET` sequence. No debug pads
-are fitted.
+`BOOT_USER_BTN_N` is pulled up by `R6` and pulled low by `SW2`. `SW2` is a
+hidden service `BOOT` button, not a normal user update control. To enter the
+ESP32-S3 ROM USB bootloader for recovery, connect USB-C, hold `SW2` (`BOOT`),
+press and release `SW3` (`RST`), then release `BOOT`. If a service setup must
+keep the board powered from battery before USB is attached, press `SW1` first to
+latch power; recovery flashing still requires USB. No debug pads are fitted.
 
 `SW1` is the active-low power button on `PWR_SW_N`. `D2` lets the MCU read this
 button as `PWR_BTN_N` on GPIO7 while preventing `BAT_RAW` or latch nodes from
 feeding the unpowered MCU in hard-off.
+
+## Firmware Update And USB-Attached Idle UX
+
+Normal firmware update is software-first. Application firmware should expose an
+update endpoint such as USB MSC drag-and-drop, USB CDC update tooling, BLE DFU,
+or OTA. Firmware must validate the image before activating it and should use OTA
+partitions with rollback so a failed update returns to the previous working
+image.
+
+USB attach is allowed to power the ESP32-S3 electrically through the charger
+power path. On boot, firmware must read `USB_VBUS_SENSE` and the current or
+persisted power-intent state. If USB is present and the user has not pressed
+`POWER`, firmware enters USB-attached idle mode rather than starting the vario
+application.
+
+In USB-attached idle mode, firmware must not start pressure/IMU vario sensing,
+BLE advertising or normal telemetry, buzzer output, flight logging, or normal
+flight behavior. Only minimal charging/status indication, the firmware update
+endpoint, and an optional command to start normal mode should run. Pressing
+`SW1` drives `PWR_BTN_N` low; firmware records this user intent and starts the
+normal application.
+
+The hidden `BOOT` + `RST` sequence remains the documented recovery fallback only
+when the application updater is unavailable or application firmware is broken.
+See `docs/firmware-update-ux.md` for the service flow and verification plan.
 
 ## Sensor Bus
 
@@ -253,9 +281,9 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | --- | --- | --- | --- | --- |
 | `U4` | `1`, `2`, `42`, `43`, `46`, `47`, `48`, `49`, `50`, `51`, `52`, `53`, `54`, `55`, `56`, `57`, `58`, `59`, `60`, `GND` | `GND` | `GND` | Tie all module grounds to the ground plane. Do not leave any ground pad isolated. |
 | `U4` | `3` | `3V3` | `+3V3` | Main module supply. Place `C9` and `C10` close to the module. |
-| `U4` | `4` | `IO0` | `BOOT_USER_BTN_N` | Boot-mode strap/debug net with pull-up `R6`; not connected to `SW1`. |
+| `U4` | `4` | `IO0` | `BOOT_USER_BTN_N` | Boot-mode strap/recovery net with pull-up `R6`; not connected to `SW1`. |
 | `U4` | `5` | `IO1` | `BAT_SENSE` | Battery ADC sense divider midpoint with filter `C2`. |
-| `U4` | `6` | `IO2` | `USB_VBUS_SENSE` | USB VBUS ADC sense divider midpoint. |
+| `U4` | `6` | `IO2` | `USB_VBUS_SENSE` | USB VBUS ADC sense divider midpoint. Firmware uses this to enter USB-attached idle/update mode. |
 | `U4` | `7` | `IO3` | `NC` | Leave floating and mark no-connect. |
 | `U4` | `8` | `IO4` | `BMP581_INT` | Pressure sensor interrupt input. |
 | `U4` | `9` | `IO5` | `BMI323_INT1` | IMU interrupt input 1. |
@@ -276,7 +304,7 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `U4` | `39` | `TXD0` | `NC` | Debug pads are not fitted. Leave floating and mark no-connect. |
 | `U4` | `40` | `RXD0` | `NC` | Debug pads are not fitted. Leave floating and mark no-connect. |
 | `U4` | `41` | `IO45` | `NC` | Leave floating and mark no-connect. |
-| `U4` | `44` | `IO46` | `NC` | Leave floating and mark no-connect. |
+| `U4` | `44` | `IO46` | `NC` | Leave floating and mark no-connect; do not drive this strapping-sensitive GPIO high during reset. |
 | `U4` | `45` | `EN` | `EN` | Module enable/reset net with `R16` pull-up and `C4` to ground. |
 
 ### Sensors
@@ -309,10 +337,10 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | --- | --- | --- | --- | --- |
 | `SW1` | `1`, `2` | `A` | `PWR_SW_N` | Button side connected to raw active-low power switch net. |
 | `SW1` | `3`, `4` | `B` | `GND` | Button side connected to ground. |
-| `SW2` | `1`, `2` | `A` | `BOOT_USER_BTN_N` | BOOT button side connected to ESP32-S3 GPIO0 strap. |
-| `SW2` | `3`, `4` | `B` | `GND` | BOOT button pulls GPIO0 low for ROM bootloader entry. |
-| `SW3` | `1`, `2` | `A` | `EN` | RESET button side connected to ESP32-S3 enable/reset net. |
-| `SW3` | `3`, `4` | `B` | `GND` | RESET button pulls `EN` low. |
+| `SW2` | `1`, `2` | `A` | `BOOT_USER_BTN_N` | Hidden service BOOT button side connected to ESP32-S3 GPIO0 strap. |
+| `SW2` | `3`, `4` | `B` | `GND` | BOOT button pulls GPIO0 low for ROM bootloader recovery entry. |
+| `SW3` | `1`, `2` | `A` | `EN` | Hidden service RESET/RST button side connected to ESP32-S3 enable/reset net. |
+| `SW3` | `3`, `4` | `B` | `GND` | RST button pulls `EN` low. |
 | `BZ1` | `1` | `+` | `SYS` | Buzzer positive terminal. Keep current path local to `C3`. |
 | `BZ1` | `2` | `-` | `BUZZER_NEG` | Buzzer switched return to `Q1.3`. |
 | `Q1` | `1` | `G` | `BUZZER_GATE` | Gate drive from `R8`, pulldown by `R7`. |
@@ -408,8 +436,12 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
   away from noisy switching nodes.
 - Firmware must leave `PWR_HOLD` high-Z/high for normal operation and drive it
   low only when intentionally shutting down from battery power.
-- `SW2` and `SW3` provide user-accessible ESP32-S3 ROM bootloader entry without
-  debug pads: hold `BOOT` (`SW2`) and tap `RESET` (`SW3`) with USB connected.
+- Firmware must use `USB_VBUS_SENSE` and `PWR_BTN_N` to keep USB attach from an
+  off state in USB-attached idle mode until the user presses `POWER` or a
+  supported start command is received.
+- `SW2` and `SW3` provide hidden service ESP32-S3 ROM bootloader recovery
+  without debug pads. PCB/enclosure access should be pinhole/service-only and
+  labeled `BOOT` and `RST`.
 - `J1` polarity must be checked against the intended LiPo connector and pack
   wiring. JST PH-compatible parts are often assembled with opposite cable
   conventions.

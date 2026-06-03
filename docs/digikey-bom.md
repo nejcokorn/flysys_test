@@ -1,8 +1,8 @@
 # FlySys DigiKey BOM
 
-Updated: 2026-06-02
+Updated: 2026-06-03
 
-All purchased components in the KiCad schematic use DigiKey order lines. Debug pads are not fitted; ESP32-S3 bootloader entry uses USB plus the BOOT and RESET buttons.
+All purchased components in the KiCad schematic use DigiKey order lines. Debug pads are not fitted; normal firmware update is software-first, and ESP32-S3 bootloader recovery uses USB plus hidden BOOT and RST service buttons.
 
 | References | Qty | Value | Manufacturer | MPN | DigiKey PN | Description |
 | --- | ---: | --- | --- | --- | --- | --- |
@@ -17,7 +17,7 @@ All purchased components in the KiCad schematic use DigiKey order lines. Debug p
 | J1 | 1 | S2B-PH-SM4-TB | JST Sales America Inc. | S2B-PH-SM4-TB | [455-S2B-PH-SM4-TBCT-ND](https://www.digikey.com/en/products/detail/jst-sales-america-inc/S2B-PH-SM4-TB/926655) | 2-pin JST PH side-entry SMT header |
 | LED2 | 1 | LTST-C190GKT | Lite-On Inc. | LTST-C190GKT | [160-LTST-C190GKTCT-ND](https://www.digikey.com/en/products/detail/lite-on-inc/LTST-C190GKT/269255) | Green 0603 LED |
 | LED1 | 1 | LTST-C190TBKT | Lite-On Inc. | LTST-C190TBKT | [160-1646-1-ND](https://www.digikey.com/en/products/detail/lite-on-inc/LTST-C190TBKT/388529) | Blue 0603 LED |
-| D1 | 1 | USBLC6-2SC6 | STMicroelectronics | USBLC6-2SC6 | [497-5235-1-ND](https://www.digikey.com/en/products/detail/stmicroelectronics/USBLC6-2SC6/1040559) | USB ESD protection diode array |
+| D1 | 1 | USBLC6-2SC6Y | STMicroelectronics | USBLC6-2SC6Y | [497-11882-1-ND](https://www.digikey.com/en/products/detail/stmicroelectronics/USBLC6-2SC6Y/2819177) | Automotive USB ESD protection diode array, SOT-23-6 |
 | BZ1 | 1 | CSS-J4D20-SMT-TR | Same Sky (Formerly CUI Devices) | CSS-J4D20-SMT-TR | [102-1198-1-ND](https://www.digikey.com/en/products/detail/same-sky-formerly-cui-devices/CSS-J4D20-SMT-TR/504819) | Externally driven magnetic buzzer |
 | C7, C8, C14 | 3 | 1uF | Samsung Electro-Mechanics | CL10A105KB8NNNC | [1276-1860-1-ND](https://www.digikey.com/en/products/detail/samsung-electro-mechanics/CL10A105KB8NNNC/3887518) | 1 uF, 50 V, X5R, 0603 capacitor |
 | C1, C3, C9, C13 | 4 | 10uF | Samsung Electro-Mechanics | CL10A106KP8NNNC | [1276-1192-1-ND](https://www.digikey.com/en/products/detail/samsung-electro-mechanics/CL10A106KP8NNNC/3886850) | 10 uF, 10 V, X5R, 0603 capacitor |
