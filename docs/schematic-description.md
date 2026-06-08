@@ -1,6 +1,6 @@
 # FlySys Schematic Description
 
-Updated: 2026-06-03
+Updated: 2026-06-08
 
 This document describes the KiCad schematic in text form. The schematic file is
 `kicad/flysys_vario.kicad_sch`; the Atopile source net plan is `main.ato`.
@@ -8,10 +8,12 @@ This document describes the KiCad schematic in text form. The schematic file is
 ## Functional Blocks
 
 FlySys is a small BLE/USB variometer board built around `U4`, an
-`ESP32-S3-MINI-1-N8` module. Power enters from USB-C at `USB1` or from a LiPo
+`ESP32-S3-WROOM-1U-N8` module with an external U.FL/I-PEX MHF1 antenna
+connector. Power enters from USB-C at `USB1` or from a LiPo
 battery at `J1`. `U1` manages LiPo charging and the system power path, `U3`
-generates the regulated `+3V3` rail, `U5` measures pressure for altitude/vario
-data, `U2` provides IMU motion data, and `BZ1` gives loud acoustic feedback.
+generates the regulated `+3V3` rail, `U5` and `U6` measure pressure for
+altitude/vario data, `U2` provides IMU motion data, and `BZ1` gives loud
+acoustic feedback.
 
 The board uses the following main nets:
 
@@ -21,12 +23,14 @@ The board uses the following main nets:
 | `BAT_RAW` | LiPo battery positive terminal at `J1`, before the hard-off battery switch. |
 | `BAT` | Switched internal battery rail after `Q4`. Feeds charger battery pin and battery ADC divider only while the battery switch is on. |
 | `SYS` | Charger power-path output. Feeds 3.3 V regulator and high-current buzzer/blue LED loads when the system is on. |
-| `+3V3` | Regulated logic rail for ESP32-S3, sensors, pull-ups, and the green power LED. |
+| `+3V3` | Regulated logic rail for ESP32-S3, both pressure sensors, IMU, pull-ups, and the green power LED. |
 | `CHG_SYSOFF` | BQ24075 ship-mode control. High disconnects battery from `SYS`; low enables battery-to-`SYS` operation. |
 | `PWR_SW_N` | Raw active-low power button node from `SW1`, isolated from MCU and latch nodes by diodes. |
-| `PWR_BTN_N` | Isolated active-low power/user button input read by the MCU on GPIO7. |
-| `USB_VBUS_SENSE` | Divided USB VBUS monitor read by the MCU on GPIO2. Firmware uses it to detect USB-attached idle/update mode. |
-| `PWR_HOLD` | MCU GPIO10 output that can release the self-latching power circuit by driving `PWR_HOLD_GATE` low. |
+| `PWR_BTN_N` | Isolated active-low power/user button input read by the MCU on `IO7`. |
+| `USB_VBUS_SENSE` | Divided USB VBUS monitor read by the MCU on `IO2`. Firmware uses it to detect USB-attached idle/update mode. |
+| `PWR_HOLD` | MCU `IO10` output that can release the self-latching power circuit by driving `PWR_HOLD_GATE` low. |
+| `BMP581_1_INT` | Interrupt output from `U5` BMP581 to MCU `IO4`. |
+| `BMP581_2_INT` | Interrupt output from `U6` BMP581 to MCU `IO16`. |
 | `BAT_SWITCH_GATE` | Gate of the battery high-side P-channel MOSFET `Q4`. |
 | `GND` | Common ground and USB shield reference. |
 
@@ -69,7 +73,7 @@ power latch is active. Pressing `SW1` grounds `PWR_SW_N`; `D3` pulls
 `CHG_SYSOFF` and `BAT_SWITCH_GATE` low after `SW1` is released. `R26` keeps the
 latch off before `+3V3` is present.
 
-Firmware can shut the board down from battery power by driving GPIO10
+Firmware can shut the board down from battery power by driving `IO10`
 (`PWR_HOLD`) low through `R25`; this turns off `Q3` and `Q5`, after which `R23`
 and `R28` return the charger and battery switch to their off states. During
 normal operation and during the ESP32-S3 ROM bootloader, `PWR_HOLD` may remain
@@ -93,8 +97,8 @@ actual battery harness before ordering or assembly.
 tied to `SYS`, so the 3.3 V rail is on whenever `SYS` is present. On battery
 power, `SYS` is present only after `CHG_SYSOFF` is pulled low by `SW1` or `Q3`.
 
-`+3V3` powers the ESP32-S3 module, BMP581 pressure sensor, BMI323 IMU, I2C
-pull-ups, charger status pull-ups, the always-on green power LED, and
+`+3V3` powers the ESP32-S3 module, both BMP581 pressure sensors, BMI323 IMU,
+I2C pull-ups, charger status pull-ups, the always-on green power LED, and
 button/latch pull-ups.
 
 ## ESP32-S3 MCU
@@ -103,6 +107,12 @@ button/latch pull-ups.
 `USB_OTG_DM`, reads battery and USB voltage dividers, reads charger status, runs
 the I2C sensor bus, drives the buzzer PWM MOSFET, and drives the BLE
 pairing/advertising LED MOSFET.
+
+The fitted module is `ESP32-S3-WROOM-1U-N8`. Its onboard U.FL/I-PEX MHF1
+connector mates to the BOM-only external antenna `ANT1`
+(`ANTX200P001B24003`). `ANT1` is not a PCB footprint. The selected antenna has
+4.4 dBi gain, so RF/EMC approval needs a separate review against the target
+certification path.
 
 `EN` has a 10 kohm pull-up (`R16`) and 100 nF capacitor (`C4`) for a simple reset
 RC network. `SW3` pulls `EN` low for a hidden service reset button labeled
@@ -116,7 +126,7 @@ keep the board powered from battery before USB is attached, press `SW1` first to
 latch power; recovery flashing still requires USB. No debug pads are fitted.
 
 `SW1` is the active-low power button on `PWR_SW_N`. `D2` lets the MCU read this
-button as `PWR_BTN_N` on GPIO7 while preventing `BAT_RAW` or latch nodes from
+button as `PWR_BTN_N` on `IO7` while preventing `BAT_RAW` or latch nodes from
 feeding the unpowered MCU in hard-off.
 
 ## Firmware Update And USB-Attached Idle UX
@@ -146,17 +156,18 @@ See `docs/firmware-update-ux.md` for the service flow and verification plan.
 
 ## Sensor Bus
 
-`U5` (`BMP581`) and `U2` (`BMI323`) share the I2C bus:
+`U5` (`BMP581`), `U6` (`BMP581`), and `U2` (`BMI323`) share the I2C bus:
 
 | Net | MCU | Loads |
 | --- | --- | --- |
-| `I2C_SCL` | ESP32-S3 GPIO8 | `U5 SCK`, `U2 SCX`, pull-up `R17` |
-| `I2C_SDA` | ESP32-S3 GPIO9 | `U5 SDI`, `U2 SDX`, pull-up `R18` |
+| `I2C_SCL` | ESP32-S3 `IO8` | `U5 SCK`, `U6 SCK`, `U2 SCX`, pull-up `R17` |
+| `I2C_SDA` | ESP32-S3 `IO9` | `U5 SDI`, `U6 SDI`, `U2 SDX`, pull-up `R18` |
 
-Both pull-ups are 4.7 kohm to `+3V3`. `BMP581 SDO` and `BMI323 SDO` are tied to
-ground to select their I2C addresses. Their chip-select pins are tied high so
-the devices remain in I2C mode. Sensor interrupt pins are routed to ESP32 GPIOs
-for firmware use.
+Both pull-ups are 4.7 kohm to `+3V3`. `U5 SDO` is tied to `GND` for BMP581 I2C
+address `0x46`; `U6 SDO` is tied to `+3V3` for address `0x47`. `BMI323 SDO` is
+tied to `GND`. All sensor chip-select pins are tied high so the devices remain
+in I2C mode. Sensor interrupt pins are routed independently to ESP32 GPIOs for
+firmware use.
 
 ## Buzzer Driver
 
@@ -192,8 +203,10 @@ otherwise.
 | `C8` | 1 uF | `+3V3` to `GND` | LDO output capacitor. It must be placed at `U3 OUT/GND` to meet regulator stability requirements. |
 | `C9` | 10 uF | `+3V3` to `GND` | ESP32-S3 local bulk capacitor. It supports RF and CPU current bursts. |
 | `C10` | 100 nF | `+3V3` to `GND` | ESP32-S3 high-frequency decoupling. It should be very close to the module power pin. |
-| `C12` | 100 nF | `BMP581 VDD` to `GND` | Pressure sensor core decoupling. Place next to `U5`. |
-| `C11` | 100 nF | `BMP581 VDDIO` to `GND` | Pressure sensor I/O decoupling. Place next to `U5`. |
+| `C12` | 100 nF | `U5 BMP581 VDD` to `GND` | First pressure sensor core decoupling. Place next to `U5`. |
+| `C11` | 100 nF | `U5 BMP581 VDDIO` to `GND` | First pressure sensor I/O decoupling. Place next to `U5`. |
+| `C15` | 100 nF | `U6 BMP581 VDD` to `GND` | Second pressure sensor core decoupling. Place next to `U6`. |
+| `C16` | 100 nF | `U6 BMP581 VDDIO` to `GND` | Second pressure sensor I/O decoupling. Place next to `U6`. |
 | `C6` | 100 nF | `BMI323 VDD` to `GND` | IMU core decoupling. Place next to `U2`. |
 | `C5` | 100 nF | `BMI323 VDDIO` to `GND` | IMU I/O decoupling. Place next to `U2`. |
 | `C3` | 10 uF | `SYS` to `GND` | Local buzzer reservoir. Place close to `BZ1` and `Q1` so buzzer current does not disturb the rest of `SYS`. |
@@ -216,7 +229,7 @@ For this design, the intentionally unused pins are:
 | --- | --- | --- |
 | `USB1` | `A8`, `B8` | USB-C SBU pins are unused. Leave floating and mark no-connect. |
 | `U3` | `4` | TLV75533 `NC` pin. Leave floating and mark no-connect. |
-| `U4` | `7`, `15`, `16`, `17`, `18`, `19`, `20`, `25`, `26`, `27`, `28`, `29`, `30`, `31`, `32`, `35`, `36`, `37`, `38`, `39`, `40`, `41`, `44` | Unused ESP32-S3 GPIO/module pins. Leave floating and mark no-connect. Do not tie unused GPIOs to rails in hardware. |
+| `U4` | `8`, `15`, `16`, `19`, `20`, `21`, `22`, `23`, `24`, `25`, `26`, `28`, `29`, `32`, `33`, `34`, `35`, `36`, `37` | Unused ESP32-S3 GPIO/module pins. Leave floating and mark no-connect. Do not tie unused GPIOs to rails in hardware. |
 | `U2` | `2`, `3`, `10`, `11` | BMI323 datasheet NC pins. Leave floating and mark no-connect. |
 
 The USB-C shell pads are not `NC`; they are part of the connector shield and are
@@ -283,46 +296,57 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 
 | Ref | Pin | Pin name | Connect to | Instruction |
 | --- | --- | --- | --- | --- |
-| `U4` | `1`, `2`, `42`, `43`, `46`, `47`, `48`, `49`, `50`, `51`, `52`, `53`, `54`, `55`, `56`, `57`, `58`, `59`, `60`, `GND` | `GND` | `GND` | Tie all module grounds to the ground plane. Do not leave any ground pad isolated. |
-| `U4` | `3` | `3V3` | `+3V3` | Main module supply. Place `C9` and `C10` close to the module. |
-| `U4` | `4` | `IO0` | `BOOT_USER_BTN_N` | Boot-mode strap/recovery net with pull-up `R6`; not connected to `SW1`. |
-| `U4` | `5` | `IO1` | `BAT_SENSE` | Battery ADC sense divider midpoint with filter `C2`. |
-| `U4` | `6` | `IO2` | `USB_VBUS_SENSE` | USB VBUS ADC sense divider midpoint. Firmware uses this to enter USB-attached idle/update mode. |
-| `U4` | `7` | `IO3` | `NC` | Leave floating and mark no-connect. |
-| `U4` | `8` | `IO4` | `BMP581_INT` | Pressure sensor interrupt input. |
-| `U4` | `9` | `IO5` | `BMI323_INT1` | IMU interrupt input 1. |
-| `U4` | `10` | `IO6` | `BMI323_INT2` | IMU interrupt input 2. |
-| `U4` | `11` | `IO7` | `PWR_BTN_N` | Active-low power/user button input from `SW1`. |
+| `U4` | `1`, `40`, `41` | `GND`, `EPAD/GND` | `GND` | Tie all module grounds and the exposed pad to the ground plane. Do not leave any ground pad isolated. |
+| `U4` | `2` | `3V3` | `+3V3` | Main module supply. Place `C9` and `C10` close to the module. |
+| `U4` | `3` | `EN` | `EN` | Module enable/reset net with `R16` pull-up and `C4` to ground. |
+| `U4` | `4` | `IO4` | `BMP581_1_INT` | First pressure sensor interrupt input from `U5`. |
+| `U4` | `5` | `IO5` | `BMI323_INT1` | IMU interrupt input 1. |
+| `U4` | `6` | `IO6` | `BMI323_INT2` | IMU interrupt input 2. |
+| `U4` | `7` | `IO7` | `PWR_BTN_N` | Active-low power/user button input from `SW1`. |
+| `U4` | `8` | `IO15` | `NC` | Leave floating and mark no-connect. |
+| `U4` | `9` | `IO16` | `BMP581_2_INT` | Second pressure sensor interrupt input from `U6`. |
+| `U4` | `10` | `IO17` | `BUZZER_PWM` | PWM output to `Q1` through `R8`. |
+| `U4` | `11` | `IO18` | `BLE_LED_PWM` | BLE pairing/advertising LED control output to `Q2` through `R4`. |
 | `U4` | `12` | `IO8` | `I2C_SCL` | I2C clock with pull-up `R17`. |
-| `U4` | `13` | `IO9` | `I2C_SDA` | I2C data with pull-up `R18`. |
-| `U4` | `14` | `IO10` | `PWR_HOLD` | Power-hold release output. Leave high-Z/high for normal hold; drive low to shut down from battery. |
-| `U4` | `15`, `16`, `17`, `18`, `19`, `20` | `IO11` to `IO16` | `NC` | Leave floating and mark no-connect. |
-| `U4` | `21` | `IO17` | `BUZZER_PWM` | PWM output to `Q1` through `R8`. |
-| `U4` | `22` | `IO18` | `BLE_LED_PWM` | BLE pairing/advertising LED control output to `Q2` through `R4`. |
-| `U4` | `23` | `IO19` | `USB_OTG_DM` | Native USB D-. Route as controlled short USB pair with pin 24. |
-| `U4` | `24` | `IO20` | `USB_OTG_DP` | Native USB D+. Route as controlled short USB pair with pin 23. |
-| `U4` | `25`, `26`, `27`, `28`, `29`, `30`, `31`, `32` | `IO21`, `IO26`, `IO47`, `IO33`, `IO34`, `IO48`, `IO35`, `IO36` | `NC` | Leave floating and mark no-connect. |
-| `U4` | `33` | `IO37` | `nCHG` | Charger status input from `U1`, pulled up to `+3V3` by `R13`. |
-| `U4` | `34` | `IO38` | `nPGOOD` | Charger power-good input from `U1`, pulled up to `+3V3` by `R19`. |
-| `U4` | `35`, `36`, `37`, `38` | `IO39` to `IO42` | `NC` | Leave floating and mark no-connect. |
-| `U4` | `39` | `TXD0` | `NC` | Debug pads are not fitted. Leave floating and mark no-connect. |
-| `U4` | `40` | `RXD0` | `NC` | Debug pads are not fitted. Leave floating and mark no-connect. |
-| `U4` | `41` | `IO45` | `NC` | Leave floating and mark no-connect. |
-| `U4` | `44` | `IO46` | `NC` | Leave floating and mark no-connect; do not drive this strapping-sensitive GPIO high during reset. |
-| `U4` | `45` | `EN` | `EN` | Module enable/reset net with `R16` pull-up and `C4` to ground. |
+| `U4` | `13` | `IO19` | `USB_OTG_DM` | Native USB D-. Route as controlled short USB pair with pin 14. |
+| `U4` | `14` | `IO20` | `USB_OTG_DP` | Native USB D+. Route as controlled short USB pair with pin 13. |
+| `U4` | `15` | `IO3` | `NC` | Leave floating and mark no-connect; this is a strapping-sensitive GPIO. |
+| `U4` | `16` | `IO46` | `NC` | Leave floating and mark no-connect; do not drive this strapping-sensitive GPIO high during reset. |
+| `U4` | `17` | `IO9` | `I2C_SDA` | I2C data with pull-up `R18`. |
+| `U4` | `18` | `IO10` | `PWR_HOLD` | Power-hold release output. Leave high-Z/high for normal hold; drive low to shut down from battery. |
+| `U4` | `19`, `20`, `21`, `22` | `IO11`, `IO12`, `IO13`, `IO14` | `NC` | Leave floating and mark no-connect. |
+| `U4` | `23`, `24`, `25` | `IO21`, `IO47`, `IO48` | `NC` | Leave floating and mark no-connect. |
+| `U4` | `26` | `IO45` | `NC` | Leave floating and mark no-connect; this is a strapping-sensitive GPIO. |
+| `U4` | `27` | `IO0` | `BOOT_USER_BTN_N` | Boot-mode strap/recovery net with pull-up `R6`; not connected to `SW1`. |
+| `U4` | `28`, `29` | `IO35`, `IO36` | `NC` | Leave floating and mark no-connect. |
+| `U4` | `30` | `IO37` | `nCHG` | Charger status input from `U1`, pulled up to `+3V3` by `R13`. |
+| `U4` | `31` | `IO38` | `nPGOOD` | Charger power-good input from `U1`, pulled up to `+3V3` by `R19`. |
+| `U4` | `32`, `33`, `34`, `35` | `IO39`, `IO40`, `IO41`, `IO42` | `NC` | Leave floating and mark no-connect. |
+| `U4` | `36` | `RXD0` | `NC` | Debug pads are not fitted. Leave floating and mark no-connect. |
+| `U4` | `37` | `TXD0` | `NC` | Debug pads are not fitted. Leave floating and mark no-connect. |
+| `U4` | `38` | `IO2` | `USB_VBUS_SENSE` | USB VBUS ADC sense divider midpoint. Firmware uses this to enter USB-attached idle/update mode. |
+| `U4` | `39` | `IO1` | `BAT_SENSE` | Battery ADC sense divider midpoint with filter `C2`. |
 
 ### Sensors
 
 | Ref | Pin | Pin name | Connect to | Instruction |
 | --- | --- | --- | --- | --- |
-| `U5` | `1` | `VDDIO` | `+3V3` | Pressure sensor I/O supply. Decouple with `C11`. |
+| `U5` | `1` | `VDDIO` | `+3V3` | First pressure sensor I/O supply. Decouple with `C11`. |
 | `U5` | `2` | `SCK` | `I2C_SCL` | I2C clock. |
 | `U5` | `3`, `8`, `9` | `VSS` | `GND` | Pressure sensor grounds. |
 | `U5` | `4` | `SDI` | `I2C_SDA` | I2C data. |
-| `U5` | `5` | `SDO` | `GND` | I2C address strap. |
+| `U5` | `5` | `SDO` | `GND` | I2C address strap for address `0x46`. |
 | `U5` | `6` | `CSB` | `+3V3` | I2C mode strap. |
-| `U5` | `7` | `INT` | `BMP581_INT` | Interrupt output to `U4.8`. |
-| `U5` | `10` | `VDD` | `+3V3` | Pressure sensor core supply. Decouple with `C12`. |
+| `U5` | `7` | `INT` | `BMP581_1_INT` | Interrupt output to `U4.4` / `IO4`. |
+| `U5` | `10` | `VDD` | `+3V3` | First pressure sensor core supply. Decouple with `C12`. |
+| `U6` | `1` | `VDDIO` | `+3V3` | Second pressure sensor I/O supply. Decouple with `C16`. |
+| `U6` | `2` | `SCK` | `I2C_SCL` | I2C clock. |
+| `U6` | `3`, `8`, `9` | `VSS` | `GND` | Pressure sensor grounds. |
+| `U6` | `4` | `SDI` | `I2C_SDA` | I2C data. |
+| `U6` | `5` | `SDO` | `+3V3` | I2C address strap for address `0x47`. |
+| `U6` | `6` | `CSB` | `+3V3` | I2C mode strap. |
+| `U6` | `7` | `INT` | `BMP581_2_INT` | Interrupt output to `U4.9` / `IO16`. |
+| `U6` | `10` | `VDD` | `+3V3` | Second pressure sensor core supply. Decouple with `C15`. |
 | `U2` | `1` | `SDO` | `GND` | I2C address strap. |
 | `U2` | `2`, `3`, `10`, `11` | `NC` | `NC` | Leave floating and mark no-connect. |
 | `U2` | `4` | `INT1` | `BMI323_INT1` | Interrupt output to `U4.9`. |
@@ -406,8 +430,10 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 | `C8` | `+3V3` | `GND` | LDO output capacitor. |
 | `C9` | `+3V3` | `GND` | ESP32 local bulk capacitor. |
 | `C10` | `+3V3` | `GND` | ESP32 high-frequency decoupling capacitor. |
-| `C12` | `+3V3` | `GND` | BMP581 VDD decoupling capacitor. |
-| `C11` | `+3V3` | `GND` | BMP581 VDDIO decoupling capacitor. |
+| `C12` | `+3V3` | `GND` | `U5` BMP581 VDD decoupling capacitor. |
+| `C11` | `+3V3` | `GND` | `U5` BMP581 VDDIO decoupling capacitor. |
+| `C15` | `+3V3` | `GND` | `U6` BMP581 VDD decoupling capacitor. |
+| `C16` | `+3V3` | `GND` | `U6` BMP581 VDDIO decoupling capacitor. |
 | `C6` | `+3V3` | `GND` | BMI323 VDD decoupling capacitor. |
 | `C5` | `+3V3` | `GND` | BMI323 VDDIO decoupling capacitor. |
 | `C3` | `SYS` | `GND` | Local buzzer bulk capacitor. |
@@ -426,15 +452,17 @@ schematic and PCB. `NC` rows follow the no-connect rules above.
 - Keep `C7` and `C8` tight to `U3`; moving them away can make the LDO unstable.
 - Keep each 100 nF sensor capacitor tight to its target sensor pin. Do not group
   all capacitors in one corner of the board.
-- Keep the ESP32 antenna area at the board edge clear of copper, vias, battery,
-  buzzer metal, enclosure metal, and tall components.
-- Keep `U5` away from heat sources, airflow from the buzzer, adhesive stress,
-  and board edges that flex. Pressure sensors are sensitive to thermal and
-  mechanical disturbance.
+- Place `U4` so its U.FL/I-PEX MHF1 connector can be reached and the antenna
+  coax can be strain-relieved. Keep the selected off-board antenna away from
+  battery metal, buzzer metal, enclosure metal, and the user's body as much as
+  the enclosure allows.
+- Keep `U5` and `U6` away from heat sources, airflow from the buzzer, adhesive
+  stress, and board edges that flex. Pressure sensors are sensitive to thermal
+  and mechanical disturbance.
 - Keep `U2` near the mechanical center of the board if orientation/acceleration
   data matters. Record final axis orientation in firmware.
 - Keep `BZ1`, `Q1`, `R8`, `R7`, and `C3` together. The buzzer switching loop
-  should not run under `U5`, `U2`, or the I2C pull-ups.
+  should not run under `U5`, `U6`, `U2`, or the I2C pull-ups.
 - `SW1`, `D2`, `D3`, `D4`, `Q3`, `Q4`, `Q5`, `R23`, `R24`, `R26`, and `R28`
   form the hard-off latch. Keep `CHG_SYSOFF` and `BAT_SWITCH_GATE` short and
   away from noisy switching nodes.

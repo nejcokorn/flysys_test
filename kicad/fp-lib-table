@@ -43,9 +43,9 @@
 		(descr "FlySys local footprint library")
 	)
 	(lib
-		(name "Espressif_Systems_ESP32_S3_MINI_1_N8")
+		(name "Espressif_Systems_ESP32_S3_WROOM_1U_N8")
 		(type "KiCad")
-		(uri "${KIPRJMOD}/../parts/Espressif_Systems_ESP32_S3_MINI_1_N8")
+		(uri "${KIPRJMOD}/../parts/Espressif_Systems_ESP32_S3_WROOM_1U_N8")
 		(options "")
 		(descr "FlySys local footprint library")
 	)

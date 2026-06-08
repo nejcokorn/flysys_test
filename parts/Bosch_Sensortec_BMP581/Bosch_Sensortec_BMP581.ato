@@ -21,3 +21,23 @@ component Bosch_Sensortec_BMP581_package:
     VSS ~ pin 8
     VSS ~ pin 9
     signal VDD ~ pin 10
+
+
+component Bosch_Sensortec_BMP581_U6_package:
+    """BMP581 barometric pressure sensor, 10-LGA 2.0 mm x 2.0 mm."""
+
+    trait is_atomic_part<manufacturer="Bosch Sensortec", partnumber="BMP581", footprint="BMP581_LGA10_2x2mm.kicad_mod", symbol="BMP581.kicad_sym">
+    trait has_designator<designator="U6">
+    trait has_designator_prefix<prefix="U">
+    trait has_datasheet<datasheet="https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp581-ds004.pdf">
+
+    signal VDDIO ~ pin 1
+    signal SCK ~ pin 2
+    signal VSS ~ pin 3
+    signal SDI ~ pin 4
+    signal SDO ~ pin 5
+    signal CSB ~ pin 6
+    signal INT ~ pin 7
+    VSS ~ pin 8
+    VSS ~ pin 9
+    signal VDD ~ pin 10

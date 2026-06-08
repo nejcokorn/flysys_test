@@ -8,6 +8,7 @@ import Resistor
 
 from "parts/Bosch_Sensortec_BMI323/Bosch_Sensortec_BMI323.ato" import Bosch_Sensortec_BMI323_package
 from "parts/Bosch_Sensortec_BMP581/Bosch_Sensortec_BMP581.ato" import Bosch_Sensortec_BMP581_package
+from "parts/Bosch_Sensortec_BMP581/Bosch_Sensortec_BMP581.ato" import Bosch_Sensortec_BMP581_U6_package
 from "parts/Alpha_Omega_AO3400A/Alpha_Omega_AO3400A.ato" import Alpha_Omega_AO3400A_Q1_package
 from "parts/Alpha_Omega_AO3400A/Alpha_Omega_AO3400A.ato" import Alpha_Omega_AO3400A_Q2_package
 from "parts/Alpha_Omega_AO3400A/Alpha_Omega_AO3400A.ato" import Alpha_Omega_AO3400A_Q3_package
@@ -19,7 +20,7 @@ from "parts/Diodes_Inc_1N4148W/Diodes_Inc_1N4148W.ato" import Diodes_Inc_1N4148W
 from "parts/Diodes_Inc_1N4148W/Diodes_Inc_1N4148W.ato" import Diodes_Inc_1N4148W_D3_package
 from "parts/Diodes_Inc_1N4148W/Diodes_Inc_1N4148W.ato" import Diodes_Inc_1N4148W_D4_package
 from "parts/Diodes_Inc_DMP3098L/DMP3098L.ato" import Diodes_Inc_DMP3098L_Q4_package
-from "parts/Espressif_Systems_ESP32_S3_MINI_1_N8/Espressif_Systems_ESP32_S3_MINI_1_N8.ato" import Espressif_Systems_ESP32_S3_MINI_1_N8_package
+from "parts/Espressif_Systems_ESP32_S3_WROOM_1U_N8/Espressif_Systems_ESP32_S3_WROOM_1U_N8.ato" import Espressif_Systems_ESP32_S3_WROOM_1U_N8_package
 from "parts/GCT_USB4105_GF_A/GCT_USB4105_GF_A.ato" import GCT_USB4105_GF_A_package
 from "parts/JST_S2B_PH_SM4_TB/JST_S2B_PH_SM4_TB.ato" import JST_S2B_PH_SM4_TB_package
 from "parts/Lite_On_LTST_C190GKT/Lite_On_LTST_C190GKT.ato" import Lite_On_LTST_C190GKT_package
@@ -67,8 +68,9 @@ module FlySysVario:
     charger = new Texas_Instruments_BQ24075RGTR_package
     ldo_3v3 = new Texas_Instruments_TLV75533PDBVR_package
     battery = new JST_S2B_PH_SM4_TB_package
-    mcu = new Espressif_Systems_ESP32_S3_MINI_1_N8_package
-    pressure = new Bosch_Sensortec_BMP581_package
+    mcu = new Espressif_Systems_ESP32_S3_WROOM_1U_N8_package
+    pressure_1 = new Bosch_Sensortec_BMP581_package
+    pressure_2 = new Bosch_Sensortec_BMP581_U6_package
     imu = new Bosch_Sensortec_BMI323_package
     buzzer = new Same_Sky_CSS_J4D20_SMT_TR_package
     q_buzzer = new Alpha_Omega_AO3400A_Q1_package
@@ -91,6 +93,8 @@ module FlySysVario:
     usb_dm_mcu = new Electrical
     i2c_scl = new Electrical
     i2c_sda = new Electrical
+    bmp581_1_int = new Electrical
+    bmp581_2_int = new Electrical
     en = new Electrical
     boot_user_btn_n = new Electrical
     pwr_sw_n = new Electrical
@@ -110,6 +114,8 @@ module FlySysVario:
     usb_dm_mcu.override_net_name = "USB_OTG_DM"
     i2c_scl.override_net_name = "I2C_SCL"
     i2c_sda.override_net_name = "I2C_SDA"
+    bmp581_1_int.override_net_name = "BMP581_1_INT"
+    bmp581_2_int.override_net_name = "BMP581_2_INT"
     en.override_net_name = "EN"
     boot_user_btn_n.override_net_name = "BOOT_USER_BTN_N"
     pwr_sw_n.override_net_name = "PWR_SW_N"
@@ -327,22 +333,41 @@ module FlySysVario:
     r_i2c_scl_pullup.package = "0603"
     r_i2c_sda_pullup.package = "0603"
 
-    pressure.VDD ~ v3v3.hv
-    pressure.VDDIO ~ v3v3.hv
-    pressure.VSS ~ gnd
-    pressure.SCK ~ i2c_scl
-    pressure.SDI ~ i2c_sda
-    pressure.SDO ~ gnd
-    pressure.CSB ~ v3v3.hv
-    pressure.INT ~ mcu.IO4
-    v3v3.hv ~> c_pressure_vdd ~> gnd
-    v3v3.hv ~> c_pressure_vddio ~> gnd
-    c_pressure_vdd = new Capacitor
-    c_pressure_vddio = new Capacitor
-    c_pressure_vdd.capacitance = 100nF +/- 10%
-    c_pressure_vddio.capacitance = 100nF +/- 10%
-    c_pressure_vdd.package = "0603"
-    c_pressure_vddio.package = "0603"
+    pressure_1.VDD ~ v3v3.hv
+    pressure_1.VDDIO ~ v3v3.hv
+    pressure_1.VSS ~ gnd
+    pressure_1.SCK ~ i2c_scl
+    pressure_1.SDI ~ i2c_sda
+    pressure_1.SDO ~ gnd
+    pressure_1.CSB ~ v3v3.hv
+    pressure_1.INT ~ bmp581_1_int
+    mcu.IO4 ~ bmp581_1_int
+    v3v3.hv ~> c_pressure1_vdd ~> gnd
+    v3v3.hv ~> c_pressure1_vddio ~> gnd
+    c_pressure1_vdd = new Capacitor
+    c_pressure1_vddio = new Capacitor
+    c_pressure1_vdd.capacitance = 100nF +/- 10%
+    c_pressure1_vddio.capacitance = 100nF +/- 10%
+    c_pressure1_vdd.package = "0603"
+    c_pressure1_vddio.package = "0603"
+
+    pressure_2.VDD ~ v3v3.hv
+    pressure_2.VDDIO ~ v3v3.hv
+    pressure_2.VSS ~ gnd
+    pressure_2.SCK ~ i2c_scl
+    pressure_2.SDI ~ i2c_sda
+    pressure_2.SDO ~ v3v3.hv
+    pressure_2.CSB ~ v3v3.hv
+    pressure_2.INT ~ bmp581_2_int
+    mcu.IO16 ~ bmp581_2_int
+    v3v3.hv ~> c_pressure2_vdd ~> gnd
+    v3v3.hv ~> c_pressure2_vddio ~> gnd
+    c_pressure2_vdd = new Capacitor
+    c_pressure2_vddio = new Capacitor
+    c_pressure2_vdd.capacitance = 100nF +/- 10%
+    c_pressure2_vddio.capacitance = 100nF +/- 10%
+    c_pressure2_vdd.package = "0603"
+    c_pressure2_vddio.package = "0603"
 
     imu.VDD ~ v3v3.hv
     imu.VDDIO ~ v3v3.hv

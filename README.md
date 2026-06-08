@@ -1,6 +1,6 @@
 # FlySys Hardware Plan
 
-Updated: 2026-06-03
+Updated: 2026-06-08
 
 This folder is intentionally a planning workspace only. The next hardware build will be created from scratch in Atopile. Old EasyEDA, KiCad, generated production files, and JLC-specific draft outputs are not part of the active design.
 
@@ -20,8 +20,9 @@ Build a compact FlySys variometer board with:
 
 | Function | Selection | Supplier note |
 | --- | --- | --- |
-| MCU/BLE/Wi-Fi/USBMSD | Espressif `ESP32-S3-MINI-1-N8` | Use ESP32-S3 because USBMSD needs configurable USB device support. `N8` provides 8 MB flash and is stocked; it has no PSRAM. |
-| Pressure sensor | Bosch `BMP581` | Primary altitude/variometer pressure sensor. |
+| MCU/BLE/Wi-Fi/USBMSD | Espressif `ESP32-S3-WROOM-1U-N8` | Use ESP32-S3 because USBMSD needs configurable USB device support. `N8` provides 8 MB flash and has no PSRAM. The `1U` variant uses the module U.FL/I-PEX MHF1 connector for an off-board antenna. |
+| External antenna | Pulse `ANTX200P001B24003` | Off-board 2.4 GHz adhesive flat patch antenna for the WROOM-1U U.FL/I-PEX MHF1 connector. It is a DigiKey order item, not a PCB footprint. |
+| Pressure sensors | 2 x Bosch `BMP581` | Dual altitude/variometer pressure sensors on the same I2C bus. `U5` uses address `0x46`; `U6` uses address `0x47`. |
 | 6-axis IMU | Bosch `BMI323` | Primary accelerometer/gyro. |
 | Magnetometer | Not fitted | Keep unpopulated I2C pads or optional footprint for future magnetometer. |
 | Charger / power path | TI `BQ24075RGTR` | 1S LiPo charger with power-path management. |
@@ -39,8 +40,9 @@ Initial audit checked: 2026-05-31. Audio and LED changes rechecked: 2026-06-01. 
 
 | Function | MPN | DigiKey cut-tape part | Observed availability | Status |
 | --- | --- | --- | --- | --- |
-| MCU/BLE/Wi-Fi/USBMSD | `ESP32-S3-MINI-1-N8` | `5407-ESP32-S3-MINI-1-N8CT-ND` | 3,843 in stock | Selected |
-| Pressure sensor | `BMP581` | `828-BMP581CT-ND` | 46,324 in stock | Selected |
+| MCU/BLE/Wi-Fi/USBMSD | `ESP32-S3-WROOM-1U-N8` | `1965-ESP32-S3-WROOM-1U-N8CT-ND` | Recheck before ordering | Selected external-antenna module |
+| External antenna | `ANTX200P001B24003` | `311-1553-ND` | Recheck before ordering | Off-board U.FL/I-PEX MHF1 adhesive 2.4 GHz antenna |
+| Pressure sensors | `BMP581` | `828-BMP581CT-ND` | Recheck before ordering | Qty 2 selected |
 | 6-axis IMU | `BMI323` | `828-BMI323CT-ND` | 663 in stock | Selected |
 | Charger / power path | `BQ24075RGTR` | `296-38874-1-ND` | 3,702 in stock | Selected |
 | 3.3 V LDO | `TLV75533PDBVR` | `296-50411-1-ND` | 110,688 in stock | Selected |
@@ -49,7 +51,7 @@ Initial audit checked: 2026-05-31. Audio and LED changes rechecked: 2026-06-01. 
 | Battery connector | `S2B-PH-SM4-TB` | `455-S2B-PH-SM4-TBCT-ND` | 71,350 in stock | Selected |
 | Loud SMD buzzer | `CSS-J4D20-SMT-TR` | `102-1198-1-ND` | 2,332 in stock | Selected old-device buzzer: externally driven magnetic transducer, 90 dB at 3.6 V, 5 cm, 80 mA, 3.1 kHz |
 | N-MOSFETs | `AO3400A` | `785-1000-1-ND` | 168,023 in stock | Low-side drivers for buzzer PWM, blue BLE pairing LED switching, and power-latch control |
-| Battery switch P-MOSFET | `DMP3098L-7` | `DMP3098L-7DICT-ND` | Recheck before ordering | High-side hard-off switch between battery connector and internal `BAT` rail |
+| Battery switch P-MOSFET | `DMP3098L-7` | `DMP3098LDICT-ND` | Recheck before ordering | High-side hard-off switch between battery connector and internal `BAT` rail |
 | Power-start diodes | `1N4148W-7-F` | `1N4148W-FDICT-ND` | Recheck before ordering | Diode isolation for power button, battery switch gate, and charger `SYSOFF` |
 | User button | `KMR211NG LFS` | `CKN10243CT-ND` | 44,917 in stock | Selected |
 | Power LED | `LTST-C190GKT` | `160-LTST-C190GKTCT-ND` | 1,068,260 in stock | Selected 0603 green LED, 2.1 V typical Vf |
@@ -66,8 +68,8 @@ Main audit result: all selected active semiconductors, sensors, connector choice
 - `SYS`: BQ24075 system output.
 - `BAT_RAW`: protected 1S LiPo positive terminal at the connector.
 - `BAT`: switched internal battery rail after the hard-off P-MOSFET.
-- `+3V3`: TLV75533 output powering ESP32-S3, BMP581, BMI323, and optional magnetometer pads.
-- `I2C_SCL`, `I2C_SDA`: shared sensor bus for BMP581, BMI323, and DNP magnetometer option.
+- `+3V3`: TLV75533 output powering ESP32-S3, both BMP581 sensors, BMI323, and optional magnetometer pads.
+- `I2C_SCL`, `I2C_SDA`: shared sensor bus for BMP581 `U5`, BMP581 `U6`, BMI323, and DNP magnetometer option.
 - `USB_OTG_DP`, `USB_OTG_DM`: USB full-speed pair to ESP32-S3 native USB pins (`GPIO20` D+, `GPIO19` D-).
 - `BUZZER_VM`: battery/SYS-powered audio rail feeding the buzzer; no boost in the baseline.
 - `BUZZER_PWM`: ESP32-S3 PWM-capable GPIO to the MOSFET gate.
@@ -136,7 +138,9 @@ The enclosure must include a real acoustic outlet or sound channel. Verify SPL a
 
 ## Sensor Plan
 
-Use BMP581 and BMI323 as the fitted sensor stack.
+Use two BMP581 barometers and one BMI323 as the fitted sensor stack.
+
+`U5` straps `SDO` to `GND` for BMP581 I2C address `0x46`; `U6` straps `SDO` to `+3V3` for address `0x47`. Both sensors strap `CSB` high for I2C mode and have separate interrupt nets, `BMP581_1_INT` and `BMP581_2_INT`.
 
 Do not fit a magnetometer for the first Atopile board. The core variometer behavior depends on pressure and vertical-motion filtering, not absolute compass heading. Without a magnetometer, yaw/heading can drift; that is acceptable for this baseline.
 
@@ -152,8 +156,8 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 
 ## Layout Constraints
 
-- Put the ESP32-S3-MINI-1-N8 antenna at a board edge and follow Espressif keepout guidance.
-- Put BMP581 near a pressure vent and away from heat, board flex, adhesive, conformal coating, and direct buzzer airflow.
+- Put the ESP32-S3-WROOM-1U-N8 so its U.FL/I-PEX MHF1 connector is accessible for the off-board antenna cable. Provide coax strain relief and keep the antenna away from battery metal, buzzer metal, enclosure metal, and the user's body as much as the enclosure allows.
+- Put both BMP581 sensors near the pressure vent and away from heat, board flex, adhesive, conformal coating, and direct buzzer airflow.
 - Put BMI323 near the board center in a mechanically stable area and document axis orientation.
 - Keep sensor supply decoupling close to each VDD/VDDIO pin.
 - Keep USB D+/D- short, impedance-conscious, protected by ESD near the connector, and routed to ESP32-S3 `GPIO20`/`GPIO19`.
@@ -173,7 +177,7 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 - Add software-first firmware update handling with image validation and OTA partition rollback.
 - On USB attach from off state, enter USB-attached idle mode until `PWR_BTN_N` is pressed or a supported start command is received.
 - In USB-attached idle mode, keep vario sensing, BLE normal operation, buzzer output, and logging inactive.
-- Add direct BMP581 driver support.
+- Add direct dual-BMP581 driver support for I2C addresses `0x46` and `0x47`, including separate `BMP581_1_INT` and `BMP581_2_INT` handling.
 - Add direct BMI323 driver support.
 - Remove required magnetometer reads from the baseline firmware path.
 - Rework GPIO mapping for ESP32-S3, including `BUZZER_PWM`, `PWR_BTN_N`, `PWR_HOLD`, `BAT_SENSE`, `BLE_LED_PWM`, I2C, USB, `EN`, and `BOOT`.
@@ -190,7 +194,8 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 - Enclosure acoustic outlet, port orientation, and measured SPL after installation.
 - Button actuator/enclosure mechanics.
 - Final ESP32-S3 GPIO map after strapping-pin, USB-pin, and reserved-pin review.
-- Whether `ESP32-S3-MINI-1-N8` without PSRAM is sufficient for the final USBMSD firmware.
+- Whether `ESP32-S3-WROOM-1U-N8` without PSRAM is sufficient for the final USBMSD firmware.
+- RF/EMC certification path for the selected 4.4 dBi external antenna. Espressif's module certification guidance recommends antennas no higher than the certified antenna gain, so this antenna choice may require additional testing.
 - TLV75533 current and thermal margin with ESP32-S3 RF peaks and USB-attached operation.
 - Whether charger status pins need LEDs or only test pads.
 - Final Atopile package/footprint sources and exact passive values.
@@ -198,10 +203,10 @@ Place the optional magnetometer pads away from USB shield, charger, buzzer, batt
 ## Atopile Build Order
 
 1. Create Atopile project scaffold.
-2. Add verified packages for ESP32-S3-MINI-1-N8, BMP581, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, CSS-J4D20 buzzer, MOSFET driver, button, green power LED, blue BLE pairing LED, and passives.
+2. Add verified packages for ESP32-S3-WROOM-1U-N8, two BMP581 sensors, BMI323, BQ24075, TLV75533, USB-C, USB ESD, LiPo connector, CSS-J4D20 buzzer, MOSFET driver, button, green power LED, blue BLE pairing LED, passives, and the BOM-only external antenna.
 3. Capture power path and 3.3 V rail.
 4. Capture ESP32-S3 native USB OTG, USB VBUS sense, `EN`, `BOOT`, and hidden service bootloader buttons.
-5. Capture BMP581 and BMI323 on shared I2C.
+5. Capture both BMP581 sensors and BMI323 on shared I2C.
 6. Add unpopulated magnetometer I2C pads or optional footprint.
 7. Add the selected USBMSD storage backend if external storage is selected.
 8. Capture loud audio and user I/O.
@@ -218,16 +223,28 @@ Atopile is now the active project source in this repo:
 - `layouts/default/default.kicad_pcb`: Atopile-generated layout artifact used by the Atopile Autolayout panel.
 - `docs/components-and-placement.md`: component map, passive explanations, and placement intent.
 
-Current modeled nets include USB-C, USB ESD, BQ24075 power path, P-MOS battery hard-off switch, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, BMP581, BMI323, battery connector, switched battery/USB sense dividers, buzzer MOSFET driver, always-on green power LED, blue BLE pairing LED low-side switch, power/user button, hidden BOOT and RESET service buttons, and optional future magnetometer pads. See `docs/firmware-update-ux.md` for the software-first update flow and recovery fallback.
+Current modeled nets include USB-C, USB ESD, BQ24075 power path, P-MOS battery hard-off switch, TLV75533 3.3 V rail, ESP32-S3 native USB, I2C sensor bus, two BMP581 barometers, BMI323, battery connector, switched battery/USB sense dividers, buzzer MOSFET driver, always-on green power LED, blue BLE pairing LED low-side switch, power/user button, hidden BOOT and RESET service buttons, and optional future magnetometer pads. See `docs/firmware-update-ux.md` for the software-first update flow and recovery fallback.
 
-`ato --non-interactive build` completes the current Atopile workflow. The 90 mm x 45 mm board outline is defined in `main.ato` with `RectangularBoardShape`, so the Atopile Autolayout panel has a board boundary to place and route against. The remaining warnings are expected for local or DigiKey-only parts because the current picker support is not covering those local packages. Before production, verify the local draft footprints for `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`, `DMP3098L`, `1N4148W`, `KMR211NG LFS`, and optional magnetometer pads against manufacturer land patterns and enclosure mechanics.
+`ato --non-interactive build --standalone main.ato:FlySysVario` completes the
+current Atopile source workflow. The default layout build still needs a layout
+artifact migration after the WROOM-1U swap; `ato --non-interactive build`
+passes electrical verification but fails while loading `layouts/default/default.kicad_pcb`.
+The 90 mm x 45 mm board outline is defined in `main.ato` with
+`RectangularBoardShape`, so the Atopile Autolayout panel has a board boundary to
+place and route against. The remaining warnings are expected for local or
+DigiKey-only parts because the current picker support is not covering those
+local packages. Before production, verify the local draft footprints for
+`ESP32-S3-WROOM-1U-N8`, `S2B-PH-SM4-TB`, `CSS-J4D20-SMT-TR`, `AO3400A`,
+`DMP3098L`, `1N4148W`, `KMR211NG LFS`, and optional magnetometer pads against
+manufacturer land patterns and enclosure mechanics.
 
 ## Source Links
 
 - Atopile project structure: https://docs.atopile.io/atopile-0.14.x/essentials/5-project-structure
 - Atopile language reference: https://docs.atopile.io/atopile-0.14.x/essentials/1-the-ato-language
-- ESP32-S3-MINI-1 datasheet: https://documentation.espressif.com/esp32-s3-mini-1_mini-1u_datasheet_en.html
-- DigiKey.si ESP32-S3-MINI-1-N8: https://www.digikey.si/en/products/detail/espressif-systems/ESP32-S3-MINI-1-N8/15295890
+- ESP32-S3-WROOM-1/WROOM-1U datasheet: https://documentation.espressif.com/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf
+- DigiKey.si ESP32-S3-WROOM-1U-N8: https://www.digikey.si/en/products/detail/espressif-systems/ESP32-S3-WROOM-1U-N8/16162635
+- DigiKey.si Pulse ANTX200P001B24003: https://www.digikey.si/en/products/detail/pulse-electronics/ANTX200P001B24003/3927174
 - ESP-IDF ESP32-S3 USB Device Stack / TinyUSB MSC: https://docs.espressif.com/projects/esp-usb/en/latest/esp32s3/usb_device.html
 - ESP-IDF ESP32-C3 USB Serial/JTAG fixed-function note: https://docs.espressif.com/projects/esp-idf/en/release-v5.2/esp32c3/api-guides/usb-serial-jtag-console.html
 - Bosch BMP581: https://www.bosch-sensortec.com/en/products/environmental-sensors/pressure-sensors/bmp581/

@@ -210,4 +210,11 @@
 		(options "")
 		(descr "atopile: part lib: Diodes_Inc_DMP3098L")
 	)
+	(lib
+		(name "Espressif_Systems_ESP32_S3_WROOM_1U_N8")
+		(type "KiCad")
+		(uri "${KIPRJMOD}/../../parts/Espressif_Systems_ESP32_S3_WROOM_1U_N8")
+		(options "")
+		(descr "atopile: part lib: Espressif_Systems_ESP32_S3_WROOM_1U_N8")
+	)
 )

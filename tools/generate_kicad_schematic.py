@@ -64,7 +64,7 @@ KINDS: dict[str, Kind] = {
     "BQ24075": Kind("Texas_Instruments_BQ24075RGTR", "BQ24075RGTR", "BQ24075RGTR.kicad_sym", "Texas_Instruments_BQ24075RGTR:QFN-16_L3.0-W3.0-P0.50-TL-EP1.7"),
     "TLV75533": Kind("Texas_Instruments_TLV75533PDBVR", "TLV75533PDBVR", "TLV75533PDBVR.kicad_sym", "Texas_Instruments_TLV75533PDBVR:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR"),
     "JST_PH_2": Kind("JST_S2B_PH_SM4_TB", "S2B-PH-SM4-TB", "S2B-PH-SM4-TB.kicad_sym", "JST_S2B_PH_SM4_TB:S2B-PH-SM4-TB"),
-    "ESP32S3": Kind("Espressif_Systems_ESP32_S3_MINI_1_N8", "ESP32-S3-MINI-1-N8", "ESP32-S3-MINI-1-N8.kicad_sym", "Espressif_Systems_ESP32_S3_MINI_1_N8:BULETM-SMD_ESP32-S3-MINI-1-N8"),
+    "ESP32S3": Kind("Espressif_Systems_ESP32_S3_WROOM_1U_N8", "ESP32-S3-WROOM-1U-N8", "ESP32-S3-WROOM-1U-N8.kicad_sym", "Espressif_Systems_ESP32_S3_WROOM_1U_N8:ESP32-S3-WROOM-1U-N8"),
     "BMP581": Kind("Bosch_Sensortec_BMP581", "BMP581", "BMP581.kicad_sym", "Bosch_Sensortec_BMP581:BMP581_LGA10_2x2mm"),
     "BMI323": Kind("Bosch_Sensortec_BMI323", "BMI323", "BMI323.kicad_sym", "Bosch_Sensortec_BMI323:LGA-14_L3.0-W2.5-P0.50-TL_QMI8658A"),
     "BUZZER": Kind("Same_Sky_CSS_J4D20_SMT_TR", "CSS-J4D20-SMT-TR", "CSS-J4D20-SMT-TR.kicad_sym", "Same_Sky_CSS_J4D20_SMT_TR:CSS-J4D20-SMT-TR"),
@@ -99,12 +99,12 @@ DIGIKEY_PARTS: dict[str, SupplierPart] = {
     "BQ24075": SupplierPart("Texas Instruments", "BQ24075RGTR", "296-38874-1-ND", "https://www.digikey.si/en/products/detail/texas-instruments/BQ24075RGTR/2047273", "Li-ion charger and power-path controller"),
     "TLV75533": SupplierPart("Texas Instruments", "TLV75533PDBVR", "296-50411-1-ND", "https://www.digikey.si/en/products/detail/texas-instruments/TLV75533PDBVR/9356541", "3.3 V 500 mA LDO regulator"),
     "JST_PH_2": SupplierPart("JST Sales America Inc.", "S2B-PH-SM4-TB", "455-S2B-PH-SM4-TBCT-ND", "https://www.digikey.si/en/products/detail/jst-sales-america-inc/S2B-PH-SM4-TB/926655", "2-pin JST PH side-entry SMT header"),
-    "ESP32S3": SupplierPart("Espressif Systems", "ESP32-S3-MINI-1-N8", "5407-ESP32-S3-MINI-1-N8CT-ND", "https://www.digikey.si/en/products/detail/espressif-systems/ESP32-S3-MINI-1-N8/15295890", "ESP32-S3 module with PCB antenna and 8 MB flash"),
+    "ESP32S3": SupplierPart("Espressif Systems", "ESP32-S3-WROOM-1U-N8", "1965-ESP32-S3-WROOM-1U-N8CT-ND", "https://www.digikey.si/en/products/detail/espressif-systems/ESP32-S3-WROOM-1U-N8/16162635", "ESP32-S3 module with U.FL/I-PEX MHF1 antenna connector and 8 MB flash"),
     "BMP581": SupplierPart("Bosch Sensortec", "BMP581", "828-BMP581CT-ND", "https://www.digikey.si/en/products/detail/bosch-sensortec/BMP581/16036134", "Barometric pressure sensor"),
     "BMI323": SupplierPart("Bosch Sensortec", "BMI323", "828-BMI323CT-ND", "https://www.digikey.si/en/products/detail/bosch-sensortec/BMI323/16719593", "6-axis IMU"),
     "BUZZER": SupplierPart("Same Sky (Formerly CUI Devices)", "CSS-J4D20-SMT-TR", "102-1198-1-ND", "https://www.digikey.si/en/products/detail/same-sky-formerly-cui-devices/CSS-J4D20-SMT-TR/504819", "Externally driven magnetic buzzer"),
     "AO3400A": SupplierPart("Alpha & Omega Semiconductor Inc.", "AO3400A", "785-1000-1-ND", "https://www.digikey.si/en/products/detail/alpha-omega-semiconductor-inc/AO3400A/1855772", "N-channel MOSFET, SOT-23"),
-    "DMP3098L": SupplierPart("Diodes Incorporated", "DMP3098L-7", "DMP3098L-7DICT-ND", "https://www.digikey.si/en/products/detail/diodes-incorporated/DMP3098L-7/1964698", "P-channel MOSFET, SOT-23"),
+    "DMP3098L": SupplierPart("Diodes Incorporated", "DMP3098L-7", "DMP3098LDICT-ND", "https://www.digikey.si/en/products/detail/diodes-incorporated/DMP3098L-7/1964699", "P-channel MOSFET, SOT-23"),
     "BUTTON": SupplierPart("C&K", "KMR211NG LFS", "CKN10243CT-ND", "https://www.digikey.si/en/products/detail/c-k/KMR211NG-LFS/2176482", "Low-profile tactile switch"),
     "BUTTON_BOOT": SupplierPart("C&K", "KMR211NG LFS", "CKN10243CT-ND", "https://www.digikey.si/en/products/detail/c-k/KMR211NG-LFS/2176482", "Low-profile tactile switch"),
     "BUTTON_RST": SupplierPart("C&K", "KMR211NG LFS", "CKN10243CT-ND", "https://www.digikey.si/en/products/detail/c-k/KMR211NG-LFS/2176482", "Low-profile tactile switch"),
@@ -125,6 +125,21 @@ DIGIKEY_PARTS: dict[str, SupplierPart] = {
     "C1U": SupplierPart("Samsung Electro-Mechanics", "CL10A105KB8NNNC", "1276-1860-1-ND", "https://www.digikey.si/en/products/detail/samsung-electro-mechanics/CL10A105KB8NNNC/3887518", "1 uF, 50 V, X5R, 0603 capacitor"),
     "C10U": SupplierPart("Samsung Electro-Mechanics", "CL10A106KP8NNNC", "1276-1192-1-ND", "https://www.digikey.si/en/products/detail/samsung-electro-mechanics/CL10A106KP8NNNC/3886850", "10 uF, 10 V, X5R, 0603 capacitor"),
 }
+
+
+OFF_BOARD_DIGIKEY_BOM_ITEMS: list[dict[str, str]] = [
+    {
+        "References": "ANT1",
+        "Quantity": "1",
+        "Value": "ANTX200P001B24003",
+        "Manufacturer": "Pulse Electronics",
+        "MPN": "ANTX200P001B24003",
+        "DigiKey Part Number": "311-1553-ND",
+        "Supplier": "DigiKey",
+        "DigiKey URL": "https://www.digikey.si/en/products/detail/pulse-electronics/ANTX200P001B24003/3927174",
+        "Description": "Off-board 2.4 GHz flat patch antenna, U.FL/I-PEX MHF1, adhesive mount; not a PCB footprint",
+    },
+]
 
 
 COMPONENTS: list[Component] = [
@@ -150,21 +165,18 @@ COMPONENTS: list[Component] = [
     Component("U3", "TLV75533PDBVR", "TLV75533", 185.0, 185.0, {
         "1": "SYS", "2": "GND", "3": "SYS", "4": None, "5": "+3V3",
     }),
-    Component("U4", "ESP32-S3-MINI-1-N8", "ESP32S3", 315.0, 180.0, {
-        "1": "GND", "2": "GND", "3": "+3V3", "4": "BOOT_USER_BTN_N",
-        "5": "BAT_SENSE", "6": "USB_VBUS_SENSE", "7": None,
-        "8": "BMP581_INT", "9": "BMI323_INT1", "10": "BMI323_INT2",
-        "11": "PWR_BTN_N", "12": "I2C_SCL", "13": "I2C_SDA",
-        "14": "PWR_HOLD", "15": None, "16": None, "17": None, "18": None, "19": None,
-        "20": None, "21": "BUZZER_PWM", "22": "BLE_LED_PWM",
-        "23": "USB_OTG_DM", "24": "USB_OTG_DP", "25": None, "26": None,
-        "27": None, "28": None, "29": None, "30": None, "31": None, "32": None,
-        "33": "nCHG", "34": "nPGOOD", "35": None, "36": None, "37": None, "38": None,
-        "39": None, "40": None, "41": None, "42": "GND", "43": "GND",
-        "44": None, "45": "EN", "46": "GND", "47": "GND", "48": "GND",
-        "49": "GND", "50": "GND", "51": "GND", "52": "GND", "53": "GND",
-        "54": "GND", "55": "GND", "56": "GND", "57": "GND", "58": "GND",
-        "59": "GND", "60": "GND", "GND": "GND",
+    Component("U4", "ESP32-S3-WROOM-1U-N8", "ESP32S3", 315.0, 180.0, {
+        "1": "GND", "2": "+3V3", "3": "EN", "4": "BMP581_1_INT",
+        "5": "BMI323_INT1", "6": "BMI323_INT2", "7": "PWR_BTN_N",
+        "8": None, "9": "BMP581_2_INT", "10": "BUZZER_PWM",
+        "11": "BLE_LED_PWM", "12": "I2C_SCL", "13": "USB_OTG_DM",
+        "14": "USB_OTG_DP", "15": None, "16": None, "17": "I2C_SDA",
+        "18": "PWR_HOLD", "19": None, "20": None, "21": None, "22": None,
+        "23": None, "24": None, "25": None, "26": None, "27": "BOOT_USER_BTN_N",
+        "28": None, "29": None, "30": "nCHG", "31": "nPGOOD",
+        "32": None, "33": None, "34": None, "35": None, "36": None,
+        "37": None, "38": "USB_VBUS_SENSE", "39": "BAT_SENSE",
+        "40": "GND", "41": "GND",
     }),
     Component("SW1", "KMR211NG LFS", "BUTTON", 430.0, 135.0, {
         "1": "PWR_SW_N", "2": "PWR_SW_N", "3": "GND", "4": "GND",
@@ -177,7 +189,11 @@ COMPONENTS: list[Component] = [
     }),
     Component("U5", "BMP581", "BMP581", 520.0, 80.0, {
         "1": "+3V3", "2": "I2C_SCL", "3": "GND", "4": "I2C_SDA", "5": "GND",
-        "6": "+3V3", "7": "BMP581_INT", "8": "GND", "9": "GND", "10": "+3V3",
+        "6": "+3V3", "7": "BMP581_1_INT", "8": "GND", "9": "GND", "10": "+3V3",
+    }),
+    Component("U6", "BMP581", "BMP581", 520.0, 125.0, {
+        "1": "+3V3", "2": "I2C_SCL", "3": "GND", "4": "I2C_SDA", "5": "+3V3",
+        "6": "+3V3", "7": "BMP581_2_INT", "8": "GND", "9": "GND", "10": "+3V3",
     }),
     Component("U2", "BMI323", "BMI323", 520.0, 175.0, {
         "1": "GND", "2": None, "3": None, "4": "BMI323_INT1", "5": "+3V3",
@@ -230,6 +246,8 @@ COMPONENTS: list[Component] = [
 
     Component("C12", "100nF", "C100N", 575.0, 35.0, {"1": "+3V3", "2": "GND"}),
     Component("C11", "100nF", "C100N", 625.0, 35.0, {"1": "+3V3", "2": "GND"}),
+    Component("C15", "100nF", "C100N", 575.0, 130.0, {"1": "+3V3", "2": "GND"}),
+    Component("C16", "100nF", "C100N", 625.0, 130.0, {"1": "+3V3", "2": "GND"}),
     Component("C6", "100nF", "C100N", 575.0, 230.0, {"1": "+3V3", "2": "GND"}),
     Component("C5", "100nF", "C100N", 625.0, 230.0, {"1": "+3V3", "2": "GND"}),
     Component("R17", "4.7k", "R4K7", 575.0, 285.0, {"1": "I2C_SCL", "2": "+3V3"}),
@@ -700,6 +718,7 @@ def schematic_connection_items(pins_by_kind: dict[str, dict[str, Pin]]) -> list[
         "I2C_SCL", "I2C_SDA", "EN", "BOOT_USER_BTN_N",
         "PWR_SW_N", "PWR_BTN_N", "CHG_SYSOFF", "PWR_HOLD", "PWR_HOLD_GATE", "BAT_SWITCH_GATE",
         "BAT_SENSE", "USB_VBUS_SENSE", "nCHG", "nPGOOD",
+        "BMP581_1_INT", "BMP581_2_INT", "BMI323_INT1", "BMI323_INT2",
         "BUZZER_PWM", "BUZZER_GATE", "BUZZER_NEG",
         "BLE_LED_PWM", "BLE_LED_GATE", "BLE_LED_A", "BLE_LED_K", "POWER_LED_A",
     ]
@@ -870,6 +889,7 @@ def grouped_digikey_bom() -> list[dict[str, str]]:
                 "Description": supplier.description,
             }
         )
+    rows.extend(OFF_BOARD_DIGIKEY_BOM_ITEMS)
     return rows
 
 
@@ -898,9 +918,9 @@ def write_digikey_bom() -> None:
     md_lines = [
         "# FlySys DigiKey BOM",
         "",
-        "Updated: 2026-06-03",
+        "Updated: 2026-06-08",
         "",
-        "All purchased components in the KiCad schematic use DigiKey order lines. Debug pads are not fitted; normal firmware update is software-first, and ESP32-S3 bootloader recovery uses USB plus hidden BOOT and RST service buttons.",
+        "All purchased components in the KiCad schematic use DigiKey order lines. `ANT1` is an off-board antenna order line for the ESP32-S3-WROOM-1U module connector and has no PCB footprint. Debug pads are not fitted; normal firmware update is software-first, and ESP32-S3 bootloader recovery uses USB plus hidden BOOT and RST service buttons.",
         "",
         "| References | Qty | Value | Manufacturer | MPN | DigiKey PN | Description |",
         "| --- | ---: | --- | --- | --- | --- | --- |",
@@ -949,7 +969,7 @@ def main() -> None:
         "\t(paper \"A0\")",
         "\t(title_block",
         "\t\t(title \"FlySys Vario\")",
-        "\t\t(date \"2026-06-01\")",
+        "\t\t(date \"2026-06-08\")",
         "\t\t(rev \"A\")",
         "\t\t(company \"FlySys\")",
         "\t\t(comment 1 \"KiCad schematic generated from main.ato net plan\")",

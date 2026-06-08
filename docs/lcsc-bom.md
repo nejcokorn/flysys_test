@@ -1,19 +1,20 @@
 # FlySys LCSC Component Set
 
-Updated: 2026-06-03
+Updated: 2026-06-08
 
 This table lists the components that Atopile currently resolves through its
 built-in LCSC picker path. It is generated from the active Atopile BOM at
 `build/builds/default/default.bom.csv`.
 
 The project also has parts that are not in this LCSC set: `D2`, `D3`, `D4`,
-`Q1`, `Q2`, `Q3`, `Q4`, `Q5`, `U5`, `SW1`, `SW2`, `SW3`, `J1`, and `BZ1` are
-handled in the DigiKey BOM. Debug pads are not fitted.
+`Q1`, `Q2`, `Q3`, `Q4`, `Q5`, `U4`, `U5`, `U6`, `SW1`, `SW2`, `SW3`, `J1`,
+`BZ1`, and off-board `ANT1` are handled in the DigiKey BOM. Debug pads are not
+fitted.
 
 | References | Qty | Value | Manufacturer | MPN | LCSC Part |
 | --- | ---: | --- | --- | --- | --- |
 | `C1`, `C3`, `C9`, `C13` | 4 | 10 uF, 10 V, X5R | Samsung Electro-Mechanics | `CL10A106KP8NNNC` | `C19702` |
-| `C2`, `C4`, `C5`, `C6`, `C10`, `C11`, `C12` | 7 | 100 nF, 50 V, X7R | YAGEO | `CC0603KRX7R9BB104` | `C14663` |
+| `C2`, `C4`, `C5`, `C6`, `C10`, `C11`, `C12`, `C15`, `C16` | 9 | 100 nF, 50 V, X7R | YAGEO | `CC0603KRX7R9BB104` | `C14663` |
 | `C7`, `C8`, `C14` | 3 | 1 uF, 50 V, X5R | Samsung Electro-Mechanics | `CL10A105KB8NNNC` | `C15849` |
 | `D1` | 1 | Automotive USB ESD protection, SOT-23-6L | STMicroelectronics | `USBLC6-2SC6Y` | `C2969755` |
 | `LED1` | 1 | Blue 0603 LED | Lite-On | `LTST-C190TBKT` | `C125096` |
@@ -32,7 +33,6 @@ handled in the DigiKey BOM. Debug pads are not fitted.
 | `U1` | 1 | LiPo charger and power-path controller | Texas Instruments | `BQ24075RGTR` | `C15464` |
 | `U2` | 1 | 6-axis IMU | Bosch Sensortec | `BMI323` | `C5368700` |
 | `U3` | 1 | 3.3 V LDO regulator | Texas Instruments | `TLV75533PDBVR` | `C404027` |
-| `U4` | 1 | ESP32-S3 module | Espressif Systems | `ESP32-S3-MINI-1-N8` | `C2913206` |
 | `USB1` | 1 | USB-C receptacle | GCT | `USB4105-GF-A` | `C3020560` |
 
 ## Procurement Note

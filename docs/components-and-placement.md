@@ -1,6 +1,6 @@
 # FlySys KiCad Components and Placement
 
-Updated: 2026-06-03
+Updated: 2026-06-08
 
 The KiCad schematic is in `kicad/flysys_vario.kicad_sch`. It uses the generated
 local symbol library `kicad/flysys_symbols.kicad_sym` and footprint libraries
@@ -8,9 +8,11 @@ from `parts/`.
 
 The DigiKey purchasing BOM is generated at
 `kicad/flysys_vario_digikey_bom.csv`. A readable version is in
-`docs/digikey-bom.md`. Debug pads are not fitted in this design; normal firmware
-update is software-first, and ESP32-S3 ROM bootloader entry is a hidden service
-fallback through the USB connector plus `BOOT`/`RST` buttons.
+`docs/digikey-bom.md`. `ANT1` in that BOM is the off-board antenna for the
+ESP32-S3-WROOM-1U module connector and has no PCB footprint. Debug pads are not
+fitted in this design; normal firmware update is software-first, and ESP32-S3
+ROM bootloader entry is a hidden service fallback through the USB connector plus
+`BOOT`/`RST` buttons.
 
 The Atopile/LCSC picked component set is documented separately in
 `docs/lcsc-bom.md`. The full text description of the schematic, capacitor
@@ -38,8 +40,10 @@ routed.
 | `D1` | `usb_esd` | `USBLC6-2SC6Y` | Automotive/AEC-Q101 USB ESD protection | Between `USB1` and `U4`, close to `USB1`, before the USB pair enters the board. Same SOT-23-6L placement intent as the previous part. |
 | `U1` | `charger` | `BQ24075RGTR` | LiPo charger and power-path management | Near USB VBUS and battery connector. Keep `IN`, `BAT`, `OUT`, and thermal ground paths short and wide. |
 | `U3` | `ldo_3v3` | `TLV75533PDBVR` | 3.3 V regulator from `SYS` | Near `U1` and the `+3V3` loads. Keep input/output caps tight to pins. |
-| `U4` | `mcu` | `ESP32-S3-MINI-1-N8` | BLE, USB device, application MCU | Top/right edge so the module antenna faces the board edge/keepout. Do not place copper or tall metal in antenna keepout. |
-| `U5` | `pressure` | `BMP581` | Pressure sensor for altitude/vario | Near pressure vent, away from heat, adhesive, board flex, and buzzer airflow. |
+| `U4` | `mcu` | `ESP32-S3-WROOM-1U-N8` | BLE, USB device, application MCU with U.FL/I-PEX MHF1 antenna connector | Edge or accessible area so the off-board antenna cable can be attached and strain-relieved. Keep the antenna/cable away from metal and noisy power paths. |
+| `ANT1` | BOM-only | `ANTX200P001B24003` | Off-board 2.4 GHz adhesive antenna | DigiKey order item only. It plugs into the module U.FL/I-PEX MHF1 connector and is not placed as a PCB footprint. |
+| `U5` | `pressure_1` | `BMP581` | Pressure sensor for altitude/vario, I2C address `0x46` | Near pressure vent, away from heat, adhesive, board flex, and buzzer airflow. |
+| `U6` | `pressure_2` | `BMP581` | Redundant/secondary pressure sensor, I2C address `0x47` | Near the same pressure environment as `U5`; keep both sensors away from heat gradients and direct buzzer airflow. |
 | `U2` | `imu` | `BMI323` | 6-axis accelerometer/gyro | Near board center on mechanically stable PCB area. Document final axis orientation in firmware. |
 | `J1` | `battery` | `S2B-PH-SM4-TB` | 2-pin LiPo connector | Near charger `BAT` pins. Confirm protected pack polarity before ordering/build. |
 | `BZ1` | `buzzer` | `CSS-J4D20-SMT-TR` | Loud firmware-driven vario tone output | Lower/right side near acoustic outlet. Keep buzzer current loop local to `BZ1`, `Q1`, and `C3`. |
@@ -66,8 +70,10 @@ routed.
 | `C8` | `c_ldo_out` | 1 uF | `+3V3` to `GND` | LDO output capacitor. Place at `U3 OUT/GND`. |
 | `C9` | `c_mcu_bulk` | 10 uF | `+3V3` to `GND` | ESP32-S3 local bulk for RF/current peaks. Place close to `U4 3V3`. |
 | `C10` | `c_mcu_decoup` | 100 nF | `+3V3` to `GND` | ESP32-S3 high-frequency decoupling. Place close to `U4 3V3`. |
-| `C12` | `c_pressure_vdd` | 100 nF | `BMP581 VDD` to `GND` | Pressure sensor core decoupling. Place next to `U5`. |
-| `C11` | `c_pressure_vddio` | 100 nF | `BMP581 VDDIO` to `GND` | Pressure sensor I/O decoupling. Place next to `U5`. |
+| `C12` | `c_pressure1_vdd` | 100 nF | `BMP581 U5 VDD` to `GND` | First pressure sensor core decoupling. Place next to `U5`. |
+| `C11` | `c_pressure1_vddio` | 100 nF | `BMP581 U5 VDDIO` to `GND` | First pressure sensor I/O decoupling. Place next to `U5`. |
+| `C15` | `c_pressure2_vdd` | 100 nF | `BMP581 U6 VDD` to `GND` | Second pressure sensor core decoupling. Place next to `U6`. |
+| `C16` | `c_pressure2_vddio` | 100 nF | `BMP581 U6 VDDIO` to `GND` | Second pressure sensor I/O decoupling. Place next to `U6`. |
 | `C6` | `c_imu_vdd` | 100 nF | `BMI323 VDD` to `GND` | IMU core decoupling. Place next to `U2`. |
 | `C5` | `c_imu_vddio` | 100 nF | `BMI323 VDDIO` to `GND` | IMU I/O decoupling. Place next to `U2`. |
 | `C3` | `c_buzzer_bulk` | 10 uF | `SYS` to `GND` | Local buzzer supply reservoir. Place close to `BZ1`/`Q1` to keep current loop local. |
@@ -115,14 +121,17 @@ and detailed connection constraints.
 - USB `D+`/`D-` must route from `USB1` through `D1` before going to `U4 GPIO20/GPIO19`. Keep this pair short and parallel in the final layout review.
 - `SW2` and `SW3` should be reachable only through service access or pinholes, not as normal exposed user controls. Add `BOOT` and `RST` PCB/service labels.
 - `USB_VBUS`, `BAT`, and `SYS` are routed wider than logic nets. These carry charger, regulator, and buzzer current.
-- `+3V3` fans out from `U3` to `U4`, `U5`, `U2`, pull-ups, and the always-on green power LED.
-- `U5` and `U2` decoupling capacitors are placed adjacent to their devices rather than grouped with generic capacitors.
+- `+3V3` fans out from `U3` to `U4`, `U5`, `U6`, `U2`, pull-ups, and the always-on green power LED.
+- `U5`, `U6`, and `U2` decoupling capacitors are placed adjacent to their devices rather than grouped with generic capacitors.
+- `U5 SDO` is tied to `GND` for I2C address `0x46`; `U6 SDO` is tied to `+3V3` for address `0x47`. Both `CSB` pins are tied to `+3V3` for I2C mode.
+- `BMP581_1_INT` and `BMP581_2_INT` route independently to `U4` so firmware can distinguish the two barometers.
+- The selected antenna is 4.4 dBi. Treat RF/EMC approval as an open item because Espressif's certified external antenna guidance recommends a lower maximum gain.
 - `BZ1`, `Q1`, `R8`, `R7`, and `C3` are grouped together to keep the buzzer switching current local.
 - `U1`, `Q3`, `Q4`, `Q5`, `D2`-`D4`, `R23`, `R24`, `R26`, and `R28` should keep the hard-off latch short and away from the buzzer gate and USB data routing.
 
 ## Current Limitations
 
-The local footprints for `J1`, `BZ1`, `Q1`, `Q2`, `Q3`, `Q4`, `Q5`, `D2`-`D4`, and `SW1`-`SW3` are draft local footprints. Before production, verify each against manufacturer land-pattern drawings and enclosure mechanics.
+The local footprints for `J1`, `BZ1`, `Q1`, `Q2`, `Q3`, `Q4`, `Q5`, `D2`-`D4`, `SW1`-`SW3`, and `U4` are draft local footprints. Before production, verify each against manufacturer land-pattern drawings, RF connector access, and enclosure mechanics.
 
 Atopile 0.15.7 currently supports only LCSC in its built-in `has_part_picked`
 BOM path. For DigiKey-only ordering, use the generated DigiKey BOM above. For
